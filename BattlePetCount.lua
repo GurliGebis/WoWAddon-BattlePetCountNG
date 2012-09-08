@@ -53,7 +53,7 @@ do
 end
 
 --
--- 
+-- BattlePetTooltipTemplate
 --
 
 local function BattlePetTooltipTemplate_SetText(t, s)
