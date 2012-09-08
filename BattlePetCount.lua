@@ -27,28 +27,44 @@ local function Create_SubTip(t)
     return subtip
 end
 
-local BuildOwnedListS
+local BuildOwnedListS, BuildOwnedListC
 do
     local tmp = {}
-    function BuildOwnedListS(speciesid)
+    local function BuildOwnedList(p_sp, p_c)
         wipe(tmp)
 
         for iv,petid in LPJ:IteratePetIDs() do
-            local p_sp, customName, _, _, _, _, petName = C_PetJournal.GetPetInfoByPetID(petid)
-            if speciesid == p_sp then
+            local speciesID, customName, _, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
+            if (p_sp and speciesID == p_sp) or (p_c and creatureID == p_c) then
                 local _, _, _, _, quality = C_PetJournal.GetPetStats(petid)
                 
                 tinsert(tmp, format("|cff%02x%02x%02x%s|r",
                             ITEM_QUALITY_COLORS[quality-1].r*255,
                             ITEM_QUALITY_COLORS[quality-1].g*255,
                             ITEM_QUALITY_COLORS[quality-1].b*255,
-                            customName or petName))
+                            customName or name))
             end
         end
         
         if #tmp > 0 then
             return table.concat(tmp, ", ")
         end
+    end
+    
+    function BuildOwnedListS(speciesid)
+        return BuildOwnedList(speciesid, nil)
+    end
+    
+    function BuildOwnedListC(creatureid)
+        return BuildOwnedList(nil, creatureid)
+    end
+end
+
+local function OwnedListOrNot(ownedlist)
+    if ownedlist then
+        return format("You own this pet: %s", ownedlist)
+    else
+        return "You don't own this pet."
     end
 end
 
@@ -67,13 +83,7 @@ end
 
 hooksecurefunc("BattlePetTooltipTemplate_SetBattlePet", function(self, data)
     local speciesID = self.speciesID
-    
-    local list = BuildOwnedListS(speciesID)
-    if list then
-        BattlePetTooltipTemplate_SetText(self, format("You own this pet: %s", list))
-    else
-        BattlePetTooltipTemplate_SetText(self, "You don't own this pet.")
-    end
+    BattlePetTooltipTemplate_SetText(self, OwnedListOrNot(BuildOwnedListS(speciesID)))
 end)
 
 --
@@ -91,11 +101,18 @@ end
 
 hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self, petOwner, petIndex)
     local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
+    PetBattleUnitTooltip_SetText(self, OwnedListOrNot(BuildOwnedListS(speciesID)))
+end)
 
-    local list = BuildOwnedListS(speciesID)
-    if list then
-        PetBattleUnitTooltip_SetText(self, format("You own this pet: %s", list))
-    else
-        PetBattleUnitTooltip_SetText(self, "You don't own this pet.")
+--
+-- GameTooltip
+--
+
+GameTooltip:HookScript("OnShow", function(self)
+    local _, unit = self:GetUnit()
+    if unit and UnitIsWildBattlePet(unit) then
+        local creatureID = tonumber(strsub(UnitGUID(unit),7,10), 16)
+        self:AddLine(OwnedListOrNot(BuildOwnedListC(creatureID)))
+        self:Show()
     end
 end)
