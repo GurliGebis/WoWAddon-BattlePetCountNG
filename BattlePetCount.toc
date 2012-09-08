@@ -6,6 +6,8 @@
 ## X-Email: end@cornhooves.org
 ## OptionalDeps: LibPetJournal-2.0
 
+Libs\LibPetJournal-2.0\LibStub.lua
+Libs\LibPetJournal-2.0\CallbackHandler-1.0.lua
 Libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
 
 BattlePetCount.lua
