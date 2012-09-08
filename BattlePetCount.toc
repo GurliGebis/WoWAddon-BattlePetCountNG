@@ -5,5 +5,7 @@
 ## Author: End
 ## X-Email: end@cornhooves.org
 ## OptionalDeps: LibPetJournal-2.0
-embeds.xml
+
+Libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
+
 BattlePetCount.lua
