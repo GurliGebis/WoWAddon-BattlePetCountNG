@@ -4,6 +4,6 @@
 ## Notes: Indicate how many and what quality battle pets you have.
 ## Author: End
 ## X-Email: end@cornhooves.org
-## OptionalDeps: Ace3, LibPetJournal-2.0
+## OptionalDeps: LibPetJournal-2.0
 embeds.xml
 BattlePetCount.lua

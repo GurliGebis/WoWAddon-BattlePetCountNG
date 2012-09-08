@@ -5,11 +5,6 @@ local LPJ = LibStub("LibPetJournal-2.0")
 --
 --
 
-
---
---
---
-
 local function Create_SubTip(t)
     local subtip = CreateFrame("FRAME", nil, t)
     subtip:SetPoint("TOPLEFT", t, "BOTTOMLEFT")
