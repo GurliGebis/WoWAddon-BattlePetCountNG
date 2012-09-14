@@ -261,12 +261,16 @@ function SlashCmdList.BPCMISSINGSCAN(msg, editbox)
         speciesSet[speciesid] = true
     end
     
+    local count = 0
     for i,speciesID in LPJ:IterateSpeciesIDs() do
         if not speciesSet[speciesID] then
             local name, _, _, creatureID, sourceText, _, isWild, canBattle = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
             if not isWild and canBattle and not strfind(sourceText, "Achievement:") and not EXCEPTIONS[speciesID] then
+                count = count + 1
                 print(format("%s species=%d creature=%d", name, speciesID, creatureID))
             end
         end
     end
+    
+    print(format("%d pets missing from table.", count))
 end
