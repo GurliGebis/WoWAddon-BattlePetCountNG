@@ -162,12 +162,12 @@ do
 
     local Text = InBattleIndicator:CreateFontString("OVERLAY")
     Text:SetFontObject(GameFontHighlightSmallLeft)
-    Text:SetPoint("RIGHT", PetBattleFrame.ActiveEnemy, "LEFT", -10, 0)
+    Text:SetPoint("RIGHT", PetBattleFrame.ActiveEnemy, "LEFT", -8, 0)
     Text:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 24, 0)
     
     InBattleIndicator:SetPoint("TOPLEFT", Text, -4, 4)
     InBattleIndicator:SetPoint("BOTTOMRIGHT", Text, 5, -4)
-    InBattleIndicator:SetScale(0.9) -- bleh
+    InBattleIndicator:SetScale(0.95) -- bleh
     
     InBattleIndicator:RegisterEvent("PET_BATTLE_PET_CHANGED")
     InBattleIndicator:RegisterEvent("PET_BATTLE_OPENING_START")
