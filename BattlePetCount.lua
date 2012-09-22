@@ -70,6 +70,24 @@ local function OwnedListOrNot(ownedlist)
     end
 end
 
+local function PlayersBestQuality(speciesID)
+    local maxquality = -1
+    for iv,petid in LPJ:IteratePetIDs() do
+        local sid = C_PetJournal.GetPetInfoByPetID(petid)
+        if sid == speciesID then
+            local _, _, _, _, quality = C_PetJournal.GetPetStats(petid)
+            if maxquality < quality then
+                maxquality = quality
+            end
+        end
+    end
+    
+    if maxquality == -1 then
+        return nil
+    end
+    return maxquality
+end
+
 --
 -- BattlePetTooltipTemplate
 --
@@ -134,3 +152,56 @@ GameTooltip:HookScript("OnShow", function(self)
         return
     end
 end)
+
+--
+-- Pet Battle Text
+--
+
+do
+    local InBattleIndicator = CreateFrame("FRAME", nil, PetBattleFrame.ActiveEnemy)
+    InBattleIndicator:SetPoint("RIGHT", PetBattleFrame.ActiveEnemy, "LEFT")
+    InBattleIndicator:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 18, 0)
+    InBattleIndicator:SetHeight(28)
+
+    InBattleIndicator.Text = InBattleIndicator:CreateFontString("OVERLAY")
+    InBattleIndicator.Text:SetFontObject(GameFontHighlightSmallLeft)
+    InBattleIndicator.Text:SetAllPoints()
+    
+    InBattleIndicator:RegisterEvent("PET_BATTLE_PET_CHANGED")
+    InBattleIndicator:RegisterEvent("PET_BATTLE_OPENING_START")
+    InBattleIndicator:SetScript("OnEvent", function(self, event, ...)
+        if not C_PetBattles.IsPlayerNPC(LE_BATTLE_PET_ENEMY) then
+            self:Hide()
+        end
+        
+        local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
+        local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
+        local best = PlayersBestQuality(speciesID)
+        if not best then
+            self.Text:SetText("You don't own this pet.")
+        else
+            if best < C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, activePet) then
+                self.Text:SetText("This pet is an upgrade.")
+            else
+                self.Text:SetText("You own this pet.")
+            end
+        end
+        
+        self:Show()
+    end)
+    
+    InBattleIndicator:SetScript("OnEnter", function(self)
+        local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
+        local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
+
+        GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
+        GameTooltip:SetText(OwnedListOrNot(BuildOwnedListS(speciesID)))
+        GameTooltip:Show()
+    end)
+    
+    InBattleIndicator:SetScript("OnLeave", function(self)
+        if self == GameTooltip:GetOwner() then
+            GameTooltip:Hide()
+        end
+    end)
+end
