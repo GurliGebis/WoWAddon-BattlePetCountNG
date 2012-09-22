@@ -158,14 +158,16 @@ end)
 --
 
 do
-    local InBattleIndicator = CreateFrame("FRAME", nil, PetBattleFrame.ActiveEnemy)
-    InBattleIndicator:SetPoint("RIGHT", PetBattleFrame.ActiveEnemy, "LEFT")
-    InBattleIndicator:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 18, 0)
-    InBattleIndicator:SetHeight(28)
+    local InBattleIndicator = CreateFrame("FRAME", nil, PetBattleFrame.ActiveEnemy, "InsetFrameTemplate3")
 
-    InBattleIndicator.Text = InBattleIndicator:CreateFontString("OVERLAY")
-    InBattleIndicator.Text:SetFontObject(GameFontHighlightSmallLeft)
-    InBattleIndicator.Text:SetAllPoints()
+    local Text = InBattleIndicator:CreateFontString("OVERLAY")
+    Text:SetFontObject(GameFontHighlightSmallLeft)
+    Text:SetPoint("RIGHT", PetBattleFrame.ActiveEnemy, "LEFT", -10, 0)
+    Text:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 24, 0)
+    
+    InBattleIndicator:SetPoint("TOPLEFT", Text, -4, 4)
+    InBattleIndicator:SetPoint("BOTTOMRIGHT", Text, 5, -4)
+    InBattleIndicator:SetScale(0.9) -- bleh
     
     InBattleIndicator:RegisterEvent("PET_BATTLE_PET_CHANGED")
     InBattleIndicator:RegisterEvent("PET_BATTLE_OPENING_START")
@@ -178,12 +180,12 @@ do
         local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
         local best = PlayersBestQuality(speciesID)
         if not best then
-            self.Text:SetText("You don't own this pet.")
+            Text:SetText("You don't own this pet.")
         else
             if best < C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, activePet) then
-                self.Text:SetText("This pet is an upgrade.")
+                Text:SetText("This pet is an upgrade.")
             else
-                self.Text:SetText("You own this pet.")
+                Text:SetText("You own this pet.")
             end
         end
         
