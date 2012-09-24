@@ -44,7 +44,7 @@ do
                             ITEM_QUALITY_COLORS[quality-1].r*255,
                             ITEM_QUALITY_COLORS[quality-1].g*255,
                             ITEM_QUALITY_COLORS[quality-1].b*255,
-                            customName or name, level))
+                            customName or name, tostring(level)))
             end
         end
         
