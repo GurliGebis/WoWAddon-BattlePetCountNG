@@ -36,15 +36,15 @@ do
         wipe(tmp)
 
         for iv,petid in LPJ:IteratePetIDs() do
-            local speciesID, customName, _, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
+            local speciesID, customName, level, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
             if (p_sp and speciesID == p_sp) or (p_c and creatureID == p_c) then
                 local _, _, _, _, quality = C_PetJournal.GetPetStats(petid)
                 
-                tinsert(tmp, format("|cff%02x%02x%02x%s|r",
+                tinsert(tmp, format("|cff%02x%02x%02x%s|r (L%d)",
                             ITEM_QUALITY_COLORS[quality-1].r*255,
                             ITEM_QUALITY_COLORS[quality-1].g*255,
                             ITEM_QUALITY_COLORS[quality-1].b*255,
-                            customName or name))
+                            customName or name, level))
             end
         end
         
