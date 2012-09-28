@@ -98,7 +98,7 @@ hooksecurefunc("BattlePetTooltipTemplate_SetBattlePet", function(self, data)
     end
     
     self.X_BPC.Text:SetText(OwnedListOrNot(BuildOwnedListS(self.speciesID)))
-    self.X_BPC:SetHeight(t.X_BPC.Text:GetHeight()+16)
+    self.X_BPC:SetHeight(self.X_BPC.Text:GetHeight()+16)
 end)
 
 --
@@ -112,8 +112,6 @@ hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self, petOwner, pe
     
     self.X_BPC.Text:SetText(OwnedListOrNot(BuildOwnedListS(speciesID)))
     self.X_BPC:SetHeight(self.X_BPC.Text:GetHeight()+16)
-
-
 end)
 
 hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
