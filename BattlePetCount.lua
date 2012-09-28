@@ -92,37 +92,39 @@ end
 -- BattlePetTooltipTemplate
 --
 
-local function BattlePetTooltipTemplate_SetText(t, s)
-    if not t.X_BPC then
-        t.X_BPC = Create_SubTip(t)
-    end
-
-    t.X_BPC.Text:SetText(s)
-    t.X_BPC:SetHeight(t.X_BPC.Text:GetHeight()+16)
-end
-
 hooksecurefunc("BattlePetTooltipTemplate_SetBattlePet", function(self, data)
-    local speciesID = self.speciesID
-    BattlePetTooltipTemplate_SetText(self, OwnedListOrNot(BuildOwnedListS(speciesID)))
+    if not self.X_BPC then
+        self.X_BPC = Create_SubTip(t)
+    end
+    
+    self.X_BPC.Text:SetText(OwnedListOrNot(BuildOwnedListS(self.speciesID)))
+    self.X_BPC:SetHeight(t.X_BPC.Text:GetHeight()+16)
 end)
 
 --
 -- PetBattleUnitTooltip
 --
 
-local function PetBattleUnitTooltip_SetText(t, s)
-    if not t.X_BPC then
-        t.X_BPC = Create_SubTip(t)
-    end
-
-    t.X_BPC.Text:SetText(s)
-    t.X_BPC:SetHeight(t.X_BPC.Text:GetHeight()+16)
-end
-
 hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self, petOwner, petIndex)
-    local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
-    PetBattleUnitTooltip_SetText(self, OwnedListOrNot(BuildOwnedListS(speciesID)))
+    if not self.X_BPC then
+        self.X_BPC = Create_SubTip(self)
+    end
+    
+    self.X_BPC.Text:SetText(OwnedListOrNot(BuildOwnedListS(speciesID)))
+    self.X_BPC:SetHeight(self.X_BPC.Text:GetHeight()+16)
+
+
 end)
+
+hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
+    local quality = C_PetBattles.GetBreedQuality(self.petOwner, self.petIndex)
+    if self.Name then
+        self.Name:SetVertexColor(ITEM_QUALITY_COLORS[quality-1].r,
+                                 ITEM_QUALITY_COLORS[quality-1].g,
+                                 ITEM_QUALITY_COLORS[quality-1].b)
+    end
+end)
+
 
 --
 -- GameTooltip
