@@ -111,6 +111,7 @@ hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self, petOwner, pe
         self.X_BPC = Create_SubTip(self)
     end
     
+    local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
     self.X_BPC.Text:SetText(OwnedListOrNot(BuildOwnedListS(speciesID)))
     self.X_BPC:SetHeight(self.X_BPC.Text:GetHeight()+16)
 end)
