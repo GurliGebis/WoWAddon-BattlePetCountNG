@@ -161,6 +161,10 @@ local function sub_PetName(line)
     if start then
         name = strsub(line, stop+1)
     end
+    local _, _, subname = strfind(name, "|c%x%x%x%x%x%x%x%x([^|]+)|r")
+    if subname then
+        name = subname
+    end
     
     for _,speciesID in LPJ:IterateSpeciesIDs() do
         local s_name = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
