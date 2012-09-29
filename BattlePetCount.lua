@@ -130,7 +130,6 @@ end)
 -- GameTooltip
 --
 
-local isMinimapTooltip
 GameTooltip:HookScript("OnShow", function(self)
     local _, unit = self:GetUnit()
     if unit then
@@ -217,8 +216,8 @@ do
     InBattleIndicator:RegisterEvent("PET_BATTLE_PET_CHANGED")
     InBattleIndicator:RegisterEvent("PET_BATTLE_OPENING_START")
     InBattleIndicator:SetScript("OnEvent", function(self, event, ...)
-        if not C_PetBattles.IsPlayerNPC(LE_BATTLE_PET_ENEMY) then
-            self:Hide()
+        if not C_PetBattles.IsWildBattle() then
+            return self:Hide()
         end
         
         local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
