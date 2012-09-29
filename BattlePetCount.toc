@@ -4,12 +4,15 @@
 ## Notes: Indicate how many and what quality battle pets you have.
 ## Author: End
 ## X-Email: end@cornhooves.org
-## OptionalDeps: LibPetJournal-2.0
+## OptionalDeps: Ace3, LibPetJournal-2.0
 ## Dependencies: Blizzard_PetBattleUI
 
 Libs\LibPetJournal-2.0\LibStub.lua
 Libs\LibPetJournal-2.0\CallbackHandler-1.0.lua
 Libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
+Libs\AceLocale-3.0\AceLocale-3.0.xml
+
+Locales\enUS.lua
 
 BattlePetCount.lua
 CritterItems.lua

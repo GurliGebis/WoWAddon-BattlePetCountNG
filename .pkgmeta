@@ -2,5 +2,7 @@
 package-as: BattlePetCount
 
 externals:
+    Libs/AceLocale-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceLocale-3.0
     Libs/LibPetJournal-2.0: 
         url: http://hg.curseforge.net/wow/libpetjournal-2-0/mainline
+        tag: latest

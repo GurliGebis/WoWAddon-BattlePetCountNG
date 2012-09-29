@@ -2,6 +2,7 @@
 local addon_name, addon = ...
 
 local LPJ = LibStub("LibPetJournal-2.0")
+local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
 --
 --
@@ -64,9 +65,9 @@ end
 
 local function OwnedListOrNot(ownedlist)
     if ownedlist then
-        return format("You own this pet: %s", ownedlist)
+        return L["YOU_OWN_COLON"]..ownedlist
     else
-        return "You don't own this pet."
+        return L["YOU_DONT_OWN"]
     end
 end
 
@@ -94,7 +95,7 @@ end
 
 hooksecurefunc("BattlePetTooltipTemplate_SetBattlePet", function(self, data)
     if not self.X_BPC then
-        self.X_BPC = Create_SubTip(t)
+        self.X_BPC = Create_SubTip(self)
     end
     
     self.X_BPC.Text:SetText(OwnedListOrNot(BuildOwnedListS(self.speciesID)))
@@ -166,12 +167,14 @@ local function sub_PetName(line)
         if s_name == name then
             local quality = PlayersBestQuality(speciesID)
             if quality then
-               return format("%s (|cff%02x%02x%02xOwned|r)", line,
+               return format("%s (|cff%02x%02x%02x%s|r)", line,
                             ITEM_QUALITY_COLORS[quality-1].r*255,
                             ITEM_QUALITY_COLORS[quality-1].g*255,
-                            ITEM_QUALITY_COLORS[quality-1].b*255)
+                            ITEM_QUALITY_COLORS[quality-1].b*255,
+                            L["OWNED"])
             else
-                return line .. " (|cffee3333Unowned|r)"
+                return format("%s (|cffee3333%s|r)", line, L["UNOWNED"])
+                
             end
         end
     end
@@ -221,12 +224,12 @@ do
         local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
         local best = PlayersBestQuality(speciesID)
         if not best then
-            Text:SetText("You don't own this pet.")
+            Text:SetText(L["YOU_DONT_OWN"])
         else
             if best < C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, activePet) then
-                Text:SetText("This pet is an upgrade.")
+                Text:SetText(L["PET_IS_UPGRADE"])
             else
-                Text:SetText("You own this pet.")
+                Text:SetText(L["YOU_OWN"])
             end
         end
         
