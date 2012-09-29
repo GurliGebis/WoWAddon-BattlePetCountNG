@@ -128,7 +128,7 @@ end)
 -- GameTooltip
 --
 
-GameTooltip:HookScript("OnShow", function(self)
+local function HandleGameTooltip(self)
     local _, unit = self:GetUnit()
     if unit then
         if UnitIsWildBattlePet(unit) then
@@ -136,7 +136,7 @@ GameTooltip:HookScript("OnShow", function(self)
             self:AddLine(OwnedListOrNot(BuildOwnedListC(creatureID)))
             self:Show()
         end
-        return
+        return true
     end
     
     local _, link = self:GetItem()
@@ -149,7 +149,55 @@ GameTooltip:HookScript("OnShow", function(self)
                 self:Show()
             end
         end
+        return true
+    end
+end
+    
+
+local isMinimapTooltip
+GameTooltip:HookScript("OnShow", function(self)
+    if HandleGameTooltip(self) then
+        isMinimapTooltip = false
         return
+    end
+    
+    isMinimapTooltip = self:GetOwner() == Minimap and MouseIsOver(Minimap)
+end)
+
+local function sub_PetName(line)
+    local name = line
+    local start, stop = strfind(line, "|t")
+    if start then
+        name = strsub(line, stop+1)
+    end
+    
+    for _,speciesID in LPJ:IterateSpeciesIDs() do
+        local s_name = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+        if s_name == name then
+            local bestquality = PlayersBestQuality(speciesID)
+            if bestquality then
+                return line .. " (Owned)"
+            else
+                return line .. " (Unowned)"
+            end
+        end
+    end
+
+    return line
+end
+
+local lastMinimapTooltip
+GameTooltip:HookScript("OnUpdate", function(self)
+    if not isMinimapTooltip then
+        return
+    end
+    
+    local text = GameTooltipTextLeft1:GetText()
+    if text ~= lastMinimapTooltip then
+        text = string.gsub(text, "([^\n]+)", sub_PetName)
+        GameTooltipTextLeft1:SetText(text)
+        lastMinimapTooltip = text
+        self:Show()
     end
 end)
 
