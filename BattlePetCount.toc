@@ -13,6 +13,10 @@ Libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
 Libs\AceLocale-3.0\AceLocale-3.0.xml
 
 Locales\enUS.lua
+Locales\deDE.lua
+Locales\frFR.lua
+Locales\itIT.lua
+Locales\koKR.lua
 
 BattlePetCount.lua
 CritterItems.lua
