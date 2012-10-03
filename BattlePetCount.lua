@@ -4,6 +4,11 @@ local addon_name, addon = ...
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
+local HEALTH_COORD, POWER_COORD,
+      SPEED_COORD, QUALITY_COORD = 
+    {0.5, 1.0, 0.5, 1.0}, {0.0, 0.5, 0.0, 0.5},
+    {0.0, 0.5, 0.5, 1.0}, {0.5, 1.0, 0.0, 0.5}
+
 --
 --
 --
@@ -71,14 +76,18 @@ local function OwnedListOrNot(ownedlist)
     end
 end
 
-local function PlayersBestQuality(speciesID)
+local function PlayersBest(speciesID)
     local maxquality = -1
+    local maxlevel = -1
     for iv,petid in LPJ:IteratePetIDs() do
-        local sid = C_PetJournal.GetPetInfoByPetID(petid)
+        local sid, _, level = C_PetJournal.GetPetInfoByPetID(petid)
         if sid == speciesID then
             local _, _, _, _, quality = C_PetJournal.GetPetStats(petid)
             if maxquality < quality then
                 maxquality = quality
+            end
+            if maxlevel < level then
+                maxlevel = level
             end
         end
     end
@@ -86,7 +95,7 @@ local function PlayersBestQuality(speciesID)
     if maxquality == -1 then
         return nil
     end
-    return maxquality
+    return maxquality, maxlevel
 end
 
 --
@@ -169,7 +178,7 @@ local function sub_PetName(line)
     for _,speciesID in LPJ:IterateSpeciesIDs() do
         local s_name = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
         if s_name == name then
-            local quality = PlayersBestQuality(speciesID)
+            local quality = PlayersBest(speciesID)
             if quality then
                return format("%s (|cff%02x%02x%02x%s|r)", line,
                             ITEM_QUALITY_COLORS[quality-1].r*255,
@@ -178,7 +187,6 @@ local function sub_PetName(line)
                             L["OWNED"])
             else
                 return format("%s (|cffee3333%s|r)", line, L["UNOWNED"])
-                
             end
         end
     end
@@ -205,17 +213,72 @@ end)
 -- Pet Battle Text
 --
 
-do
+do   
     local InBattleIndicator = CreateFrame("FRAME", nil, PetBattleFrame.ActiveEnemy, "InsetFrameTemplate3")
-
-    local Text = InBattleIndicator:CreateFontString("OVERLAY")
-    Text:SetFontObject(GameFontHighlightSmallLeft)
-    Text:SetPoint("RIGHT", PetBattleFrame.ActiveEnemy, "LEFT", -8, 0)
-    Text:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 24, 0)
+    InBattleIndicator:SetPoint("RIGHT", PetBattleFrame.ActiveEnemy, "LEFT", -6, 0)
+    InBattleIndicator:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 22, 0)
+    InBattleIndicator:SetHeight(30)
     
-    InBattleIndicator:SetPoint("TOPLEFT", Text, -4, 4)
-    InBattleIndicator:SetPoint("BOTTOMRIGHT", Text, 5, -4)
-    InBattleIndicator:SetScale(0.95) -- bleh
+    local NotOwned = InBattleIndicator:CreateFontString("OVERLAY")
+    NotOwned:SetFontObject(GameFontHighlightLeft)
+    NotOwned:SetText(L["UNOWNED"])
+    NotOwned:SetJustifyH("CENTER")
+    NotOwned:SetAllPoints()
+    NotOwned:Hide()
+    
+    local function CreateTexturePair(texture1, t1coord, texture2, t2coord)
+        local frame = CreateFrame("FRAME", nil, InBattleIndicator)
+        frame:SetHeight(16)
+        frame:SetWidth(28)
+        
+        local t1 = frame:CreateTexture("ARTWORK")
+        t1:SetTexture(texture1)
+        t1:SetWidth(16)
+        t1:SetHeight(16)
+        if t1coord then
+            t1:SetTexCoord(unpack(t1coord))
+        end
+        t1:SetPoint("LEFT")
+            
+        local t2 = frame:CreateTexture("ARTWORK") 
+        t2:SetTexture(texture2)
+        t2:SetWidth(16)
+        t2:SetHeight(16)
+        if t2coord then
+            t2:SetTexCoord(unpack(t1coord))
+        end
+        t2:SetPoint("RIGHT")
+
+        frame:SetScale(1)
+        frame:Hide()
+        return frame
+    end
+    
+    --
+    -- Textures
+    --
+        
+    local TLevelUpgrade = CreateTexturePair(
+        "Interface\\AddOns\\BattlePetCount\\Media\\level", nil,
+        "Interface\\PetBattles\\BattleBar-AbilityBadge-Strong-Small"
+    )
+    local TLevelDowngrade = CreateTexturePair(
+        "Interface\\AddOns\\BattlePetCount\\Media\\level", nil,
+        "Interface\\PetBattles\\BattleBar-AbilityBadge-Weak-Small"
+    )
+    local TQualityUpgrade = CreateTexturePair(
+        "Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD,
+        "Interface\\PetBattles\\BattleBar-AbilityBadge-Strong-Small"
+    )
+    local TQualityDowngrade = CreateTexturePair(
+        "Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD,
+        "Interface\\PetBattles\\BattleBar-AbilityBadge-Weak-Small"
+    )
+    
+    --
+    --
+    --    
+    local shown = {}
     
     InBattleIndicator:RegisterEvent("PET_BATTLE_PET_CHANGED")
     InBattleIndicator:RegisterEvent("PET_BATTLE_OPENING_START")
@@ -224,17 +287,44 @@ do
             return self:Hide()
         end
         
+        for i, item in ipairs(shown) do
+            item:Hide()
+        end
+        wipe(shown)
+        
         local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
         local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
-        local best = PlayersBestQuality(speciesID)
-        if not best then
-            Text:SetText(L["YOU_DONT_OWN"])
+        local bestquality, bestlevel = PlayersBest(speciesID)
+        
+        if not bestquality then
+            NotOwned:Show()
         else
-            if best < C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, activePet) then
-                Text:SetText(L["PET_IS_UPGRADE"])
-            else
-                Text:SetText(L["YOU_OWN"])
+            NotOwned:Hide()
+            
+            local quality = C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, activePet)
+            if bestquality < quality then
+                tinsert(shown, TQualityUpgrade)
+            elseif bestquality > quality  then
+                tinsert(shown, TQualityDowngrade)
             end
+            
+            local level = C_PetBattles.GetLevel(LE_BATTLE_PET_ENEMY, activePet)
+            if bestlevel < level then
+                tinsert(shown, TLevelUpgrade)
+            elseif bestlevel > level then
+                tinsert(shown, TLevelDowngrade)
+            end
+        end
+        
+        local last
+        for i,item in ipairs(shown) do
+            if last == nil then
+                item:SetPoint("RIGHT", self, "RIGHT", -4, 0)
+            else
+                item:SetPoint("RIGHT", last, "LEFT", -4, 0)
+            end
+            last = item
+            item:Show()
         end
         
         self:Show()
@@ -245,7 +335,8 @@ do
         local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
 
         GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
-        GameTooltip:SetText(OwnedListOrNot(BuildOwnedListS(speciesID)))
+        
+        GameTooltip:AddLine(OwnedListOrNot(BuildOwnedListS(speciesID)))
         GameTooltip:Show()
     end)
     
