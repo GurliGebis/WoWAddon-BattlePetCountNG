@@ -13,7 +13,7 @@ if not L then return end
 
 --
 
-L["YOU_OWN_COLON"] = "You own this pet: "
+L["YOU_OWN_COLON"] = "You own this pet:"
 L["YOU_OWN"] = "You own this pet."
 L["YOU_DONT_OWN"] = "You don't own this pet."
 L["PET_IS_UPGRADE"] = "This pet is an upgrade."

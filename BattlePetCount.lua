@@ -65,7 +65,7 @@ end
 
 local function OwnedListOrNot(ownedlist)
     if ownedlist then
-        return L["YOU_OWN_COLON"]..ownedlist
+        return format("%s %s", L["YOU_OWN_COLON"], ownedlist)
     else
         return L["YOU_DONT_OWN"]
     end
