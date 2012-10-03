@@ -13,10 +13,11 @@ if not L then return end
 
 --
 
-L["OWNED"] = "J\195\161 Possui"
+L["OWNED"] = "J\195\161 possui"
 L["PET_IS_UPGRADE"] = "Este mascote \195\169 uma melhoria de qualidade."
-L["UNOWNED"] = "N\195\163o Possui"
+L["UNOWNED"] = "N\195\163o possui"
 L["YOU_DONT_OWN"] = "Voc\195\170 n\195\163o possui este mascote."
 L["YOU_OWN"] = "Voc\195\170 j\195\161 possui este mascote."
-L["YOU_OWN_COLON"] = "Voc\195\170 j\195\161 possui este mascote:"
+L["YOU_OWN_COLON"] = "Voc\195\170 j\195\161 possui este mascote: "
+
 
