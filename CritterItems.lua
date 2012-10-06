@@ -236,6 +236,7 @@ Map[86563] = 836
 Map[86564] = 834
 Map[87526] = 844
 Map[88148] = 792
+Map[89368] = 849
 Map[89587] = 381
 Map[90177] = 903
 Map[90897] = 278
@@ -265,7 +266,7 @@ function SlashCmdList.BPCMISSINGSCAN(msg, editbox)
     for i,speciesID in LPJ:IterateSpeciesIDs() do
         if not speciesSet[speciesID] then
             local name, _, _, creatureID, sourceText, _, isWild, canBattle = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
-            if not isWild and canBattle and not strfind(sourceText, "Achievement:") and not EXCEPTIONS[speciesID] then
+            if not isWild and not strfind(sourceText, "Achievement:") and not EXCEPTIONS[speciesID] then
                 count = count + 1
                 print(format("%s species=%d creature=%d", name, speciesID, creatureID))
             end
