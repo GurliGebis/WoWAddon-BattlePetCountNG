@@ -3,14 +3,6 @@ local addon_name, addon = ...
 
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
-
-local HEALTH_COORD, POWER_COORD,
-      SPEED_COORD, QUALITY_COORD = 
-    {0.5, 1.0, 0.5, 1.0}, {0.0, 0.5, 0.0, 0.5},
-    {0.0, 0.5, 0.5, 1.0}, {0.5, 1.0, 0.0, 0.5}
-
-local UP_ARROW = "Interface\\PetBattles\\BattleBar-AbilityBadge-Strong-Small"
-local DOWN_ARROW = "Interface\\PetBattles\\BattleBar-AbilityBadge-Weak-Small"
     
 --
 --
@@ -76,6 +68,34 @@ local function OwnedListOrNot(ownedlist)
         return format("%s %s", L["YOU_OWN_COLON"], ownedlist)
     else
         return L["YOU_DONT_OWN"]
+    end
+end
+
+local ShortOwnedList
+do
+    local tmp = {}
+    
+    function ShortOwnedList(speciesID)
+        wipe(tmp)
+        
+        for _, petID in LPJ:IteratePetIDs() do
+            local sid, _, level = C_PetJournal.GetPetInfoByPetID(petID)
+            if sid == speciesID then
+                local _, _, _, _, quality = C_PetJournal.GetPetStats(petID)
+                
+                tinsert(tmp, format("|cff%02x%02x%02xL%d|r",
+                        ITEM_QUALITY_COLORS[quality-1].r*255,
+                        ITEM_QUALITY_COLORS[quality-1].g*255,
+                        ITEM_QUALITY_COLORS[quality-1].b*255,
+                        level))
+            end
+        end
+        
+        if #tmp > 0 then
+            return format("%s: %s", L["OWNED"], table.concat(tmp, "/"))
+        else
+            return format("|cffee3333%s|r", L["UNOWNED"])
+        end
     end
 end
 
@@ -181,16 +201,7 @@ local function sub_PetName(line)
     for _,speciesID in LPJ:IterateSpeciesIDs() do
         local s_name = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
         if s_name == name then
-            local quality = PlayersBest(speciesID)
-            if quality then
-               return format("%s (|cff%02x%02x%02x%s|r)", line,
-                            ITEM_QUALITY_COLORS[quality-1].r*255,
-                            ITEM_QUALITY_COLORS[quality-1].g*255,
-                            ITEM_QUALITY_COLORS[quality-1].b*255,
-                            L["OWNED"])
-            else
-                return format("%s (|cffee3333%s|r)", line, L["UNOWNED"])
-            end
+            return format("%s (%s)", line, ShortOwnedList(speciesID))          
         end
     end
 
@@ -226,51 +237,11 @@ do
     Text:SetFontObject(GameFontHighlightLeft)
     Text:SetJustifyH("CENTER")
     Text:SetAllPoints()
-    Text:Hide()
-    
-    local function CreateTexturePair(texture1, t1coord, texture2, t2coord)
-        local frame = CreateFrame("FRAME", nil, InBattleIndicator)
-        frame:SetHeight(16)
-        frame:SetWidth(28)
-        
-        local t1 = frame:CreateTexture("ARTWORK")
-        t1:SetTexture(texture1)
-        t1:SetWidth(16)
-        t1:SetHeight(16)
-        if t1coord then
-            t1:SetTexCoord(unpack(t1coord))
-        end
-        t1:SetPoint("LEFT")
-            
-        local t2 = frame:CreateTexture("ARTWORK") 
-        t2:SetTexture(texture2)
-        t2:SetWidth(16)
-        t2:SetHeight(16)
-        if t2coord then
-            t2:SetTexCoord(unpack(t1coord))
-        end
-        t2:SetPoint("RIGHT")
-
-        frame:SetScale(1)
-        frame:Hide()
-        return frame
-    end
-    
-    --
-    -- Textures
-    --
-        
-    local TLevel = CreateTexturePair("Interface\\AddOns\\BattlePetCount\\Media\\level")
-    local TQuality = CreateTexturePair("Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD)
-    local THealth = CreateTexturePair("Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD)
-    local TPower = CreateTexturePair("Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD)
-    local TSpeed = CreateTexturePair("Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD)
 
     --
     --
     --    
-    local shown = {}
-    
+
     InBattleIndicator:RegisterEvent("PET_BATTLE_PET_CHANGED")
     InBattleIndicator:RegisterEvent("PET_BATTLE_OPENING_START")
     InBattleIndicator:SetScript("OnEvent", function(self, event, ...)
@@ -278,56 +249,11 @@ do
             return self:Hide()
         end
         
-        for i, item in ipairs(shown) do
-            item:Hide()
-        end
-        wipe(shown)
-        
         local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
         local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
-        local quality = C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, activePet)
-        local bestquality, bestlevel = PlayersBest(speciesID)
         
-        if not bestquality then
-            Text:SetText(L["UNOWNED"])
-            Text:Show()
-        elseif true then
-            -- text
-            if bestquality < quality then
-                Text:SetText(L["UPGRADE"])
-            else
-                Text:SetText(L["OWNED"])
-            end
-            Text:Show()
-        else
-            Text:Hide()
-            
-            local level = C_PetBattles.GetLevel(LE_BATTLE_PET_ENEMY, activePet)
-            
-            if bestquality < quality then
-                tinsert(shown, TQualityUpgrade)
-            elseif bestquality > quality  then
-                tinsert(shown, TQualityDowngrade)
-            end
-            
-            if bestlevel < level then
-                tinsert(shown, TLevelUpgrade)
-            elseif bestlevel > level then
-                tinsert(shown, TLevelDowngrade)
-            end
-        end
-        
-        local last
-        for i,item in ipairs(shown) do
-            if last == nil then
-                item:SetPoint("RIGHT", self, "RIGHT", -4, 0)
-            else
-                item:SetPoint("RIGHT", last, "LEFT", -4, 0)
-            end
-            last = item
-            item:Show()
-        end
-        
+        Text:SetText(ShortOwnedList(speciesID))
+
         self:Show()
     end)
     
