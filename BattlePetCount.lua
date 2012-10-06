@@ -9,6 +9,9 @@ local HEALTH_COORD, POWER_COORD,
     {0.5, 1.0, 0.5, 1.0}, {0.0, 0.5, 0.0, 0.5},
     {0.0, 0.5, 0.5, 1.0}, {0.5, 1.0, 0.0, 0.5}
 
+local UP_ARROW = "Interface\\PetBattles\\BattleBar-AbilityBadge-Strong-Small"
+local DOWN_ARROW = "Interface\\PetBattles\\BattleBar-AbilityBadge-Weak-Small"
+    
 --
 --
 --
@@ -219,12 +222,11 @@ do
     InBattleIndicator:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 22, 0)
     InBattleIndicator:SetHeight(30)
     
-    local NotOwned = InBattleIndicator:CreateFontString("OVERLAY")
-    NotOwned:SetFontObject(GameFontHighlightLeft)
-    NotOwned:SetText(L["UNOWNED"])
-    NotOwned:SetJustifyH("CENTER")
-    NotOwned:SetAllPoints()
-    NotOwned:Hide()
+    local Text = InBattleIndicator:CreateFontString("OVERLAY")
+    Text:SetFontObject(GameFontHighlightLeft)
+    Text:SetJustifyH("CENTER")
+    Text:SetAllPoints()
+    Text:Hide()
     
     local function CreateTexturePair(texture1, t1coord, texture2, t2coord)
         local frame = CreateFrame("FRAME", nil, InBattleIndicator)
@@ -258,23 +260,12 @@ do
     -- Textures
     --
         
-    local TLevelUpgrade = CreateTexturePair(
-        "Interface\\AddOns\\BattlePetCount\\Media\\level", nil,
-        "Interface\\PetBattles\\BattleBar-AbilityBadge-Strong-Small"
-    )
-    local TLevelDowngrade = CreateTexturePair(
-        "Interface\\AddOns\\BattlePetCount\\Media\\level", nil,
-        "Interface\\PetBattles\\BattleBar-AbilityBadge-Weak-Small"
-    )
-    local TQualityUpgrade = CreateTexturePair(
-        "Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD,
-        "Interface\\PetBattles\\BattleBar-AbilityBadge-Strong-Small"
-    )
-    local TQualityDowngrade = CreateTexturePair(
-        "Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD,
-        "Interface\\PetBattles\\BattleBar-AbilityBadge-Weak-Small"
-    )
-    
+    local TLevel = CreateTexturePair("Interface\\AddOns\\BattlePetCount\\Media\\level")
+    local TQuality = CreateTexturePair("Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD)
+    local THealth = CreateTexturePair("Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD)
+    local TPower = CreateTexturePair("Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD)
+    local TSpeed = CreateTexturePair("Interface\\PetBattles\\PetBattle-StatIcons", QUALITY_COORD)
+
     --
     --
     --    
@@ -294,21 +285,31 @@ do
         
         local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
         local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
+        local quality = C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, activePet)
         local bestquality, bestlevel = PlayersBest(speciesID)
         
         if not bestquality then
-            NotOwned:Show()
+            Text:SetText(L["UNOWNED"])
+            Text:Show()
+        elseif true then
+            -- text
+            if bestquality < quality then
+                Text:SetText(L["UPGRADE"])
+            else
+                Text:SetText(L["OWNED"])
+            end
+            Text:Show()
         else
-            NotOwned:Hide()
+            Text:Hide()
             
-            local quality = C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, activePet)
+            local level = C_PetBattles.GetLevel(LE_BATTLE_PET_ENEMY, activePet)
+            
             if bestquality < quality then
                 tinsert(shown, TQualityUpgrade)
             elseif bestquality > quality  then
                 tinsert(shown, TQualityDowngrade)
             end
             
-            local level = C_PetBattles.GetLevel(LE_BATTLE_PET_ENEMY, activePet)
             if bestlevel < level then
                 tinsert(shown, TLevelUpgrade)
             elseif bestlevel > level then
