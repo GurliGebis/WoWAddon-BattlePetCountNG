@@ -163,27 +163,31 @@ end)
 --
 
 GameTooltip:HookScript("OnShow", function(self)
-    local _, unit = self:GetUnit()
-    if unit then
-        if UnitIsWildBattlePet(unit) then
-            local creatureID = tonumber(strsub(UnitGUID(unit),7,10), 16)
-            self:AddLine(OwnedListOrNot(BuildOwnedListC(creatureID)))
-            self:Show()
-        end
-        return
-    end
-    
-    local _, link = self:GetItem()
-    if link then
-        local _, _, itemid = strfind(link, "|Hitem:(%d+):")
-        if itemid then
-            local speciesID = addon.Item2Species[tonumber(itemid)]
-            if speciesID then
-                self:AddLine(OwnedListOrNot(BuildOwnedListS(speciesID)))
+    if self.GetUnit then
+        local _, unit = self:GetUnit()
+        if unit then
+            if UnitIsWildBattlePet(unit) then
+                local creatureID = tonumber(strsub(UnitGUID(unit),7,10), 16)
+                self:AddLine(OwnedListOrNot(BuildOwnedListC(creatureID)))
                 self:Show()
             end
+            return
         end
-        return
+    end
+    
+    if self.GetItem then
+        local _, link = self:GetItem()
+        if link then
+            local _, _, itemid = strfind(link, "|Hitem:(%d+):")
+            if itemid then
+                local speciesID = addon.Item2Species[tonumber(itemid)]
+                if speciesID then
+                    self:AddLine(OwnedListOrNot(BuildOwnedListS(speciesID)))
+                    self:Show()
+                end
+            end
+            return
+        end
     end
 end)
 
