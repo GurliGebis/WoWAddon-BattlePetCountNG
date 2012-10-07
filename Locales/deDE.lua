@@ -18,4 +18,4 @@ L["PET_IS_UPGRADE"] = "Dieses Haustier ist besser."
 L["UNOWNED"] = "Nicht im Besitz"
 L["YOU_DONT_OWN"] = "Du besitzt dieses Haustier nicht."
 L["YOU_OWN"] = "Du besitzt dieses Haustier."
-L["YOU_OWN_COLON"] = "Du besitzt dieses Haustier:"
+L["YOU_OWN_COLON"] = "Du besitzt dieses Haustier:" -- Needs review

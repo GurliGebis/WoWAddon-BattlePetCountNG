@@ -18,4 +18,5 @@ L["PET_IS_UPGRADE"] = "Questa mascotte \195\168 un miglioramento."
 L["UNOWNED"] = "Non lo possiedi"
 L["YOU_DONT_OWN"] = "Non possiedi questa mascotte."
 L["YOU_OWN"] = "Possiedi questa mascotte."
-L["YOU_OWN_COLON"] = "Possiedi questa mascotte:"
+L["YOU_OWN_COLON"] = "Possiedi questa mascotte:" -- Needs review
+
