@@ -36,12 +36,12 @@ local options = {
             args = {
                 enableBattleTip = {
                     type = "toggle",
-                    name = "Alter In Battle Tooltip",
+                    name = L["OPT_BATTLE_TIP"],
                     width = "double",
                 },
                 enableBattleIndicator = {
                     type = "toggle",
-                    name = "Show In Battle Hint Box",
+                    name = L["OPT_BATTLE_HINT_BOX"],
                     width = "double",
                 },
             }
@@ -53,12 +53,12 @@ local options = {
             args = {
                 enableCreatureTip = {
                     type = "toggle",
-                    name = "Alter Creature Tooltip",
+                    name = L["OPT_CREATURE_TIP"],
                     width = "double",
                 },
                 enableMinimapTip = {
                     type = "toggle",
-                    name = "Alter Minimap Tooltip",
+                    name = L["OPT_MINIMAP_TIP"],
                     width = "double",
                 },
             }
@@ -70,19 +70,19 @@ local options = {
             args = {
                 enableCageTip = {
                     type = "toggle",
-                    name = "Alter Caged Pet Tooltip",
+                    name = L["OPT_CAGE_TIP"],
                     width = "double",
                     order = 1,
                 },
                 enableItemTip = {
                     type = "toggle",
-                    name = "Alter Learnable Item Tooltip",
+                    name = L["OPT_ITEM_TIP"],
                     width = "double",
                     order = 10,
                 },
                 itemTipIncludesAll = {
                     type = "toggle",
-                    name = "Item Tooltip Includes Non-Battle Pets",
+                    name = L["OPT_ITEM_TIP_ALL"],
                     width = "double",
                     order = 11,
                 },
