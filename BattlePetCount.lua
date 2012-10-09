@@ -31,7 +31,7 @@ local options = {
     args = {
         sectionBattle = {
             type = 'group',
-            name = "Battle",
+            name = L["OPT_HEADER_BATTLE"],
             inline = true,
             args = {
                 enableBattleTip = {
@@ -48,7 +48,7 @@ local options = {
         },
         sectionWorld = {
             type = 'group',
-            name = "World",
+            name = L["OPT_HEADER_WORLD"],
             inline = true,
             args = {
                 enableCreatureTip = {
@@ -65,7 +65,7 @@ local options = {
         },
         sectionItem = {
             type = 'group',
-            name = "Items",
+            name = L["OPT_HEADER_ITEMS"],
             inline = true,
             args = {
                 enableCageTip = {
