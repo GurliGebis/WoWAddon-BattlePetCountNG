@@ -1,6 +1,8 @@
 
 local addon_name, addon = ...
 
+LibStub("AceAddon-3.0"):NewAddon(addon, addon_name)
+
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
@@ -8,8 +10,107 @@ local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 --
 --
 
+local defaults = {
+    profile = {
+        enableCageTip = true,
+        enableBattleTip = true,
+        enableMinimapTip = true,
+        enableCreatureTip = true,
+        enableItemTip = true,
+        itemTipIncludesAll = true,
+        enableBattleIndicator = true
+    }
+}
+
+local options = {
+    name = addon_name,
+    handler = addon,
+    type = 'group',
+    get = function(info) return addon.db.profile[info[#info]] end,
+    set = function(info,v) addon.db.profile[info[#info]] = v end,
+    args = {
+        sectionBattle = {
+            type = 'group',
+            name = "Battle",
+            inline = true,
+            args = {
+                enableBattleTip = {
+                    type = "toggle",
+                    name = "Alter In Battle Tooltip",
+                    width = "double",
+                },
+                enableBattleIndicator = {
+                    type = "toggle",
+                    name = "Show In Battle Hint Box",
+                    width = "double",
+                },
+            }
+        },
+        sectionWorld = {
+            type = 'group',
+            name = "World",
+            inline = true,
+            args = {
+                enableCreatureTip = {
+                    type = "toggle",
+                    name = "Alter Creature Tooltip",
+                    width = "double",
+                },
+                enableMinimapTip = {
+                    type = "toggle",
+                    name = "Alter Minimap Tooltip",
+                    width = "double",
+                },
+            }
+        },
+        sectionItem = {
+            type = 'group',
+            name = "Items",
+            inline = true,
+            args = {
+                enableCageTip = {
+                    type = "toggle",
+                    name = "Alter Caged Pet Tooltip",
+                    width = "double",
+                    order = 1,
+                },
+                enableItemTip = {
+                    type = "toggle",
+                    name = "Alter Learnable Item Tooltip",
+                    width = "double",
+                    order = 10,
+                },
+                itemTipIncludesAll = {
+                    type = "toggle",
+                    name = "Item Tooltip Includes Non-Battle Pets",
+                    width = "double",
+                    order = 11,
+                },
+            }
+        }
+    }
+}
+
+--
+--
+--
+
+function addon:OnInitialize()
+    self.db = LibStub("AceDB-3.0"):New("BattlePetCountDB", defaults, true)
+    self.options = options
+    
+    LibStub("AceConfig-3.0"):RegisterOptionsTable(self.name, options)
+    self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(self.name, self.name, nil)
+end
+
+
+--
+--
+--
+
 local function SubTip(t)
     if t.X_BPC then
+        t.X_BPC:Show()
         return t.X_BPC
     end
     
@@ -33,6 +134,12 @@ local function SubTip(t)
     
     t.X_BPC = subtip
     return subtip
+end
+
+local function HideSubTip(t)
+    if t.X_BPC then
+        t.X_BPC:Hide()
+    end
 end
 
 local BuildOwnedListS, BuildOwnedListC
@@ -131,6 +238,10 @@ end
 --
 
 hooksecurefunc("BattlePetTooltipTemplate_SetBattlePet", function(self, data)
+    if not addon.db.profile.enableCageTip then
+        return HideSubTip(self)
+    end
+
     local subtip = SubTip(self)
     subtip.Text:SetText(OwnedListOrNot(BuildOwnedListS(self.speciesID)))
     subtip:SetHeight(subtip.Text:GetHeight()+16)
@@ -141,7 +252,11 @@ end)
 --
 
 hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self, petOwner, petIndex)
-    local subtip = SubTip(self)    
+    if not addon.db.profile.enableBattleTip then
+        return HideSubTip(self)
+    end
+
+    local subtip = SubTip(self)
     local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
     subtip.Text:SetText(OwnedListOrNot(BuildOwnedListS(speciesID)))
     subtip:SetHeight(subtip.Text:GetHeight()+16)
@@ -162,7 +277,11 @@ end)
 --
 
 GameTooltip:HookScript("OnShow", function(self)
-    if self.GetUnit then
+    if not addon.db then
+        return
+    end
+
+    if self.GetUnit and addon.db.profile.enableCreatureTip then
         local _, unit = self:GetUnit()
         if unit then
             if UnitIsWildBattlePet(unit) then
@@ -174,13 +293,19 @@ GameTooltip:HookScript("OnShow", function(self)
         end
     end
     
-    if self.GetItem then
+    if self.GetItem and addon.db.profile.enableItemTip then
         local _, link = self:GetItem()
         if link then
             local _, _, itemid = strfind(link, "|Hitem:(%d+):")
             if itemid then
                 local speciesID = addon.Item2Species[tonumber(itemid)]
                 if speciesID then
+                    if not addon.db.profile.itemTipIncludesAll then
+                        local _, _, _, _, _, _, _, canBattle = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+                        if not canBattle then
+                            return
+                        end
+                    end
                     self:AddLine(OwnedListOrNot(BuildOwnedListS(speciesID)))
                     self:Show()
                 end
@@ -213,7 +338,9 @@ end
 
 local lastMinimapTooltip
 GameTooltip:HookScript("OnUpdate", function(self)
-    if self:GetOwner() ~= Minimap then
+    if addon.db and not addon.db.profile.enableMinimapTip then
+        return
+    elseif self:GetOwner() ~= Minimap then
         return
     end
     
@@ -248,7 +375,9 @@ do
     InBattleIndicator:RegisterEvent("PET_BATTLE_PET_CHANGED")
     InBattleIndicator:RegisterEvent("PET_BATTLE_OPENING_START")
     InBattleIndicator:SetScript("OnEvent", function(self, event, ...)
-        if not C_PetBattles.IsWildBattle() then
+        if not addon.db.profile.enableBattleIndicator then
+            return self:Hide()
+        elseif not C_PetBattles.IsWildBattle() then
             return self:Hide()
         end
         

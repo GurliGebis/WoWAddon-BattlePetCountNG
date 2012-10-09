@@ -6,6 +6,7 @@
 ## X-Email: end@cornhooves.org
 ## OptionalDeps: Ace3, LibPetJournal-2.0
 ## Dependencies: Blizzard_PetBattleUI
+## SavedVariables: BattlePetCountDB
 
 Libs\LibPetJournal-2.0\LibStub.lua
 Libs\LibPetJournal-2.0\CallbackHandler-1.0.lua
