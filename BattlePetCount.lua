@@ -3,12 +3,16 @@ local addon_name, addon = ...
 
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
-    
+
 --
 --
 --
 
-local function Create_SubTip(t)
+local function SubTip(t)
+    if t.X_BPC then
+        return t.X_BPC
+    end
+    
     local subtip = CreateFrame("FRAME", nil, t)
     subtip:SetPoint("TOPLEFT", t, "BOTTOMLEFT")
     subtip:SetPoint("TOPRIGHT", t, "BOTTOMRIGHT")
@@ -27,6 +31,7 @@ local function Create_SubTip(t)
     subtip.Text:SetPoint("TOPLEFT", subtip, 8, -8)
     subtip.Text:SetWidth(220)
     
+    t.X_BPC = subtip
     return subtip
 end
 
@@ -126,12 +131,9 @@ end
 --
 
 hooksecurefunc("BattlePetTooltipTemplate_SetBattlePet", function(self, data)
-    if not self.X_BPC then
-        self.X_BPC = Create_SubTip(self)
-    end
-    
-    self.X_BPC.Text:SetText(OwnedListOrNot(BuildOwnedListS(self.speciesID)))
-    self.X_BPC:SetHeight(self.X_BPC.Text:GetHeight()+16)
+    local subtip = SubTip(self)
+    subtip.Text:SetText(OwnedListOrNot(BuildOwnedListS(self.speciesID)))
+    subtip:SetHeight(subtip.Text:GetHeight()+16)
 end)
 
 --
@@ -139,13 +141,10 @@ end)
 --
 
 hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self, petOwner, petIndex)
-    if not self.X_BPC then
-        self.X_BPC = Create_SubTip(self)
-    end
-    
+    local subtip = SubTip(self)    
     local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
-    self.X_BPC.Text:SetText(OwnedListOrNot(BuildOwnedListS(speciesID)))
-    self.X_BPC:SetHeight(self.X_BPC.Text:GetHeight()+16)
+    subtip.Text:SetText(OwnedListOrNot(BuildOwnedListS(speciesID)))
+    subtip:SetHeight(subtip.Text:GetHeight()+16)
 end)
 
 hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
