@@ -8,6 +8,7 @@
 ## Dependencies: Blizzard_PetBattleUI
 ## SavedVariables: BattlePetCountDB
 
+#@no-lib-strip@ 
 Libs\LibPetJournal-2.0\LibStub.lua
 Libs\LibPetJournal-2.0\CallbackHandler-1.0.lua
 Libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
@@ -16,6 +17,7 @@ Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\AceDB-3.0\AceDB-3.0.xml
 Libs\AceLocale-3.0\AceLocale-3.0.xml
+#@end-no-lib-strip@
 
 Locales\enUS.lua
 Locales\ptBR.lua
