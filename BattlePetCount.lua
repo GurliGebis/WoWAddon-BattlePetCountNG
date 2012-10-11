@@ -424,9 +424,10 @@ do
         local upgradeIcon = frame.X_BPC_UP
         if upgradeIcon then
             if addon.db.profile.enableBattleBorderIcon then
+                local hp = C_PetBattles.GetHealth(owner, slot)
                 local speciesID = C_PetBattles.GetPetSpeciesID(owner, slot)
                 local bestquality = PlayersBest(speciesID)
-                if not bestquality or quality > bestquality then
+                if hp > 0 and (not bestquality or quality > bestquality) then
                     upgradeIcon.Texture:SetVertexColor(
                         ITEM_QUALITY_COLORS[quality-1].r,
                         ITEM_QUALITY_COLORS[quality-1].g,
