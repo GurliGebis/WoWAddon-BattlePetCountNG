@@ -40,21 +40,25 @@ local options = {
                     type = "toggle",
                     name = L["OPT_BATTLE_TIP"],
                     width = "double",
+                    order = 1,
                 },
                 enableBattleIndicator = {
                     type = "toggle",
                     name = L["OPT_BATTLE_HINT_BOX"],
                     width = "double",
+                    order = 2,
                 },
                 enableBattleBorder = {
                     type = "toggle",
                     name = L["OPT_BATTLE_BORDER"],
-                    width = "double"
+                    width = "double",
+                    order = 3,
                 },
                 enableBattleBorderIcon = {
                     type = "toggle",
                     name = L["OPT_BATTLE_BORDER_ICON"],
-                    width = "double"
+                    width = "double",
+                    order = 4
                 }
             }
         },
@@ -67,11 +71,13 @@ local options = {
                     type = "toggle",
                     name = L["OPT_CREATURE_TIP"],
                     width = "double",
+                    order = 1,
                 },
                 enableMinimapTip = {
                     type = "toggle",
                     name = L["OPT_MINIMAP_TIP"],
                     width = "double",
+                    order = 2
                 },
             }
         },
