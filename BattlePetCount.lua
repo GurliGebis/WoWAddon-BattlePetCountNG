@@ -423,7 +423,7 @@ do
         
         local upgradeIcon = frame.X_BPC_UP
         if upgradeIcon then
-            if addon.db.profile.enableBattleBorderIcon then
+            if addon.db.profile.enableBattleBorderIcon and C_PetBattles.IsWildBattle() then
                 local hp = C_PetBattles.GetHealth(owner, slot)
                 local speciesID = C_PetBattles.GetPetSpeciesID(owner, slot)
                 local bestquality = PlayersBest(speciesID)
