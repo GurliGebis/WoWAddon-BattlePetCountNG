@@ -144,7 +144,7 @@ local function SubTip(t)
     })
     subtip:SetBackdropColor(0,0,0,1)
     
-    subtip.Text = subtip:CreateFontString("ARTWORK")
+    subtip.Text = subtip:CreateFontString(nil, "ARTWORK")
     subtip.Text:SetFontObject(GameTooltipTextSmall)
     subtip.Text:SetWordWrap(true)
     subtip.Text:SetPoint("TOPLEFT", subtip, 8, -8)
@@ -381,7 +381,7 @@ do
     InBattleIndicator:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 22, 0)
     InBattleIndicator:SetHeight(30)
     
-    local Text = InBattleIndicator:CreateFontString("OVERLAY")
+    local Text = InBattleIndicator:CreateFontString(nil, "OVERLAY")
     Text:SetFontObject(GameFontHighlightLeft)
     Text:SetJustifyH("CENTER")
     Text:SetAllPoints()
@@ -395,7 +395,7 @@ do
         overlay:SetWidth(16)
         overlay:SetHeight(16)
         overlay:SetPoint("TOPRIGHT", 7, 0)
-        local texture = overlay:CreateTexture("OVERLAY")
+        local texture = overlay:CreateTexture(nil, "OVERLAY")
         texture:SetAllPoints()
         texture:SetTexture("Interface\\AddOns\\"..addon_name.."\\Media\\investigate")
         overlay.Texture = texture
