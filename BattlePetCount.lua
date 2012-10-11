@@ -19,7 +19,7 @@ local defaults = {
         enableItemTip = true,
         itemTipIncludesAll = true,
         enableBattleIndicator = true,
-        enableBattleBorder = true,
+        enableBattleBorder = false,
         enableBattleBorderIcon = true,
     }
 }
