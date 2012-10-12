@@ -6,6 +6,8 @@ LibStub("AceAddon-3.0"):NewAddon(addon, addon_name)
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
+local is5_1 = tonumber((select(GuildBuildInfo(), 2))) >= 16139
+
 --
 --
 --
@@ -167,7 +169,13 @@ do
         wipe(tmp)
 
         for iv,petid in LPJ:IteratePetIDs() do
-            local speciesID, customName, level, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
+            local _, speciesID, customName, level, name, creatureID
+            if is5_1 then
+                speciesID, customName, level, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
+            else
+                speciesID, customName, level, _, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
+            end
+            
             if (p_sp and speciesID == p_sp) or (p_c and creatureID == p_c) then
                 local _, _, _, _, quality = C_PetJournal.GetPetStats(petid)
                 
