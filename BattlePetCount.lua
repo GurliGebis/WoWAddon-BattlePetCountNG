@@ -55,6 +55,7 @@ local options = {
                     name = L["OPT_BATTLE_BORDER"],
                     width = "double",
                     order = 3,
+                    hidden = is5_1
                 },
                 enableBattleBorderIcon = {
                     type = "toggle",
@@ -288,14 +289,16 @@ hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self, petOwner, pe
     subtip:SetHeight(subtip.Text:GetHeight()+16)
 end)
 
-hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
-    local quality = C_PetBattles.GetBreedQuality(self.petOwner, self.petIndex)
-    if self.Name then
-        self.Name:SetVertexColor(ITEM_QUALITY_COLORS[quality-1].r,
-                                 ITEM_QUALITY_COLORS[quality-1].g,
-                                 ITEM_QUALITY_COLORS[quality-1].b)
-    end
-end)
+if not is5_1 then
+    hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
+        local quality = C_PetBattles.GetBreedQuality(self.petOwner, self.petIndex)
+        if self.Name then
+            self.Name:SetVertexColor(ITEM_QUALITY_COLORS[quality-1].r,
+                                    ITEM_QUALITY_COLORS[quality-1].g,
+                                    ITEM_QUALITY_COLORS[quality-1].b)
+        end
+    end)
+end
 
 
 --
@@ -419,16 +422,19 @@ do
         
         local border = frame.Border or frame.BorderAlive
         local quality = C_PetBattles.GetBreedQuality(owner, slot)
-        if addon.db.profile.enableBattleBorder then
-            border:SetVertexColor(ITEM_QUALITY_COLORS[quality-1].r,
-                                ITEM_QUALITY_COLORS[quality-1].g,
-                                ITEM_QUALITY_COLORS[quality-1].b)
-            border_touched[border] = true
-        elseif border_touched[border] then
-            border:SetVertexColor(1, 1, 1)
-            border_touched[border] = nil
-        end
         
+        if not is5_1 then
+            if addon.db.profile.enableBattleBorder then
+                border:SetVertexColor(ITEM_QUALITY_COLORS[quality-1].r,
+                                    ITEM_QUALITY_COLORS[quality-1].g,
+                                    ITEM_QUALITY_COLORS[quality-1].b)
+                border_touched[border] = true
+            elseif border_touched[border] then
+                border:SetVertexColor(1, 1, 1)
+                border_touched[border] = nil
+            end
+        end
+            
         local upgradeIcon = frame.X_BPC_UP
         if upgradeIcon then
             if addon.db.profile.enableBattleBorderIcon and C_PetBattles.IsWildBattle() then
