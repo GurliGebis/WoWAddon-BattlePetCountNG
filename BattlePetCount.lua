@@ -6,7 +6,7 @@ LibStub("AceAddon-3.0"):NewAddon(addon, addon_name)
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
-local is5_1 = tonumber((select(2, GetBuildInfo(), 2))) >= 16139
+local is5_1 = not not C_PetJournal.GetNumCollectedInfo
 
 --
 --
