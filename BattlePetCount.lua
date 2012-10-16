@@ -305,11 +305,12 @@ end
 -- GameTooltip
 --
 
-GameTooltip:HookScript("OnShow", function(self)
+
+local function AlterGameTooltip(self)
     if not addon.db then
         return
     end
-
+    
     if self.GetUnit and addon.db.profile.enableCreatureTip then
         local _, unit = self:GetUnit()
         if unit then
@@ -342,6 +343,16 @@ GameTooltip:HookScript("OnShow", function(self)
             return
         end
     end
+end
+
+GameTooltip:HookScript("OnShow", function(self)
+    self = self or GameTooltip -- work around someone not playing nicely
+    AlterGameTooltip(self)
+end)
+
+ItemRefTooltip:HookScript("OnShow", function(self)
+    self = self or ItemRefTooltip -- work around someone not playing nicely
+    AlterGameTooltip(self)
 end)
 
 local function sub_PetName(line)
