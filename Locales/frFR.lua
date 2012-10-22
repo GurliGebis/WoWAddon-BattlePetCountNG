@@ -14,7 +14,7 @@ if not L then return end
 --
 
 L["OPT_BATTLE_BORDER"] = "Modifier la couleur de bordure des mascottes de combat" -- Needs review
--- L["OPT_BATTLE_BORDER_ICON"] = ""
+L["OPT_BATTLE_BORDER_ICON"] = "Montrer l'ic\195\180ne d'info sur la bordure du portrait" -- Needs review
 L["OPT_BATTLE_HINT_BOX"] = "Montrer la zone d'infos en combat" -- Needs review
 L["OPT_BATTLE_TIP"] = "Modifier l'infobulle en combat" -- Needs review
 L["OPT_CAGE_TIP"] = "Modifier l'infobulle des mascottes mises en cage" -- Needs review
