@@ -1,7 +1,7 @@
 
 local addon_name, addon = ...
 
-LibStub("AceAddon-3.0"):NewAddon(addon, addon_name)
+LibStub("AceAddon-3.0"):NewAddon(addon, addon_name, "AceEvent-3.0")
 
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
@@ -119,8 +119,28 @@ function addon:OnInitialize()
     
     LibStub("AceConfig-3.0"):RegisterOptionsTable(self.name, options)
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(self.name, self.name, nil)
+    
+    self:RegisterEvent("ADDON_LOADED")
+    self:ADDON_LOADED()
 end
 
+function addon:ADDON_LOADED(addon_name)
+    if not self.LibExtraTip then
+        -- XXX this is probably temporary until wow 5.1
+        self.LibExtraTip = LibStub("LibExtraTip-1", true)
+        if self.LibExtraTip then
+            self.LibExtraTip:AddCallback{
+                type = "extrashow",
+                callback = function(tip, extratip)
+                    if tip.X_BPC then
+                        tip.X_BPC:SetPoint("TOPLEFT", extratip, "BOTTOMLEFT")
+                        tip.X_BPC:SetPoint("TOPRIGHT", extratip, "BOTTOMRIGHT") 
+                    end
+                end
+            }
+        end
+    end
+end
 
 --
 --
