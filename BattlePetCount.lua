@@ -127,30 +127,32 @@ end
 --
 
 local function SubTip(t)
-    if t.X_BPC then
-        t.X_BPC:Show()
-        return t.X_BPC
+    local subtip = t.X_BPC
+    
+    if not subtip
+        local subtip = CreateFrame("FRAME", nil, t)
+        subtip:SetPoint("TOPLEFT", t, "BOTTOMLEFT")
+        subtip:SetPoint("TOPRIGHT", t, "BOTTOMRIGHT")
+        
+        subtip:SetBackdrop({
+            bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
+            edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
+            tile = true, tileSize = 16, edgeSize = 16, 
+            insets = { left = 4, right = 4, top = 4, bottom = 4 }
+        })
+        subtip:SetBackdropColor(0,0,0,1)
+        
+        subtip.Text = subtip:CreateFontString(nil, "ARTWORK")
+        subtip.Text:SetFontObject(GameTooltipTextSmall)
+        subtip.Text:SetWordWrap(true)
+        subtip.Text:SetPoint("TOPLEFT", subtip, 8, -8)
+        subtip.Text:SetWidth(220)
+        
+        t.X_BPC = subtip
+    else
+        subtip:Show()
     end
-    
-    local subtip = CreateFrame("FRAME", nil, t)
-    subtip:SetPoint("TOPLEFT", t, "BOTTOMLEFT")
-    subtip:SetPoint("TOPRIGHT", t, "BOTTOMRIGHT")
-    
-    subtip:SetBackdrop({
-        bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
-        edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
-        tile = true, tileSize = 16, edgeSize = 16, 
-        insets = { left = 4, right = 4, top = 4, bottom = 4 }
-    })
-    subtip:SetBackdropColor(0,0,0,1)
-    
-    subtip.Text = subtip:CreateFontString(nil, "ARTWORK")
-    subtip.Text:SetFontObject(GameTooltipTextSmall)
-    subtip.Text:SetWordWrap(true)
-    subtip.Text:SetPoint("TOPLEFT", subtip, 8, -8)
-    subtip.Text:SetWidth(220)
-    
-    t.X_BPC = subtip
+
     return subtip
 end
 
