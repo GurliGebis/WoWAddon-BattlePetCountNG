@@ -138,6 +138,15 @@ function addon:ADDON_LOADED(addon_name)
                     end
                 end
             }
+            self.LibExtraTip:AddCallback{
+                type = "extrahide",
+                callback = function(tip, extratip)
+                    if tip.X_BPC then
+                        tip.X_BPC:SetPoint("TOPLEFT", tip, "BOTTOMLEFT")
+                        tip.X_BPC:SetPoint("TOPRIGHT", tip, "BOTTOMRIGHT") 
+                    end
+                end
+            }
         end
     end
 end
