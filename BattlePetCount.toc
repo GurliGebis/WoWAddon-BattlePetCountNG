@@ -13,6 +13,7 @@ Libs\LibPetJournal-2.0\LibStub.lua
 Libs\LibPetJournal-2.0\CallbackHandler-1.0.lua
 Libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
 Libs\AceAddon-3.0\AceAddon-3.0.xml
+Libs\AceEvent-3.0\AceEvent-3.0.xml
 Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\AceDB-3.0\AceDB-3.0.xml
