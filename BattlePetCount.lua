@@ -130,7 +130,7 @@ local function SubTip(t)
     local subtip = t.X_BPC
     
     if not subtip then
-        local subtip = CreateFrame("FRAME", nil, t)
+        subtip = CreateFrame("FRAME", nil, t)
         subtip:SetPoint("TOPLEFT", t, "BOTTOMLEFT")
         subtip:SetPoint("TOPRIGHT", t, "BOTTOMRIGHT")
         
