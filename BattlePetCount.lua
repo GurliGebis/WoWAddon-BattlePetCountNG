@@ -124,3 +124,100 @@ function addon:OnInitialize()
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(self.name, self.name, nil)
 end
 
+--
+--
+--
+
+do
+    local tmp = {}
+    local function BuildOwnedList(p_sp, p_c)
+        wipe(tmp)
+
+        for iv,petid in LPJ:IteratePetIDs() do
+            local _, speciesID, customName, level, name, creatureID
+            if is5_1 then
+                speciesID, customName, level, _, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
+            else
+                speciesID, customName, level, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
+            end
+            
+            if (p_sp and speciesID == p_sp) or (p_c and creatureID == p_c) then
+                local _, _, _, _, quality = C_PetJournal.GetPetStats(petid)
+                
+                tinsert(tmp, format("|cff%02x%02x%02x%s|r (L%d)",
+                            ITEM_QUALITY_COLORS[quality-1].r*255,
+                            ITEM_QUALITY_COLORS[quality-1].g*255,
+                            ITEM_QUALITY_COLORS[quality-1].b*255,
+                            customName or name, tostring(level)))
+            end
+        end
+        
+        if #tmp > 0 then
+            return table.concat(tmp, ", ")
+        end
+    end
+    
+    function addon:BuildOwnedListS(speciesid)
+        return BuildOwnedList(speciesid, nil)
+    end
+    
+    function addon:BuildOwnedListC(creatureid)
+        return BuildOwnedList(nil, creatureid)
+    end
+end
+
+function addon:OwnedListOrNot(ownedlist)
+    if ownedlist then
+        return format("%s %s", L["YOU_OWN_COLON"], ownedlist)
+    else
+        return L["YOU_DONT_OWN"]
+    end
+end
+
+do
+    local tmp = {}
+    function addon:ShortOwnedList(speciesID)
+        wipe(tmp)
+        
+        for _, petID in LPJ:IteratePetIDs() do
+            local sid, _, level = C_PetJournal.GetPetInfoByPetID(petID)
+            if sid == speciesID then
+                local _, _, _, _, quality = C_PetJournal.GetPetStats(petID)
+                
+                tinsert(tmp, format("|cff%02x%02x%02xL%d|r",
+                        ITEM_QUALITY_COLORS[quality-1].r*255,
+                        ITEM_QUALITY_COLORS[quality-1].g*255,
+                        ITEM_QUALITY_COLORS[quality-1].b*255,
+                        level))
+            end
+        end
+        
+        if #tmp > 0 then
+            return format("%s: %s", L["OWNED"], table.concat(tmp, "/"))
+        else
+            return format("|cffee3333%s|r", L["UNOWNED"])
+        end
+    end
+end
+
+function addon:PlayersBest(speciesID)
+    local maxquality = -1
+    local maxlevel = -1
+    for iv,petid in LPJ:IteratePetIDs() do
+        local sid, _, level = C_PetJournal.GetPetInfoByPetID(petid)
+        if sid == speciesID then
+            local _, _, _, _, quality = C_PetJournal.GetPetStats(petid)
+            if maxquality < quality then
+                maxquality = quality
+            end
+            if maxlevel < level then
+                maxlevel = level
+            end
+        end
+    end
+    
+    if maxquality == -1 then
+        return nil
+    end
+    return maxquality, maxlevel
+end
