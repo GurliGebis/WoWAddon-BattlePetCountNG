@@ -244,7 +244,7 @@ end
 function addon:CollectedText(speciesID)
     local owned, maxOwned
     if C_PetJournal.GetNumCollectedInfo then
-        numOwned, maxAllowed = C_PetJournal.GetNumCollectedInfo(speciesID)  
+        owned, maxOwned = C_PetJournal.GetNumCollectedInfo(speciesID)  
     else
         -- 5.0 COMPAT
         local _, _, _, _, _, _, _, _, _, unique = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
