@@ -12,6 +12,8 @@ local is5_1 = not not C_PetJournal.GetNumCollectedInfo
 --
 --
 
+local GameTooltip_OnUpdate_Hook
+
 function module:OnInitialize()
     self:SecureHook("BattlePetTooltipTemplate_SetBattlePet")
 
@@ -27,6 +29,8 @@ function module:OnInitialize()
     self:HookScript(ItemRefTooltip, "OnShow", function()
         module:AlterGameTooltip(ItemRefTooltip)
     end)
+
+    self:HookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
 end
 
 --
@@ -135,7 +139,7 @@ local function sub_PetName(line)
 end
 
 local lastMinimapTooltip
-function module:GameTooltip_OnUpdate(tt)
+function GameTooltip_OnUpdate_Hook(tt)
     if addon.db and not addon.db.profile.enableMinimapTip then
         return
     elseif tt:GetOwner() ~= Minimap then
@@ -144,9 +148,13 @@ function module:GameTooltip_OnUpdate(tt)
     
     local text = GameTooltipTextLeft1:GetText()
     if text ~= lastMinimapTooltip then
-        text = string.gsub(text, "([^\n]+)", sub_PetName)
-        GameTooltipTextLeft1:SetText(text)
-        lastMinimapTooltip = text
-        tt:Show()
+        return module:UpdateMiniMapTooltip(tt, text)
     end
+end
+
+function module:UpdateMiniMapTooltip(tt, text)
+    text = string.gsub(text, "([^\n]+)", sub_PetName)
+    GameTooltipTextLeft1:SetText(text)
+    lastMinimapTooltip = text
+    tt:Show()
 end

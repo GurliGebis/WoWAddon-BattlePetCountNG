@@ -195,7 +195,7 @@ do
         local idfunc = MatchType[idtype]
         assert(idfunc, "invalid idtype")
 
-        for _,petid in LPJ:IteratePetIDs() do
+        for _,petID in LPJ:IteratePetIDs() do
             if idfunc(petID, matchID) then
                 if sid == speciesID then
                     local _, _, level = C_PetJournal.GetPetInfoByPetID(petID)
