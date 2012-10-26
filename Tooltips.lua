@@ -53,9 +53,9 @@ do
         for iv,petid in LPJ:IteratePetIDs() do
             local _, speciesID, customName, level, name, creatureID
             if is5_1 then
-                speciesID, customName, level, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
-            else
                 speciesID, customName, level, _, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
+            else
+                speciesID, customName, level, _, _, _, name, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petid)
             end
             
             if (p_sp and speciesID == p_sp) or (p_c and creatureID == p_c) then
