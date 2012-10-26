@@ -239,3 +239,42 @@ function addon:PlayersBest(speciesID)
     end
     return maxquality, maxlevel
 end
+
+
+function addon:CollectedText(speciesID)
+    local owned, maxOwned
+    if C_PetJournal.GetNumCollectedInfo then
+        numOwned, maxAllowed = C_PetJournal.GetNumCollectedInfo(speciesID)  
+    else
+        -- 5.0 COMPAT
+        local _, _, _, _, _, _, _, _, _, unique = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+        if unique then
+            maxOwned = 1
+        else
+            maxOwned = 3
+        end
+
+        owned = 0
+        for _,petID in LPJ:IteratePetIDs() do
+            local pet_speciesID = C_PetJournal.GetPetInfoByPetID(petID)
+            if pet_speciesID == speciesID then
+                owned = owned + 1
+            end
+        end
+    end
+
+    local ITEM_PET_KNOWN = ITEM_PET_KNOWN or "Collected (%d/%d)" -- TODO localize??
+    local ownedColor
+    if owned < maxOwned then
+        ownedColor = GREEN_FONT_COLOR_CODE
+    else
+        ownedColor = RED_FONT_COLOR_CODE
+    end
+
+    return format("%s%s%s: %s",
+                ownedColor,
+                format(ITEM_PET_KNOWN, owned, maxOwned),
+                FONT_COLOR_CODE_CLOSE,
+                self:OwnedList("speciesID", speciesID) or L["UNOWNED"]
+                )
+end
