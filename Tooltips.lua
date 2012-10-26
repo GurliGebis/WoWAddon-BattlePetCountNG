@@ -40,7 +40,7 @@ function module:Initialize_BattlePetTooltip()
     end
 end
 
-function module:BattlePetToolTip_Show(speciesID)
+function module:BattlePetToolTip_Show(speciesID, ...)
     local tip = BattlePetTooltip
     if not speciesID or speciesID < 0 then
         return
