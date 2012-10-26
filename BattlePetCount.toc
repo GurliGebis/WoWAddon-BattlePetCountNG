@@ -32,5 +32,7 @@ Locales\zhCN.lua
 Locales\zhTW.lua
 
 BattlePetCount.lua
+Tooltips.lua
+BattleIndicator.lua
 CritterItems.lua
 
