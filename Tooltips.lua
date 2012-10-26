@@ -15,51 +15,89 @@ local is5_1 = not not C_PetJournal.GetNumCollectedInfo
 local GameTooltip_OnUpdate_Hook
 
 function module:OnInitialize()
-    self:SecureHook("BattlePetTooltipTemplate_SetBattlePet")
-
-    self:SecureHook("PetBattleUnitTooltip_UpdateForUnit")
-    if not is5_1 then
-        self:SecureHook("PetBattleUnitFrame_UpdateDisplay")
-    end
-
-    -- XX hook SetUnit?
-    self:HookScript(GameTooltip, "OnShow", function()
-        module:AlterGameTooltip(GameTooltip)
-    end)
-    self:HookScript(ItemRefTooltip, "OnShow", function()
-        module:AlterGameTooltip(ItemRefTooltip)
-    end)
-
-    self:HookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
+    self:Initialize_BattlePetTooltip()
+    self:Initialize_PetBattleUnitTooltip()
+    self:Initialize_GameTooltip()
 end
 
 --
 -- BattlePetTooltipTemplate
 --
 
-function module:BattlePetTooltipTemplate_SetBattlePet(tip, data)
-    if not addon.db.profile.enableCageTip then
-        return HideSubTip(self)
+function module:Initialize_BattlePetTooltip()
+    self:SecureHook("BattlePetToolTip_Show")
+
+    if not is5_1 then
+        -- XXX also do FloatBattlePetTooltip or whatever??
+        local frame = BattlePetTooltip
+        local Owned = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        Owned:SetWidth(238)
+        Owned:SetJustifyH("LEFT")
+        Owned:SetPoint("TOPLEFT", frame.SpeedTexture, "BOTTOMLEFT", 0, -2)
+        Owned:SetVertexColor(1.0, 0.82, 0.0, 1.0)
+
+        frame.Owned = Owned
+    end
+end
+
+function module:BattlePetToolTip_Show(speciesID)
+    local tip = BattlePetTooltip
+    if not speciesID or speciesID < 0 then
+        return
+    elseif not addon.db.profile.enableCageTip then
+        -- TODO
     end
 
-    local subtip = SubTip(self)
-    subtip.Text:SetText(addon:OwnedListOrNot("speciesID", self.speciesID))
-    subtip:SetHeight(subtip.Text:GetHeight()+16)
+    local Owned = tip.Owned
+    Owned:SetText(addon:CollectedText(speciesID))
+    Owned:Show()
+
+    -- XXX TRIPLE ECKS
+    tip:SetSize(260,136)
 end
 
 --
 -- PetBattleUnitTooltip
 --
 
+function module:Initialize_PetBattleUnitTooltip()
+    self:SecureHook("PetBattleUnitTooltip_UpdateForUnit")
+    if not is5_1 then
+        self:SecureHook("PetBattleUnitFrame_UpdateDisplay")
+
+        local frame = PetBattlePrimaryUnitTooltip
+        local CollectedText = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        CollectedText:SetJustifyH("LEFT")
+        CollectedText:SetPoint("TOPLEFT", frame.Icon, "BOTTOMLEFT", 0, -4)
+
+        frame.CollectedText = CollectedText
+    end
+end
+
 function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
     if not addon.db.profile.enableBattleTip then
-        return HideSubTip(self)
+        if not is5_1 then
+            tip.CollectedText:Hide()
+            tip.HealthBorder:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", -1, -6)
+        end
+        return
     end
 
-    local subtip = SubTip(self)
+    local CollectedText = tip.CollectedText
+    local height = tip:GetHeight()
+    if CollectedText:IsShown() and is5_1 then
+        height = height - CollectedText:GetHeight()
+    end
+    
     local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
-    subtip.Text:SetText(addon:OwnedListOrNot("speciesID", speciesID))
-    subtip:SetHeight(subtip.Text:GetHeight()+16)
+    if not is5_1 then
+        CollectedText:SetWidth(tip:GetWidth() - 8) -- fudge
+    end
+    CollectedText:SetText(addon:CollectedText(speciesID))
+    CollectedText:Show()
+
+    tip.HealthBorder:SetPoint("TOPLEFT", CollectedText, "BOTTOMLEFT", -1, -6)
+    tip:SetHeight(height + CollectedText:GetHeight())
 end
 
 -- 5.0 client support
@@ -72,11 +110,21 @@ function module:PetBattleUnitFrame_UpdateDisplay(frame)
     end
 end
 
-
-
 --
 -- GameTooltip
 --
+
+function module:Initialize_GameTooltip()
+    -- XX hook SetUnit?
+    self:HookScript(GameTooltip, "OnShow", function()
+        module:AlterGameTooltip(GameTooltip)
+    end)
+    self:HookScript(ItemRefTooltip, "OnShow", function()
+        module:AlterGameTooltip(ItemRefTooltip)
+    end)
+
+    self:HookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
+end
 
 function module:AlterGameTooltip(self)
     if not addon.db then
