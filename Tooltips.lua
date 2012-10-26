@@ -39,7 +39,7 @@ function module:BattlePetTooltipTemplate_SetBattlePet(tip, data)
     end
 
     local subtip = SubTip(self)
-    subtip.Text:SetText(addon:OwnedListOrNot(addon:BuildOwnedListS(self.speciesID)))
+    subtip.Text:SetText(addon:OwnedListOrNot("speciesID", self.speciesID))
     subtip:SetHeight(subtip.Text:GetHeight()+16)
 end
 
@@ -54,7 +54,7 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
 
     local subtip = SubTip(self)
     local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
-    subtip.Text:SetText(addon:OwnedListOrNot(addon:BuildOwnedListS(speciesID)))
+    subtip.Text:SetText(addon:OwnedListOrNot("speciesID", speciesID))
     subtip:SetHeight(subtip.Text:GetHeight()+16)
 end
 
@@ -84,7 +84,7 @@ function module:AlterGameTooltip(self)
         if unit then
             if UnitIsWildBattlePet(unit) then
                 local creatureID = tonumber(strsub(UnitGUID(unit),7,10), 16)
-                self:AddLine(addon:OwnedListOrNot(addon:BuildOwnedListC(creatureID)))
+                self:AddLine(addon:OwnedListOrNot("creatureID", creatureID))
                 self:Show()
             end
             return
@@ -104,7 +104,7 @@ function module:AlterGameTooltip(self)
                             return
                         end
                     end
-                    self:AddLine(addon:OwnedListOrNot(addon:BuildOwnedListS(speciesID)))
+                    self:AddLine(addon:OwnedListOrNot("speciesID", speciesID))
                     self:Show()
                 end
             end
@@ -127,7 +127,7 @@ local function sub_PetName(line)
     for _,speciesID in LPJ:IterateSpeciesIDs() do
         local s_name = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
         if s_name == name then
-            return format("%s (%s)", line, ShortOwnedList(speciesID))          
+            return format("%s (%s)", line, addon:ShortOwnedList("speciesID", speciesID))          
         end
     end
 
