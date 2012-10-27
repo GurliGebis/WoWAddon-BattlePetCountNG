@@ -23,7 +23,7 @@ local defaults = {
         enableBattleIndicator = true,
         enableBattleBorder = false,
         enableBattleBorderIcon = true,
-        preferNamesOverQuality = true -- XXX default false
+        preferNamesOverQuality = false
     }
 }
 
@@ -37,6 +37,7 @@ local options = {
         sectionBattle = {
             type = 'group',
             name = L["OPT_HEADER_BATTLE"],
+            order = 10,
             inline = true,
             args = {
                 enableBattleTip = {
@@ -69,6 +70,7 @@ local options = {
         sectionWorld = {
             type = 'group',
             name = L["OPT_HEADER_WORLD"],
+            order = 20,
             inline = true,
             args = {
                 enableCreatureTip = {
@@ -88,6 +90,7 @@ local options = {
         sectionItem = {
             type = 'group',
             name = L["OPT_HEADER_ITEMS"],
+            order = 30,
             inline = true,
             args = {
                 enableCageTip = {
@@ -109,6 +112,12 @@ local options = {
                     order = 11,
                 },
             }
+        },
+        preferNamesOverQuality = {
+            type = "toggle",
+            name = L["OPT_PREFER_NAMES_OVER_QUALITY"],
+            width = "double",
+            order = 40
         }
     }
 }
