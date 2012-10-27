@@ -15,6 +15,13 @@ local is5_1 = not not C_PetJournal.GetNumCollectedInfo
 local GameTooltip_OnUpdate_Hook
 
 function module:OnInitialize()
+    if ITEM_PET_KNOWN then
+        local str = ITEM_PET_KNOWN
+        str = gsub(gsub(str, "%(", "%%("), "%)", "%%)")
+        str = gsub(str, "%%d", "%%d+")
+        self.ITEM_PET_KNOWN_DEFORMAT = "^"..str
+    end
+
     self:Initialize_BattlePetTooltip()
     self:Initialize_PetBattleUnitTooltip()
     self:Initialize_GameTooltip()
@@ -126,26 +133,51 @@ function module:Initialize_GameTooltip()
     self:HookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
 end
 
-function module:AlterGameTooltip(self)
+function module:AlterGameTooltip(tt)
     if not addon.db then
         return
     end
     
-    if self.GetUnit and addon.db.profile.enableCreatureTip then
-        local _, unit = self:GetUnit()
+    if tt.GetUnit and addon.db.profile.enableCreatureTip then
+        local _, unit = tt:GetUnit()
         if unit then
             if UnitIsWildBattlePet(unit) then
                 local creatureID = tonumber(strsub(UnitGUID(unit),7,10), 16)
                 local speciesID = LPJ:GetSpeciesIDForCreatureID(creatureID)
-                self:AddLine(addon:CollectedText(speciesID))
-                self:Show()
+
+                local lineno, line = 0, nil
+                while true do
+                    lineno = lineno + 1
+                    line = _G["GameTooltipTextLeft"..lineno] 
+                    if not line or not line:IsShown() then
+                        line = nil
+                        break
+                    end
+
+                    local text = line:GetText()
+                    if text == UNIT_CAPTURABLE then
+                        break
+                    elseif self.ITEM_PET_KNOWN_DEFORMAT and strmatch(text, self.ITEM_PET_KNOWN_DEFORMAT) then
+                        -- XXX self.ITEM_PET_KNOWN_DEFORMAT nil check for 5.0 client
+                        break
+                    end
+                end
+
+                local newtext = addon:CollectedText(speciesID)
+                if line then
+                    line:SetText(newtext)
+                    line:SetVertexColor(1, 1, 1)
+                else
+                    tt:AddLine(newtext)
+                end
+                tt:Show()
             end
             return
         end
     end
     
-    if self.GetItem and addon.db.profile.enableItemTip then
-        local _, link = self:GetItem()
+    if tt.GetItem and addon.db.profile.enableItemTip then
+        local _, link = tt:GetItem()
         if link then
             local _, _, itemid = strfind(link, "|Hitem:(%d+):")
             if itemid then
@@ -157,8 +189,8 @@ function module:AlterGameTooltip(self)
                             return
                         end
                     end
-                    self:AddLine(addon:CollectedText(speciesID))
-                    self:Show()
+                    tt:AddLine(addon:CollectedText(speciesID))
+                    tt:Show()
                 end
             end
             return
