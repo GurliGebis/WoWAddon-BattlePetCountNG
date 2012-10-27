@@ -13,9 +13,9 @@ if not L then return end
 
 --
 
-L["YOU_OWN_COLON"] = "You own this pet:"
-L["YOU_OWN"] = "You own this pet."
-L["YOU_DONT_OWN"] = "You don't own this pet."
+L["YOU_OWN_COLON"] = "You own this pet:" -- XXX remove me?
+L["YOU_OWN"] = "You own this pet." -- XXX remove me?
+L["YOU_DONT_OWN"] = "You don't own this pet." -- XXX remove me?
 L["UPGRADE"] = "Upgrade"
 L["OWNED"] = "Owned"
 L["UNOWNED"] = "Unowned"
