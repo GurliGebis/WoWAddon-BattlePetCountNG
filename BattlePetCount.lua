@@ -21,7 +21,7 @@ local defaults = {
         enableItemTip = true,
         itemTipIncludesAll = true,
         enableBattleIndicator = true,
-        enableBattleBorder = false,
+        enableBattleBorder = false,     -- for 5.0 only
         enableBattleBorderIcon = true,
         preferNamesOverQuality = false
     }
@@ -63,7 +63,7 @@ local options = {
                     type = "toggle",
                     name = L["OPT_BATTLE_BORDER_ICON"],
                     width = "double",
-                    order = 4
+                    order = 4,
                 }
             }
         },
