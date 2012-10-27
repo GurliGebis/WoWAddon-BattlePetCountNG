@@ -137,7 +137,7 @@ function module:AlterGameTooltip(self)
             if UnitIsWildBattlePet(unit) then
                 local creatureID = tonumber(strsub(UnitGUID(unit),7,10), 16)
                 local speciesID = LPJ:GetSpeciesIDForCreatureID(creatureID)
-                self:AddLine(addon:OwnedListOrNot(speciesID))
+                self:AddLine(addon:CollectedText(speciesID))
                 self:Show()
             end
             return
@@ -157,7 +157,7 @@ function module:AlterGameTooltip(self)
                             return
                         end
                     end
-                    self:AddLine(addon:OwnedListOrNot(speciesID))
+                    self:AddLine(addon:CollectedText(speciesID))
                     self:Show()
                 end
             end

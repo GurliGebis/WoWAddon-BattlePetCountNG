@@ -150,7 +150,7 @@ function module:InBattleIndicator_OnEnter(indicator)
 
     GameTooltip:SetOwner(indicator, "ANCHOR_BOTTOM")
     
-    GameTooltip:AddLine(addon:OwnedListOrNot(speciesID))
+    GameTooltip:AddLine(addon:CollectedText(speciesID))
     GameTooltip:Show()
 end
 

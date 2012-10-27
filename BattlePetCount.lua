@@ -168,15 +168,6 @@ do
     end
 end
 
-function addon:OwnedListOrNot(speciesID)
-    local ownedlist = self:OwnedList(speciesID)
-    if ownedlist then
-        return format("%s %s", L["YOU_OWN_COLON"], ownedlist)
-    else
-        return L["YOU_DONT_OWN"]
-    end
-end
-
 do
     local tmp = {}
     function addon:ShortOwnedList(speciesID)
