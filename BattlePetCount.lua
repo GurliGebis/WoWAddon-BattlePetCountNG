@@ -250,7 +250,7 @@ function addon:CollectedText(speciesID)
         end
     end
 
-    local ITEM_PET_KNOWN = ITEM_PET_KNOWN or "Collected (%d/%d)" -- TODO localize??
+    local ITEM_PET_KNOWN = ITEM_PET_KNOWN or L["ITEM_PET_KNOWN_5_0"]
     local ownedColor
     if owned < maxOwned then
         ownedColor = GREEN_FONT_COLOR_CODE
