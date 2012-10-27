@@ -33,18 +33,6 @@ end
 
 function module:Initialize_BattlePetTooltip()
     self:SecureHook("BattlePetToolTip_Show")
-
-    if not is5_1 then
-        -- XXX also do FloatBattlePetTooltip or whatever??
-        local frame = BattlePetTooltip
-        local Owned = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        Owned:SetWidth(238)
-        Owned:SetJustifyH("LEFT")
-        Owned:SetPoint("TOPLEFT", frame.SpeedTexture, "BOTTOMLEFT", 0, -2)
-        Owned:SetVertexColor(1.0, 0.82, 0.0, 1.0)
-
-        frame.Owned = Owned
-    end
 end
 
 function module:BattlePetToolTip_Show(speciesID)
@@ -55,7 +43,17 @@ function module:BattlePetToolTip_Show(speciesID)
         -- TODO
     end
 
-    local Owned = tip.Owned
+    if not tip.Owned then
+        -- 5.0 support
+        Owned = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        Owned:SetWidth(238)
+        Owned:SetJustifyH("LEFT")
+        Owned:SetPoint("TOPLEFT", tip.SpeedTexture, "BOTTOMLEFT", 0, -2)
+        Owned:SetVertexColor(1.0, 0.82, 0.0, 1.0)
+
+        tip.Owned = Owned
+    end
+
     Owned:SetText(addon:CollectedText(speciesID))
     Owned:Show()
 
@@ -69,16 +67,6 @@ end
 
 function module:Initialize_PetBattleUnitTooltip()
     self:SecureHook("PetBattleUnitTooltip_UpdateForUnit")
-    if not is5_1 then
-        self:SecureHook("PetBattleUnitFrame_UpdateDisplay")
-
-        local frame = PetBattlePrimaryUnitTooltip
-        local CollectedText = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        CollectedText:SetJustifyH("LEFT")
-        CollectedText:SetPoint("TOPLEFT", frame.Icon, "BOTTOMLEFT", 0, -4)
-
-        frame.CollectedText = CollectedText
-    end
 end
 
 function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
@@ -91,6 +79,15 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
     end
 
     local CollectedText = tip.CollectedText
+    if not CollectedText then
+        -- 5.0 support
+        CollectedText = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        CollectedText:SetJustifyH("LEFT")
+        CollectedText:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", 0, -4)
+
+        tip.CollectedText = CollectedText
+    end
+
     local height = tip:GetHeight()
     if CollectedText:IsShown() and is5_1 then
         height = height - CollectedText:GetHeight()
