@@ -67,6 +67,10 @@ end
 
 function module:Initialize_PetBattleUnitTooltip()
     self:SecureHook("PetBattleUnitTooltip_UpdateForUnit")
+    
+    if not is5_1 then
+        self:SecureHook("PetBattleUnitFrame_UpdateDisplay")
+    end
 end
 
 function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
