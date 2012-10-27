@@ -240,7 +240,6 @@ function addon:PlayersBest(speciesID)
     return maxquality, maxlevel
 end
 
-
 function addon:CollectedText(speciesID)
     local owned, maxOwned
     if C_PetJournal.GetNumCollectedInfo then
@@ -275,6 +274,6 @@ function addon:CollectedText(speciesID)
                 ownedColor,
                 format(ITEM_PET_KNOWN, owned, maxOwned),
                 FONT_COLOR_CODE_CLOSE,
-                self:OwnedList("speciesID", speciesID) or L["UNOWNED"]
+                self:OwnedList("speciesID", speciesID) or RED_FONT_COLOR_CODE..L["UNOWNED"]
                 )
 end
