@@ -21,8 +21,9 @@ local defaults = {
         enableItemTip = true,
         itemTipIncludesAll = true,
         enableBattleIndicator = true,
-        enableBattleBorder = false,
+        enableBattleBorder = false,     -- for 5.0 only
         enableBattleBorderIcon = true,
+        preferNamesOverQuality = false
     }
 }
 
@@ -36,6 +37,7 @@ local options = {
         sectionBattle = {
             type = 'group',
             name = L["OPT_HEADER_BATTLE"],
+            order = 10,
             inline = true,
             args = {
                 enableBattleTip = {
@@ -61,13 +63,14 @@ local options = {
                     type = "toggle",
                     name = L["OPT_BATTLE_BORDER_ICON"],
                     width = "double",
-                    order = 4
+                    order = 4,
                 }
             }
         },
         sectionWorld = {
             type = 'group',
             name = L["OPT_HEADER_WORLD"],
+            order = 20,
             inline = true,
             args = {
                 enableCreatureTip = {
@@ -87,6 +90,7 @@ local options = {
         sectionItem = {
             type = 'group',
             name = L["OPT_HEADER_ITEMS"],
+            order = 30,
             inline = true,
             args = {
                 enableCageTip = {
@@ -108,6 +112,12 @@ local options = {
                     order = 11,
                 },
             }
+        },
+        preferNamesOverQuality = {
+            type = "toggle",
+            name = L["OPT_PREFER_NAMES_OVER_QUALITY"],
+            width = "double",
+            order = 40
         }
     }
 }
@@ -128,41 +138,33 @@ end
 --
 --
 
-local MatchType = {}
-
-function MatchType.speciesID(petID, matchID)
-    return C_PetJournal.GetPetInfoByPetID(petID) == matchID
-end
-
-if is5_1 then
-    function MatchType.creatureID(petID, matchID)
-        local _, _, _, _, _, _, _, _, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petID)
-        return creatureID == matchID
+function addon:GetPetName(petID)
+    local _, customName, petName
+    if is5_0 then
+        _, customName, _, _, _, _, petName = C_PetJournal.GetPetInfoByPetID(petID)
+    else
+        _, customName, _, _, _, _, _, petName = C_PetJournal.GetPetInfoByPetID(petID)
     end
-else
-    function MatchType.creatureID(petID, matchID)
-        local _, _, _, _, _, _, _, _, _, creatureID = C_PetJournal.GetPetInfoByPetID(petID)
-        return creatureID == matchID
-    end
+    return customName or petName
 end
-
---
---
---
 
 do
     local tmp = {}
-    function addon:OwnedList(idtype, matchID)
+    function addon:OwnedList(speciesID)
         wipe(tmp)
 
-        local idfunc = MatchType[idtype]
-        assert(idfunc, "invalid idtype")
-
         for _,petID in LPJ:IteratePetIDs() do
-            if idfunc(petID, matchID) then
+            if C_PetJournal.GetPetInfoByPetID(petID) == speciesID then
                 local _, _, level = C_PetJournal.GetPetInfoByPetID(petID)
                 local _, _, _, _, quality = C_PetJournal.GetPetStats(petID)
-                local name = _G["ITEM_QUALITY"..(quality-1).."_DESC"] or UNKNOWN
+
+                local name
+                if self.db.profile.preferNamesOverQuality then
+                    name = self:GetPetName(petID)
+                else
+                    name = _G["ITEM_QUALITY"..(quality-1).."_DESC"] or UNKNOWN
+                end
+
 
                 tinsert(tmp, format("|cff%02x%02x%02x%s|r (L%d)",
                             ITEM_QUALITY_COLORS[quality-1].r*255,
@@ -178,35 +180,21 @@ do
     end
 end
 
-function addon:OwnedListOrNot(idtype, matchID)
-    local ownedlist = self:OwnedList(idtype, matchID)
-    if ownedlist then
-        return format("%s %s", L["YOU_OWN_COLON"], ownedlist)
-    else
-        return L["YOU_DONT_OWN"]
-    end
-end
-
 do
     local tmp = {}
-    function addon:ShortOwnedList(idtype, matchID)
+    function addon:ShortOwnedList(speciesID)
         wipe(tmp)
-        
-        local idfunc = MatchType[idtype]
-        assert(idfunc, "invalid idtype")
 
         for _,petID in LPJ:IteratePetIDs() do
-            if idfunc(petID, matchID) then
-                if sid == speciesID then
-                    local _, _, level = C_PetJournal.GetPetInfoByPetID(petID)
-                    local _, _, _, _, quality = C_PetJournal.GetPetStats(petID)
-                    
-                    tinsert(tmp, format("|cff%02x%02x%02xL%d|r",
-                            ITEM_QUALITY_COLORS[quality-1].r*255,
-                            ITEM_QUALITY_COLORS[quality-1].g*255,
-                            ITEM_QUALITY_COLORS[quality-1].b*255,
-                            level))
-                end
+            if C_PetJournal.GetPetInfoByPetID(petID) == speciesID then
+                local _, _, level = C_PetJournal.GetPetInfoByPetID(petID)
+                local _, _, _, _, quality = C_PetJournal.GetPetStats(petID)
+                
+                tinsert(tmp, format("|cff%02x%02x%02xL%d|r",
+                        ITEM_QUALITY_COLORS[quality-1].r*255,
+                        ITEM_QUALITY_COLORS[quality-1].g*255,
+                        ITEM_QUALITY_COLORS[quality-1].b*255,
+                        level))
             end
         end
         
@@ -240,11 +228,10 @@ function addon:PlayersBest(speciesID)
     return maxquality, maxlevel
 end
 
-
 function addon:CollectedText(speciesID)
     local owned, maxOwned
     if C_PetJournal.GetNumCollectedInfo then
-        numOwned, maxAllowed = C_PetJournal.GetNumCollectedInfo(speciesID)  
+        owned, maxOwned = C_PetJournal.GetNumCollectedInfo(speciesID)  
     else
         -- 5.0 COMPAT
         local _, _, _, _, _, _, _, _, _, unique = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
@@ -263,7 +250,7 @@ function addon:CollectedText(speciesID)
         end
     end
 
-    local ITEM_PET_KNOWN = ITEM_PET_KNOWN or "Collected (%d/%d)" -- TODO localize??
+    local ITEM_PET_KNOWN = ITEM_PET_KNOWN or L["ITEM_PET_KNOWN_5_0"]
     local ownedColor
     if owned < maxOwned then
         ownedColor = GREEN_FONT_COLOR_CODE
@@ -275,6 +262,6 @@ function addon:CollectedText(speciesID)
                 ownedColor,
                 format(ITEM_PET_KNOWN, owned, maxOwned),
                 FONT_COLOR_CODE_CLOSE,
-                self:OwnedList("speciesID", speciesID) or L["UNOWNED"]
+                self:OwnedList(speciesID) or RED_FONT_COLOR_CODE..L["UNOWNED"]
                 )
 end

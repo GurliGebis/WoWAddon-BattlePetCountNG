@@ -140,7 +140,7 @@ function module:Update()
     
     local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
     local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
-    self.InBattleIndicator.Text:SetText(addon:ShortOwnedList("speciesID", speciesID))
+    self.InBattleIndicator.Text:SetText(addon:ShortOwnedList(speciesID))
     self.InBattleIndicator:Show()
 end
 
@@ -150,7 +150,7 @@ function module:InBattleIndicator_OnEnter(indicator)
 
     GameTooltip:SetOwner(indicator, "ANCHOR_BOTTOM")
     
-    GameTooltip:AddLine(addon:OwnedListOrNot("speciesID", speciesID))
+    GameTooltip:AddLine(addon:CollectedText(speciesID))
     GameTooltip:Show()
 end
 
