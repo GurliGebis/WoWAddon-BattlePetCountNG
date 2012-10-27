@@ -136,7 +136,8 @@ function module:AlterGameTooltip(self)
         if unit then
             if UnitIsWildBattlePet(unit) then
                 local creatureID = tonumber(strsub(UnitGUID(unit),7,10), 16)
-                self:AddLine(addon:OwnedListOrNot("creatureID", creatureID))
+                local speciesID = LPJ:GetSpeciesIDForCreatureID(creatureID)
+                self:AddLine(addon:OwnedListOrNot(speciesID))
                 self:Show()
             end
             return
@@ -156,7 +157,7 @@ function module:AlterGameTooltip(self)
                             return
                         end
                     end
-                    self:AddLine(addon:OwnedListOrNot("speciesID", speciesID))
+                    self:AddLine(addon:OwnedListOrNot(speciesID))
                     self:Show()
                 end
             end
@@ -179,7 +180,7 @@ local function sub_PetName(line)
     for _,speciesID in LPJ:IterateSpeciesIDs() do
         local s_name = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
         if s_name == name then
-            return format("%s (%s)", line, addon:ShortOwnedList("speciesID", speciesID))          
+            return format("%s (%s)", line, addon:ShortOwnedList(speciesID))          
         end
     end
 
