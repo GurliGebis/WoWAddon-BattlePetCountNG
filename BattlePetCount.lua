@@ -141,6 +141,8 @@ end
 do
     local tmp = {}
     function addon:OwnedList(speciesID)
+        wipe(tmp)
+
         for _,petID in LPJ:IteratePetIDs() do
             if C_PetJournal.GetPetInfoByPetID(petID) == speciesID then
                 local _, _, level = C_PetJournal.GetPetInfoByPetID(petID)
