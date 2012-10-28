@@ -6,7 +6,7 @@ local module = addon:NewModule("Tooltips", "AceEvent-3.0", "AceHook-3.0")
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
-local is5_1 = not not C_PetJournal.GetNumCollectedInfo
+local is5_0 = not C_PetJournal.GetNumCollectedInfo
 
 --
 --
@@ -67,15 +67,15 @@ end
 
 function module:Initialize_PetBattleUnitTooltip()
     self:SecureHook("PetBattleUnitTooltip_UpdateForUnit")
-    
-    if not is5_1 then
+
+    if is5_0 then
         self:SecureHook("PetBattleUnitFrame_UpdateDisplay")
     end
 end
 
 function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
     if not addon.db.profile.enableBattleTip then
-        if not is5_1 then
+        if is5_0 then
             tip.CollectedText:Hide()
             tip.HealthBorder:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", -1, -6)
         end
@@ -93,12 +93,12 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
     end
 
     local height = tip:GetHeight()
-    if CollectedText:IsShown() and is5_1 then
+    if CollectedText:IsShown() and not is5_0 then
         height = height - CollectedText:GetHeight()
     end
     
     local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
-    if not is5_1 then
+    if is5_0 then
         CollectedText:SetWidth(tip:GetWidth() - 8) -- fudge
     end
     CollectedText:SetText(addon:CollectedText(speciesID))

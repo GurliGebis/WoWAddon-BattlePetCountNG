@@ -6,7 +6,7 @@ LibStub("AceAddon-3.0"):NewAddon(addon, addon_name)
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
-local is5_1 = not not C_PetJournal.GetNumCollectedInfo
+local is5_0 = not C_PetJournal.GetNumCollectedInfo
 
 --
 --
@@ -57,7 +57,7 @@ local options = {
                     name = L["OPT_BATTLE_BORDER"],
                     width = "double",
                     order = 3,
-                    hidden = is5_1
+                    hidden = not is5_0
                 },
                 enableBattleBorderIcon = {
                     type = "toggle",

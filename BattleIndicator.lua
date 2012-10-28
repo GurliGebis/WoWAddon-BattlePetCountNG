@@ -6,7 +6,7 @@ local module = addon:NewModule("Indicators", "AceEvent-3.0", "AceHook-3.0")
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
-local is5_1 = not not C_PetJournal.GetNumCollectedInfo
+local is5_0 = not C_PetJournal.GetNumCollectedInfo
 
 --
 --
@@ -71,7 +71,7 @@ local function updateBorder(owner, slot, frame)
     local border = frame.Border or frame.BorderAlive
     local quality = C_PetBattles.GetBreedQuality(owner, slot)
     
-    if not is5_1 then
+    if is5_0 then
         if addon.db.profile.enableBattleBorder then
             border:SetVertexColor(ITEM_QUALITY_COLORS[quality-1].r,
                                 ITEM_QUALITY_COLORS[quality-1].g,
