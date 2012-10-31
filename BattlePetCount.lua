@@ -124,6 +124,12 @@ local options = {
             name = L["OPT_USE_OLDER_TEXT"],
             width = "double",
             order = 41,
+        },
+        useSubTip = {
+            type = "toggle",
+            name = L["OPT_USE_SUB_TIP"],
+            width = "double",
+            order  = 42,
         }
     }
 }

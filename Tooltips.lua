@@ -25,6 +25,75 @@ function module:OnInitialize()
     self:Initialize_BattlePetTooltip()
     self:Initialize_PetBattleUnitTooltip()
     self:Initialize_GameTooltip()
+
+    self:RegisterEvent("ADDON_LOADED")
+    self:ADDON_LOADED()
+end
+
+function module:ADDON_LOADED()
+    if not self.LibExtraTip then
+        self.LibExtraTip = LibStub("LibExtraTip-1", true)
+        if self.LibExtraTip then
+            self.LibExtraTip:AddCallback{
+                type = "extrashow",
+                callback = function(tip, extratip)
+                    if tip.X_BPC then
+                        tip.X_BPC:SetPoint("TOPLEFT", extratip, "BOTTOMLEFT")
+                        tip.X_BPC:SetPoint("TOPRIGHT", extratip, "BOTTOMRIGHT") 
+                    end
+                end
+            }
+            self.LibExtraTip:AddCallback{
+                type = "extrahide",
+                callback = function(tip, extratip)
+                    if tip.X_BPC then
+                        tip.X_BPC:SetPoint("TOPLEFT", tip, "BOTTOMLEFT")
+                        tip.X_BPC:SetPoint("TOPRIGHT", tip, "BOTTOMRIGHT") 
+                    end
+                end
+            }
+        end
+    end
+end
+
+function module:SubTip(tooltip, text)
+    local subtip = tooltip.X_BPC
+    if not subtip then
+        subtip = CreateFrame("FRAME", nil, tooltip)
+        subtip:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
+        subtip:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
+
+        subtip:SetBackdrop({
+             bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
+             edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
+             tile = true, tileSize = 16, edgeSize = 16, 
+             insets = { left = 4, right = 4, top = 4, bottom = 4 }
+         })
+         subtip:SetBackdropColor(0,0,0,1)
+         
+         subtip.Text = subtip:CreateFontString(nil, "ARTWORK")
+         subtip.Text:SetFontObject(GameTooltipTextSmall)
+         subtip.Text:SetWordWrap(true)
+         subtip.Text:SetPoint("TOPLEFT", subtip, 8, -8)
+         subtip.Text:SetWidth(220)
+         
+         tooltip.X_BPC = subtip
+    else
+         subtip:Show()
+    end
+
+    if text then
+        subtip.Text:SetText(text)
+    else
+        subtip.Text:SetText("")
+    end
+    subtip:SetHeight(subtip.Text:GetHeight()+16)
+end
+
+function module:HideSubTip(tooltip)
+    if tooltip.X_BPC then
+        tooltip.X_BPC:Hide()
+    end
 end
 
 --
@@ -37,13 +106,29 @@ end
 
 function module:BattlePetToolTip_Show(speciesID)
     local tip = BattlePetTooltip
+    local Owned = tip.Owned
+
     if not speciesID or speciesID < 0 then
         return
     elseif not addon.db.profile.enableCageTip then
-        -- TODO
+        if is5_0 then
+            -- TODO fix size
+            tip.Owned:Hide()
+        end
+        return
+    elseif addon.db.profile.useSubTip then
+        if Owned and Owned:IsShown() then
+            tip.Owned:Hide()
+            -- TODO fix size
+        end
+
+        self:SubTip(tip, addon:CollectedText(speciesID))
+        return
     end
 
-    if not tip.Owned then
+    self:HideSubTip(tip)
+
+    if not Owned then
         -- 5.0 support
         Owned = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         Owned:SetWidth(238)
@@ -74,15 +159,27 @@ function module:Initialize_PetBattleUnitTooltip()
 end
 
 function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
+    local CollectedText = tip.CollectedText
+
     if not addon.db.profile.enableBattleTip then
         if is5_0 then
             tip.CollectedText:Hide()
             tip.HealthBorder:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", -1, -6)
         end
         return
+    elseif addon.db.profile.useSubTip then
+        if CollectedText and CollectedText:IsShown() then
+            local height = tip:GetHeight()
+            tip:SetHeight(height - CollectedText:GetHeight())
+            CollectedText:Hide()
+        end
+
+        self:SubTip(tip, addon:CollectedText(speciesID))
+        return
     end
 
-    local CollectedText = tip.CollectedText
+    self:HideSubTip(tip)
+    
     if not CollectedText then
         -- 5.0 support
         CollectedText = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

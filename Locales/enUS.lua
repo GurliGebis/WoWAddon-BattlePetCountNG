@@ -32,3 +32,5 @@ L["OPT_CAGE_TIP"] = "Alter Caged Pet Tooltip"
 L["OPT_ITEM_TIP"] = "Alter Learnable Item Tooltip"
 L["OPT_ITEM_TIP_ALL"] = "Item Tooltip Includes Non-Battle Pets"
 L["OPT_PREFER_NAMES_OVER_QUALITY"] = "Prefer to Show Pet Names"
+L["OPT_USE_OLDER_TEXT"] = "Use original BattlePetCount text" -- XXX changeme
+L["OPT_USE_SUB_TIP"] = "Use seperated tooltip"  --- XXX changeme
