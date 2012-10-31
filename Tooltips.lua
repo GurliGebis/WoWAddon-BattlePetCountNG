@@ -96,6 +96,12 @@ function module:HideSubTip(tooltip)
     end
 end
 
+function module:HookScriptSilent(frame, script, func)
+    if frame:HasScript(script) then
+        return self:HookScript(frame, script, func)
+    end
+end
+
 --
 -- BattlePetTooltipTemplate
 --
@@ -220,14 +226,13 @@ end
 --
 
 function module:Initialize_GameTooltip()
-    -- XX hook SetUnit?
-    self:HookScript(GameTooltip, "OnTooltipSetUnit", function()
+    self:HookScriptSilent(GameTooltip, "OnTooltipSetUnit", function()
         module:AlterGameTooltip(GameTooltip)
     end)
-    self:HookScript(GameTooltip, "OnTooltipSetItem", function()
+    self:HookScriptSilent(GameTooltip, "OnTooltipSetItem", function()
         module:AlterGameTooltip(GameTooltip)
     end)
-    self:HookScript(ItemRefTooltip, "OnTooltipSetItem", function()
+    self:HookScriptSilent(ItemRefTooltip, "OnTooltipSetItem", function()
         module:AlterGameTooltip(ItemRefTooltip)
     end)
 
