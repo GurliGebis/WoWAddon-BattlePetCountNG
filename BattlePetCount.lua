@@ -118,6 +118,12 @@ local options = {
             name = L["OPT_PREFER_NAMES_OVER_QUALITY"],
             width = "double",
             order = 40
+        },
+        useOlderText = {
+            type = "toggle",
+            name = L["OPT_USE_OLDER_TEXT"],
+            width = "double",
+            order = 41,
         }
     }
 }
@@ -228,7 +234,20 @@ function addon:PlayersBest(speciesID)
     return maxquality, maxlevel
 end
 
+function addon:CollectedOlderText(speciesID)
+    local ownedlist = self:OwnedList(speciesID)
+    if ownedlist then
+        return format("%s %s", L["YOU_OWN_COLON"], ownedlist)
+    else
+        return L["YOU_DONT_OWN"]
+    end
+end
+
 function addon:CollectedText(speciesID)
+    if self.db.profile.useOlderText then
+        return self:CollectedOlderText(speciesID)
+    end
+
     local owned, maxOwned
     if C_PetJournal.GetNumCollectedInfo then
         owned, maxOwned = C_PetJournal.GetNumCollectedInfo(speciesID)  
