@@ -9,7 +9,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 local is5_0 = not C_PetJournal.GetNumCollectedInfo
 
 local GREEN_FONT_COLOR_CODE = "|cff30d030"
-local RED_FONT_COLOR_CODE = "|cffd03030"
+local RED_FONT_COLOR_CODE = "|cffff3030"
 
 --
 --
