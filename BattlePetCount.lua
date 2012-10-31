@@ -23,7 +23,9 @@ local defaults = {
         enableBattleIndicator = true,
         enableBattleBorder = false,     -- for 5.0 only
         enableBattleBorderIcon = true,
-        preferNamesOverQuality = false
+        preferNamesOverQuality = false,
+        useOlderText = false,
+        useSubTip = false
     }
 }
 
