@@ -221,10 +221,13 @@ end
 
 function module:Initialize_GameTooltip()
     -- XX hook SetUnit?
-    self:HookScript(GameTooltip, "OnShow", function()
+    self:HookScript(GameTooltip, "OnTooltipSetUnit", function()
         module:AlterGameTooltip(GameTooltip)
     end)
-    self:HookScript(ItemRefTooltip, "OnShow", function()
+    self:HookScript(GameTooltip, "OnTooltipSetItem", function()
+        module:AlterGameTooltip(GameTooltip)
+    end)
+    self:HookScript(ItemRefTooltip, "OnTooltipSetItem", function()
         module:AlterGameTooltip(ItemRefTooltip)
     end)
 
