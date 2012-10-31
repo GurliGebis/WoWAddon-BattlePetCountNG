@@ -26,6 +26,10 @@ function module:OnInitialize()
     self:Initialize_PetBattleUnitTooltip()
     self:Initialize_GameTooltip()
 
+    self.savedStats = { [LE_BATTLE_PET_ALLY] = { [1] = {}, [2] = {}, [3] = {} },
+                        [LE_BATTLE_PET_ENEMY] = { [1] = {}, [2] = {}, [3] = {} } }
+    self:RegisterEvent("PET_BATTLE_OPENING_START")
+
     self:RegisterEvent("ADDON_LOADED")
     self:ADDON_LOADED()
 end
@@ -99,6 +103,19 @@ end
 function module:HookScriptSilent(frame, script, func)
     if frame:HasScript(script) then
         return self:HookScript(frame, script, func)
+    end
+end
+
+function module:SaveBattleStats(petOwner, petIndex)
+    self.savedStats[petOwner][petIndex].power = C_PetBattles.GetPower(petOwner, petIndex)
+    self.savedStats[petOwner][petIndex].speed = C_PetBattles.GetSpeed(petOwner, petIndex)
+    self.savedStats[petOwner][petIndex].health = C_PetBattles.GetMaxHealth(petOwner, petIndex)
+end
+
+function module:PET_BATTLE_OPENING_START()
+    for i = 1,3 do
+        self:SaveBattleStats(LE_BATTLE_PET_ALLY, i)
+        self:SaveBattleStats(LE_BATTLE_PET_ENEMY, i)
     end
 end
 

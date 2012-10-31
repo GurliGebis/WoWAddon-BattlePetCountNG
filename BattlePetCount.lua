@@ -28,7 +28,8 @@ local defaults = {
         enableBattleBorderIcon = true,
         preferNamesOverQuality = false,
         useOlderText = false,
-        useSubTip = false
+        useSubTip = false,
+        petCompare = false
     }
 }
 
@@ -118,23 +119,37 @@ local options = {
                 },
             }
         },
-        preferNamesOverQuality = {
-            type = "toggle",
-            name = L["OPT_PREFER_NAMES_OVER_QUALITY"],
-            width = "double",
-            order = 40
-        },
-        useOlderText = {
-            type = "toggle",
-            name = L["OPT_USE_OLDER_TEXT"],
-            width = "double",
-            order = 41,
-        },
-        useSubTip = {
-            type = "toggle",
-            name = L["OPT_USE_SUB_TIP"],
-            width = "double",
-            order  = 42,
+        sectionAdvanced = {
+            type = 'group',
+            name = L["OPT_HEADER_ADVANCED"],
+            order = 40,
+            inline = true,
+            args = {
+                preferNamesOverQuality = {
+                    type = "toggle",
+                    name = L["OPT_PREFER_NAMES_OVER_QUALITY"],
+                    width = "double",
+                    order = 1
+                },
+                useOlderText = {
+                    type = "toggle",
+                    name = L["OPT_USE_OLDER_TEXT"],
+                    width = "double",
+                    order = 2,
+                },
+                useSubTip = {
+                    type = "toggle",
+                    name = L["OPT_USE_SUB_TIP"],
+                    width = "double",
+                    order  = 3,
+                },
+                petCompare = {
+                    type = "toggle",
+                    name = L["OPT_PET_COMPARE"] .. " " .. L["EXPERIMENTAL_TAG"],
+                    width = "full",
+                    order = 4
+                }
+            }
         }
     }
 }
