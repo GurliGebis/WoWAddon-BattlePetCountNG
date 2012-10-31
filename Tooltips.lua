@@ -4,6 +4,7 @@ local addon_name, addon = ...
 local module = addon:NewModule("Tooltips", "AceEvent-3.0", "AceHook-3.0")
 
 local LPJ = LibStub("LibPetJournal-2.0")
+local LibQTip = LibStub("LibQTip-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
 local is5_0 = not C_PetJournal.GetNumCollectedInfo
@@ -41,18 +42,18 @@ function module:ADDON_LOADED()
             self.LibExtraTip:AddCallback{
                 type = "extrashow",
                 callback = function(tip, extratip)
-                    if tip.X_BPC then
-                        tip.X_BPC:SetPoint("TOPLEFT", extratip, "BOTTOMLEFT")
-                        tip.X_BPC:SetPoint("TOPRIGHT", extratip, "BOTTOMRIGHT") 
+                    if tip.X_BPC2 then
+                        tip.X_BPC2:SetPoint("TOPLEFT", extratip, "BOTTOMLEFT")
+                        tip.X_BPC2:SetPoint("TOPRIGHT", extratip, "BOTTOMRIGHT") 
                     end
                 end
             }
             self.LibExtraTip:AddCallback{
                 type = "extrahide",
                 callback = function(tip, extratip)
-                    if tip.X_BPC then
-                        tip.X_BPC:SetPoint("TOPLEFT", tip, "BOTTOMLEFT")
-                        tip.X_BPC:SetPoint("TOPRIGHT", tip, "BOTTOMRIGHT") 
+                    if tip.X_BPC2 then
+                        tip.X_BPC2:SetPoint("TOPLEFT", tip, "BOTTOMLEFT")
+                        tip.X_BPC2:SetPoint("TOPRIGHT", tip, "BOTTOMRIGHT") 
                     end
                 end
             }
@@ -61,42 +62,34 @@ function module:ADDON_LOADED()
 end
 
 function module:SubTip(tooltip, text)
-    local subtip = tooltip.X_BPC
-    if not subtip then
-        subtip = CreateFrame("FRAME", nil, tooltip)
-        subtip:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
-        subtip:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
+    --- XXX call something when tooltip is hidden
 
-        subtip:SetBackdrop({
-             bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
-             edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
-             tile = true, tileSize = 16, edgeSize = 16, 
-             insets = { left = 4, right = 4, top = 4, bottom = 4 }
-         })
-         subtip:SetBackdropColor(0,0,0,1)
-         
-         subtip.Text = subtip:CreateFontString(nil, "ARTWORK")
-         subtip.Text:SetFontObject(GameTooltipTextSmall)
-         subtip.Text:SetWordWrap(true)
-         subtip.Text:SetPoint("TOPLEFT", subtip, 8, -8)
-         subtip.Text:SetWidth(220)
-         
-         tooltip.X_BPC = subtip
+    if not text then
+        return self:HideSubTip(tooltip)
+    end
+
+    local subtip = tooltip.X_BPC2
+    if not subtip then
+        subtip = LibQTip:Acquire(tooltip:GetName().."_BPC_SubTip", 1, "LEFT")
+
+        subtip:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
+        subtip:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT") 
+        subtip:Show()
+
+        tooltip.X_BPC2 = subtip
     else
-         subtip:Show()
+        subtip:Clear()
     end
 
     if text then
-        subtip.Text:SetText(text)
-    else
-        subtip.Text:SetText("")
+        subtip:AddLine(text)
     end
-    subtip:SetHeight(subtip.Text:GetHeight()+16)
 end
 
 function module:HideSubTip(tooltip)
-    if tooltip.X_BPC then
-        tooltip.X_BPC:Hide()
+    if tooltip.X_BPC2 then
+        LibQTip:Release(tooltip.X_BPC2)
+        tooltip.X_BPC2 = nil
     end
 end
 
@@ -125,6 +118,7 @@ end
 
 function module:Initialize_BattlePetTooltip()
     self:SecureHook("BattlePetToolTip_Show")
+    self:HookScript(BattlePetTooltip, "OnHide", "BattlePetToolTip_Hide")
 end
 
 function module:BattlePetToolTip_Show(speciesID)
@@ -169,11 +163,16 @@ function module:BattlePetToolTip_Show(speciesID)
     tip:SetSize(260,136)
 end
 
+function module:BattlePetToolTip_Hide()
+    self:HideSubTip(BattlePetTooltip)
+end
+
 --
 -- PetBattleUnitTooltip
 --
 
 function module:Initialize_PetBattleUnitTooltip()
+    self.PetBattleUnit_Hooked = {}
     self:SecureHook("PetBattleUnitTooltip_UpdateForUnit")
 
     if is5_0 then
@@ -182,6 +181,11 @@ function module:Initialize_PetBattleUnitTooltip()
 end
 
 function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
+    if not self.PetBattleUnit_Hooked[tip] then
+        self:HookScript(tip, "OnHide", "PetBattleUnitTooltip_Hide")
+        self.PetBattleUnit_Hooked[tip] = true
+    end
+
     local CollectedText = tip.CollectedText
 
     if not addon.db.profile.enableBattleTip then
@@ -226,6 +230,10 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
 
     tip.HealthBorder:SetPoint("TOPLEFT", CollectedText, "BOTTOMLEFT", -1, -6)
     tip:SetHeight(height + CollectedText:GetHeight())
+end
+
+function module:PetBattleUnitTooltip_Hide(tip)
+    self:HideSubTip(tip)
 end
 
 -- 5.0 client support

@@ -4,7 +4,7 @@
 ## Notes: Indicate how many and what quality battle pets you have.
 ## Author: End
 ## X-Email: end@cornhooves.org
-## OptionalDeps: Ace3, LibPetJournal-2.0
+## OptionalDeps: Ace3, LibPetJournal-2.0, LibQTip-1.0
 ## Dependencies: Blizzard_PetBattleUI
 ## SavedVariables: BattlePetCountDB
 
@@ -12,6 +12,7 @@
 Libs\LibPetJournal-2.0\LibStub.lua
 Libs\LibPetJournal-2.0\CallbackHandler-1.0.lua
 Libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
+Libs\LibQTip-1.0\LibQTip-1.0.lua
 Libs\AceAddon-3.0\AceAddon-3.0.xml
 Libs\AceEvent-3.0\AceEvent-3.0.xml
 Libs\AceGUI-3.0\AceGUI-3.0.xml
