@@ -62,8 +62,6 @@ function module:ADDON_LOADED()
 end
 
 function module:SubTip(tooltip, text)
-    --- XXX call something when tooltip is hidden
-
     if not text then
         return self:HideSubTip(tooltip)
     end
@@ -123,16 +121,17 @@ end
 
 function module:BattlePetToolTip_Show(speciesID)
     local tip = BattlePetTooltip
-    local Owned = tip.Owned
 
     if not speciesID or speciesID < 0 then
         return
-    elseif not addon.db.profile.enableCageTip then
+    end
+
+    local Owned = tip.Owned
+    if not addon.db.profile.enableCageTip then
         if is5_0 then
             -- TODO fix size
             tip.Owned:Hide()
         end
-        return
     elseif addon.db.profile.useSubTip then
         if Owned and Owned:IsShown() then
             tip.Owned:Hide()
@@ -140,27 +139,26 @@ function module:BattlePetToolTip_Show(speciesID)
         end
 
         self:SubTip(tip, addon:CollectedText(speciesID))
-        return
+    else
+        self:HideSubTip(tip)
+
+        if not Owned then
+            -- 5.0 support
+            Owned = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            Owned:SetWidth(238)
+            Owned:SetJustifyH("LEFT")
+            Owned:SetPoint("TOPLEFT", tip.SpeedTexture, "BOTTOMLEFT", 0, -2)
+            Owned:SetVertexColor(1.0, 0.82, 0.0, 1.0)
+
+            tip.Owned = Owned
+        end
+
+        Owned:SetText(addon:CollectedText(speciesID))
+        Owned:Show()
+
+        -- XXX TRIPLE ECKS
+        tip:SetSize(260,136)
     end
-
-    self:HideSubTip(tip)
-
-    if not Owned then
-        -- 5.0 support
-        Owned = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        Owned:SetWidth(238)
-        Owned:SetJustifyH("LEFT")
-        Owned:SetPoint("TOPLEFT", tip.SpeedTexture, "BOTTOMLEFT", 0, -2)
-        Owned:SetVertexColor(1.0, 0.82, 0.0, 1.0)
-
-        tip.Owned = Owned
-    end
-
-    Owned:SetText(addon:CollectedText(speciesID))
-    Owned:Show()
-
-    -- XXX TRIPLE ECKS
-    tip:SetSize(260,136)
 end
 
 function module:BattlePetToolTip_Hide()
@@ -187,13 +185,11 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
     end
 
     local CollectedText = tip.CollectedText
-
     if not addon.db.profile.enableBattleTip then
         if is5_0 then
             tip.CollectedText:Hide()
             tip.HealthBorder:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", -1, -6)
         end
-        return
     elseif addon.db.profile.useSubTip then
         if CollectedText and CollectedText:IsShown() then
             local height = tip:GetHeight()
@@ -202,34 +198,33 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         end
 
         self:SubTip(tip, addon:CollectedText(speciesID))
-        return
-    end
-
-    self:HideSubTip(tip)
+    else
+        self:HideSubTip(tip)
     
-    if not CollectedText then
-        -- 5.0 support
-        CollectedText = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        CollectedText:SetJustifyH("LEFT")
-        CollectedText:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", 0, -4)
+        if not CollectedText then
+            -- 5.0 support
+            CollectedText = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            CollectedText:SetJustifyH("LEFT")
+            CollectedText:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", 0, -4)
 
-        tip.CollectedText = CollectedText
-    end
+            tip.CollectedText = CollectedText
+        end
 
-    local height = tip:GetHeight()
-    if CollectedText:IsShown() and not is5_0 then
-        height = height - CollectedText:GetHeight()
-    end
-    
-    local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
-    if is5_0 then
-        CollectedText:SetWidth(tip:GetWidth() - 8) -- fudge
-    end
-    CollectedText:SetText(addon:CollectedText(speciesID))
-    CollectedText:Show()
+        local height = tip:GetHeight()
+        if CollectedText:IsShown() and not is5_0 then
+            height = height - CollectedText:GetHeight()
+        end
+        
+        local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
+        if is5_0 then
+            CollectedText:SetWidth(tip:GetWidth() - 8) -- fudge
+        end
+        CollectedText:SetText(addon:CollectedText(speciesID))
+        CollectedText:Show()
 
-    tip.HealthBorder:SetPoint("TOPLEFT", CollectedText, "BOTTOMLEFT", -1, -6)
-    tip:SetHeight(height + CollectedText:GetHeight())
+        tip.HealthBorder:SetPoint("TOPLEFT", CollectedText, "BOTTOMLEFT", -1, -6)
+        tip:SetHeight(height + CollectedText:GetHeight())
+    end
 end
 
 function module:PetBattleUnitTooltip_Hide(tip)
