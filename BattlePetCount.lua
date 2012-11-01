@@ -29,6 +29,7 @@ local defaults = {
         preferNamesOverQuality = false,
         useOlderText = false,
         useSubTip = false,
+        showStats = false,
         petCompare = false
     }
 }
@@ -119,10 +120,30 @@ local options = {
                 },
             }
         },
-        sectionAdvanced = {
+        petStats = {
             type = 'group',
-            name = L["OPT_HEADER_ADVANCED"],
+            name = L["OPT_HEADER_STATS"] .. " " .. L["EXPERIMENTAL_TAG"],
             order = 40,
+            inline = true,
+            args = {
+                showStats = {
+                    type = "toggle",
+                    name = L["OPT_PET_STATS"],
+                    width = "double",
+                    order = 1
+                },
+                petCompare = {
+                    type = "toggle",
+                    name = L["OPT_PET_COMPARE"],
+                    width = "double",
+                    order = 2
+                }
+            }
+        },
+        sectionOther = {
+            type = 'group',
+            name = L["OPT_HEADER_OTHER"],
+            order = 50,
             inline = true,
             args = {
                 preferNamesOverQuality = {
@@ -143,12 +164,6 @@ local options = {
                     width = "double",
                     order  = 3,
                 },
-                petCompare = {
-                    type = "toggle",
-                    name = L["OPT_PET_COMPARE"] .. " " .. L["EXPERIMENTAL_TAG"],
-                    width = "full",
-                    order = 4
-                }
             }
         }
     }

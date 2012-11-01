@@ -9,6 +9,43 @@ local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
 local is5_0 = not C_PetJournal.GetNumCollectedInfo
 
+local COMPARE_LEVEL = 25
+local COMPARE_COLOR = "|cff44dddd"
+
+--
+-- Stat Math
+--
+
+local QUALITY_VALUES = {
+    [1] = 1,
+    [2] = 1.1,
+    [3] = 1.2,
+    [4] = 1.3,
+    [5] = 1.4,
+}
+
+local function getBaseStats(quality, level, maxHealth, power, speed)
+    local qualmult = QUALITY_VALUES[quality]
+    local baseHealth = (maxHealth-100)/qualmult/level + 100
+    local basePower = power/qualmult/level
+    local baseSpeed = speed/qualmult/level
+    return baseHealth, basePower, baseSpeed  
+end
+
+local function getLeveledStatsFromBase(quality, level, baseHealth, basePower, baseSpeed)
+    local qualmult = QUALITY_VALUES[quality]
+
+    local health = 100 + (baseHealth-100)*level*qualmult
+    local power = basePower*qualmult*level
+    local speed = baseSpeed*qualmult*level
+    return health, power, speed
+end
+
+local function getLeveledStats(quality, fromLevel, toLevel, health, power, speed)
+    local baseHealth, basePower, baseSpeed = getBaseStats(quality, fromLevel, health, power, speed)
+    return getLeveledStatsFromBase(quality, toLevel, baseHealth, basePower, baseSpeed)
+end
+
 --
 --
 --
@@ -119,7 +156,7 @@ function module:Initialize_BattlePetTooltip()
     self:HookScript(BattlePetTooltip, "OnHide", "BattlePetToolTip_Hide")
 end
 
-function module:BattlePetToolTip_Show(speciesID)
+function module:BattlePetToolTip_Show(speciesID, level, breedQuality, maxHealth, power, speed, customName)
     local tip = BattlePetTooltip
 
     if not speciesID or speciesID < 0 then
@@ -158,6 +195,13 @@ function module:BattlePetToolTip_Show(speciesID)
 
         -- XXX TRIPLE ECKS
         tip:SetSize(260,136)
+    end
+
+    if addon.db.profile.showStats then
+        local health25, power25, speed25 = getLeveledStats(breedQuality, level, COMPARE_LEVEL, maxHealth, power, speed)
+        tip.Health:SetText(format("%s  %s(~%d @L%d)", maxHealth, COMPARE_COLOR, health25, COMPARE_LEVEL))
+        tip.Power:SetText(format("%s  %s(~%d @L%d)", power, COMPARE_COLOR, power25, COMPARE_LEVEL))
+        tip.Speed:SetText(format("%s  %s(~%d @L%d)", speed, COMPARE_COLOR, speed25, COMPARE_LEVEL))
     end
 end
 
