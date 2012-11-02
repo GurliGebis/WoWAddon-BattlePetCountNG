@@ -125,6 +125,7 @@ local options = {
             name = L["OPT_HEADER_STATS"] .. " " .. L["EXPERIMENTAL_TAG"],
             order = 40,
             inline = true,
+            hidden = true,
             args = {
                 showStats = {
                     type = "toggle",
