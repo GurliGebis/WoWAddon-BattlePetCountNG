@@ -12,6 +12,6 @@ externals:
     Libs/LibPetJournal-2.0: 
         url: http://hg.curseforge.net/wow/libpetjournal-2-0/mainline
         tag: latest
-    libs/LibQTip-1.0:
+    Libs/LibQTip-1.0:
         url: svn://svn.wowace.com/wow/libqtip-1-0/mainline/trunk
         tag: latest
