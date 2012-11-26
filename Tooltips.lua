@@ -193,8 +193,7 @@ function module:BattlePetToolTip_Show(speciesID, level, breedQuality, maxHealth,
         Owned:SetText(addon:CollectedText(speciesID))
         Owned:Show()
 
-        -- XXX TRIPLE ECKS
-        tip:SetSize(260,136)
+        tip:SetSize(260,122+Owned:GetHeight())
     end
 
     if addon.db.profile.showStats then
