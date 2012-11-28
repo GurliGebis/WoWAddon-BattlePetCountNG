@@ -264,6 +264,7 @@ Map[91040] = 1063
 Map[92707] = 1117
 Map[92798] = 1124
 Map[92799] = 1125
+Map[93025] = 1142
 Map[93029] = 1146
 Map[93030] = 1143
 Map[93031] = 1145
@@ -287,6 +288,7 @@ Map[98079] = 308
 local EXCEPTIONS = {
     [629] = true,   -- Shore Crawler (Sold as Spell)
     [630] = true,   -- Gilnean Raven (Sold as Spell)
+    [1168] = true,  -- Murki (Korean Promotional Event)
 }
 
 SLASH_BPCMISSINGSCAN1 = '/bpcmissing'
