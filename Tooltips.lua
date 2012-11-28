@@ -302,6 +302,40 @@ function module:Initialize_GameTooltip()
     self:HookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
 end
 
+function module:FindCollectedTooltipText(tt)
+    local lineno, line = 0, nil
+    while true do
+        lineno = lineno + 1
+        line = _G["GameTooltipTextLeft"..lineno] 
+        if not line or not line:IsShown() then
+            line = nil
+            break
+        end
+
+        local text = line:GetText()
+        if text == UNIT_CAPTURABLE then
+            break
+        elseif self.ITEM_PET_KNOWN_DEFORMAT and strmatch(text, self.ITEM_PET_KNOWN_DEFORMAT) then
+            -- XXX self.ITEM_PET_KNOWN_DEFORMAT nil check for 5.0 client
+            break
+        end
+    end
+
+    return line
+end
+
+function module:AlterCollectedTooltipText(tt, speciesID)
+    local line = self:FindCollectedTooltipText(tt)
+    local newtext = addon:CollectedText(speciesID)
+    if line then
+        line:SetText(newtext)
+        line:SetVertexColor(1, 1, 1)
+    else
+        tt:AddLine(newtext)
+    end
+    tt:Show()
+end
+
 function module:AlterGameTooltip(tt)
     if not addon.db then
         return
@@ -314,32 +348,7 @@ function module:AlterGameTooltip(tt)
                 local creatureID = tonumber(strsub(UnitGUID(unit),7,10), 16)
                 local speciesID = LPJ:GetSpeciesIDForCreatureID(creatureID)
 
-                local lineno, line = 0, nil
-                while true do
-                    lineno = lineno + 1
-                    line = _G["GameTooltipTextLeft"..lineno] 
-                    if not line or not line:IsShown() then
-                        line = nil
-                        break
-                    end
-
-                    local text = line:GetText()
-                    if text == UNIT_CAPTURABLE then
-                        break
-                    elseif self.ITEM_PET_KNOWN_DEFORMAT and strmatch(text, self.ITEM_PET_KNOWN_DEFORMAT) then
-                        -- XXX self.ITEM_PET_KNOWN_DEFORMAT nil check for 5.0 client
-                        break
-                    end
-                end
-
-                local newtext = addon:CollectedText(speciesID)
-                if line then
-                    line:SetText(newtext)
-                    line:SetVertexColor(1, 1, 1)
-                else
-                    tt:AddLine(newtext)
-                end
-                tt:Show()
+                self:AlterCollectedTooltipText(tt, speciesID)
             end
             return
         end
@@ -358,8 +367,8 @@ function module:AlterGameTooltip(tt)
                             return
                         end
                     end
-                    tt:AddLine(addon:CollectedText(speciesID))
-                    tt:Show()
+
+                    self:AlterCollectedTooltipText(tt, speciesID)
                 end
             end
             return
