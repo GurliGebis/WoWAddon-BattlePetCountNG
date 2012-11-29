@@ -345,8 +345,14 @@ function module:AlterGameTooltip(tt)
         local _, unit = tt:GetUnit()
         if unit then
             if UnitIsWildBattlePet(unit) then
-                local creatureID = tonumber(strsub(UnitGUID(unit),6,10), 16)
-                local speciesID = LPJ:GetSpeciesIDForCreatureID(creatureID)
+                local speciesID
+
+                if UnitBattlePetSpeciesID then
+                    speciesID = UnitBattlePetSpeciesID(unit)
+                else
+                    local creatureID = tonumber(strsub(UnitGUID(unit),6,10), 16)
+                    speciesID = LPJ:GetSpeciesIDForCreatureID(creatureID)
+                end
 
                 self:AlterCollectedTooltipText(tt, speciesID)
             end
