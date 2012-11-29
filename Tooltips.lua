@@ -347,9 +347,9 @@ function module:AlterGameTooltip(tt)
             if UnitIsWildBattlePet(unit) then
                 local speciesID
 
-                if UnitBattlePetSpeciesID then
+                if UnitBattlePetSpeciesID then 
                     speciesID = UnitBattlePetSpeciesID(unit)
-                else
+                else -- is5_0
                     local creatureID = tonumber(strsub(UnitGUID(unit),6,10), 16)
                     speciesID = LPJ:GetSpeciesIDForCreatureID(creatureID)
                 end
