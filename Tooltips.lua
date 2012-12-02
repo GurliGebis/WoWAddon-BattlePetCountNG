@@ -190,6 +190,7 @@ function module:BattlePetToolTip_Show(speciesID, level, breedQuality, maxHealth,
             tip.Owned = Owned
         end
 
+        Owned:SetWordWrap(true)
         Owned:SetText(addon:CollectedText(speciesID))
         Owned:Show()
 
@@ -262,6 +263,7 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         if is5_0 then
             CollectedText:SetWidth(tip:GetWidth() - 8) -- fudge
         end
+        CollectedText:SetWordWrap(true)
         CollectedText:SetText(addon:CollectedText(speciesID))
         CollectedText:Show()
 
