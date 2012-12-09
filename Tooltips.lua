@@ -117,7 +117,8 @@ function module:SubTip(tooltip, text)
     end
 
     if text then
-        subtip:AddLine(text)
+        local row, col = subtip:AddLine()
+        subtip:SetCell(row, col, text, nil, "LEFT", nil, nil, nil, nil, tooltip:GetWidth()-10)
     end
 end
 
