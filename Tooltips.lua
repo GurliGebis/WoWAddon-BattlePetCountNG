@@ -198,7 +198,7 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         end
 
         local height = tip:GetHeight()
-        if CollectedText:IsShown() and not is5_0 then
+        if CollectedText:IsShown() then
             height = height - CollectedText:GetHeight()
         end
         
@@ -214,16 +214,6 @@ end
 
 function module:PetBattleUnitTooltip_Hide(tip)
     self:HideSubTip(tip)
-end
-
--- 5.0 client support
-function module:PetBattleUnitFrame_UpdateDisplay(frame)
-    local quality = C_PetBattles.GetBreedQuality(frame.petOwner, frame.petIndex)
-    if frame.Name then
-        frame.Name:SetVertexColor(ITEM_QUALITY_COLORS[quality-1].r,
-                                ITEM_QUALITY_COLORS[quality-1].g,
-                                ITEM_QUALITY_COLORS[quality-1].b)
-    end
 end
 
 --
