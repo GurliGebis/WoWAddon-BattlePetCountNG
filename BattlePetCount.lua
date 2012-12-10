@@ -28,9 +28,7 @@ local defaults = {
         enableBattleBorderIcon = true,
         preferNamesOverQuality = false,
         useOlderText = false,
-        useSubTip = false,
-        showStats = false,
-        petCompare = false
+        useSubTip = false
     }
 }
 
@@ -118,27 +116,6 @@ local options = {
                     width = "double",
                     order = 11,
                 },
-            }
-        },
-        petStats = {
-            type = 'group',
-            name = L["OPT_HEADER_STATS"] .. " " .. L["EXPERIMENTAL_TAG"],
-            order = 40,
-            inline = true,
-            hidden = true,
-            args = {
-                showStats = {
-                    type = "toggle",
-                    name = L["OPT_PET_STATS"],
-                    width = "double",
-                    order = 1
-                },
-                petCompare = {
-                    type = "toggle",
-                    name = L["OPT_PET_COMPARE"],
-                    width = "double",
-                    order = 2
-                }
             }
         },
         sectionOther = {
