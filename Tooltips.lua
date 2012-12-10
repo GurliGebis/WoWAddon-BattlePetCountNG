@@ -14,12 +14,10 @@ local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 local GameTooltip_OnUpdate_Hook
 
 function module:OnInitialize()
-    if ITEM_PET_KNOWN then
-        local str = ITEM_PET_KNOWN
-        str = gsub(gsub(str, "%(", "%%("), "%)", "%%)")
-        str = gsub(str, "%%d", "%%d+")
-        self.ITEM_PET_KNOWN_DEFORMAT = "^"..str
-    end
+    local str = ITEM_PET_KNOWN
+    str = gsub(gsub(str, "%(", "%%("), "%)", "%%)")
+    str = gsub(str, "%%d", "%%d+")
+    self.ITEM_PET_KNOWN_DEFORMAT = "^"..str
 
     self:Initialize_BattlePetTooltip()
     self:Initialize_PetBattleUnitTooltip()
@@ -259,8 +257,7 @@ function module:FindCollectedTooltipText(tt)
         local text = line:GetText()
         if text == UNIT_CAPTURABLE then
             break
-        elseif self.ITEM_PET_KNOWN_DEFORMAT and strmatch(text, self.ITEM_PET_KNOWN_DEFORMAT) then
-            -- XXX self.ITEM_PET_KNOWN_DEFORMAT nil check for 5.0 client
+        elseif strmatch(text, self.ITEM_PET_KNOWN_DEFORMAT) then
             break
         end
     end
