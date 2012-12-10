@@ -7,8 +7,6 @@ local LPJ = LibStub("LibPetJournal-2.0")
 local LibQTip = LibStub("LibQTip-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
-local is5_0 = not C_PetJournal.GetNumCollectedInfo
-
 --
 --
 --
@@ -129,10 +127,7 @@ function module:BattlePetToolTip_Show(speciesID, level, breedQuality, maxHealth,
 
     local Owned = tip.Owned
     if not addon.db.profile.enableCageTip then
-        if is5_0 then
-            -- TODO fix size
-            tip.Owned:Hide()
-        end
+        -- pass
     elseif addon.db.profile.useSubTip then
         if Owned and Owned:IsShown() then
             tip.Owned:Hide()
@@ -173,10 +168,6 @@ end
 function module:Initialize_PetBattleUnitTooltip()
     self.PetBattleUnit_Hooked = {}
     self:SecureHook("PetBattleUnitTooltip_UpdateForUnit")
-
-    if is5_0 then
-        self:SecureHook("PetBattleUnitFrame_UpdateDisplay")
-    end
 end
 
 function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
@@ -187,10 +178,7 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
 
     local CollectedText = tip.CollectedText
     if not addon.db.profile.enableBattleTip then
-        if is5_0 then
-            tip.CollectedText:Hide()
-            tip.HealthBorder:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", -1, -6)
-        end
+        -- pass
     elseif addon.db.profile.useSubTip then
         if CollectedText and CollectedText:IsShown() then
             local height = tip:GetHeight()
@@ -217,9 +205,6 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         end
         
         local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
-        if is5_0 then
-            CollectedText:SetWidth(tip:GetWidth() - 8) -- fudge
-        end
         CollectedText:SetWordWrap(true)
         CollectedText:SetText(addon:CollectedText(speciesID))
         CollectedText:Show()
@@ -304,15 +289,7 @@ function module:AlterGameTooltip(tt)
         local _, unit = tt:GetUnit()
         if unit then
             if UnitIsWildBattlePet(unit) then
-                local speciesID
-
-                if UnitBattlePetSpeciesID then 
-                    speciesID = UnitBattlePetSpeciesID(unit)
-                else -- is5_0
-                    local creatureID = tonumber(strsub(UnitGUID(unit),6,10), 16)
-                    speciesID = LPJ:GetSpeciesIDForCreatureID(creatureID)
-                end
-
+                local speciesID = UnitBattlePetSpeciesID(unit)
                 self:AlterCollectedTooltipText(tt, speciesID)
             end
             return

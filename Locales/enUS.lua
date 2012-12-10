@@ -15,7 +15,6 @@ if not L then return end
 
 L["YOU_OWN_COLON"] = "You own this pet:"
 L["YOU_DONT_OWN"] = "You don't own this pet."
-L["ITEM_PET_KNOWN_5_0"] = "Collected (%d/%d)" -- 5.0 support
 L["UPGRADE"] = "Upgrade"
 L["OWNED"] = "Owned"
 L["UNOWNED"] = "Unowned"

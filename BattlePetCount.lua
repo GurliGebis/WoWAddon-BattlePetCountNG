@@ -6,8 +6,6 @@ LibStub("AceAddon-3.0"):NewAddon(addon, addon_name)
 local LPJ = LibStub("LibPetJournal-2.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
-local is5_0 = not C_PetJournal.GetNumCollectedInfo
-
 local GREEN_FONT_COLOR_CODE = "|cff30d030"
 local RED_FONT_COLOR_CODE = "|cffff3030"
 
@@ -56,13 +54,6 @@ local options = {
                     name = L["OPT_BATTLE_HINT_BOX"],
                     width = "double",
                     order = 2,
-                },
-                enableBattleBorder = {
-                    type = "toggle",
-                    name = L["OPT_BATTLE_BORDER"],
-                    width = "double",
-                    order = 3,
-                    hidden = not is5_0
                 },
                 enableBattleBorderIcon = {
                     type = "toggle",
@@ -164,12 +155,7 @@ end
 --
 
 function addon:GetPetName(petID)
-    local _, customName, petName
-    if is5_0 then
-        _, customName, _, _, _, _, petName = C_PetJournal.GetPetInfoByPetID(petID)
-    else
-        _, customName, _, _, _, _, _, petName = C_PetJournal.GetPetInfoByPetID(petID)
-    end
+    local _, customName, _, _, _, _, _, petName = C_PetJournal.GetPetInfoByPetID(petID)
     return customName or petName
 end
 
@@ -267,28 +253,7 @@ function addon:CollectedText(speciesID)
         return self:CollectedOlderText(speciesID)
     end
 
-    local owned, maxOwned
-    if C_PetJournal.GetNumCollectedInfo then
-        owned, maxOwned = C_PetJournal.GetNumCollectedInfo(speciesID)  
-    else
-        -- 5.0 COMPAT
-        local _, _, _, _, _, _, _, _, _, unique = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
-        if unique then
-            maxOwned = 1
-        else
-            maxOwned = 3
-        end
-
-        owned = 0
-        for _,petID in LPJ:IteratePetIDs() do
-            local pet_speciesID = C_PetJournal.GetPetInfoByPetID(petID)
-            if pet_speciesID == speciesID then
-                owned = owned + 1
-            end
-        end
-    end
-
-    local ITEM_PET_KNOWN = ITEM_PET_KNOWN or L["ITEM_PET_KNOWN_5_0"]
+    local owned, maxOwned = C_PetJournal.GetNumCollectedInfo(speciesID)  
     local ownedColor
     if owned < maxOwned then
         ownedColor = GREEN_FONT_COLOR_CODE
