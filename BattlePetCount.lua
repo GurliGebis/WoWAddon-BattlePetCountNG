@@ -170,7 +170,7 @@ end
 
 function addon:_breedID(petID)
     if self.db.profile.showBreedID and GetBreedID_Journal then
-        return ":"..tostring(GetBreedID_Journal(petID))
+        return " "..tostring(GetBreedID_Journal(petID))
     end
     return ""
 end
@@ -209,6 +209,11 @@ end
 do
     local tmp = {}
     function addon:ShortOwnedList(speciesID)
+        local sep = "/"
+        if self.db.profile.showBreedID and GetBreedID_Journal then
+            sep = ","
+        end
+
         wipe(tmp)
 
         for _,petID in LPJ:IteratePetIDs() do
@@ -216,16 +221,16 @@ do
                 local _, _, level = C_PetJournal.GetPetInfoByPetID(petID)
                 local _, _, _, _, quality = C_PetJournal.GetPetStats(petID)
                 
-                tinsert(tmp, format("|cff%02x%02x%02xL%d|r",
+                tinsert(tmp, format("|cff%02x%02x%02xL%d%s|r",
                         ITEM_QUALITY_COLORS[quality-1].r*255,
                         ITEM_QUALITY_COLORS[quality-1].g*255,
                         ITEM_QUALITY_COLORS[quality-1].b*255,
-                        level))
+                        level, self:_breedID(petID)))
             end
         end
         
         if #tmp > 0 then
-            return format("%s: %s", L["OWNED"], table.concat(tmp, "/"))
+            return format("%s: %s", L["OWNED"], table.concat(tmp, sep))
         else
             return format("|cffee3333%s|r", L["UNOWNED"])
         end
