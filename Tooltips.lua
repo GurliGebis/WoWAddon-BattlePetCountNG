@@ -203,6 +203,7 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         end
         
         local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
+        CollectedText:SetWidth(tip:GetWidth()-20)
         CollectedText:SetWordWrap(true)
         CollectedText:SetText(addon:CollectedText(speciesID))
         CollectedText:Show()
