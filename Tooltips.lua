@@ -236,10 +236,11 @@ function module:Initialize_GameTooltip()
 end
 
 function module:FindCollectedTooltipText(tt)
+    local prefix = tt:GetName().."TextLeft"
     local lineno, line = 0, nil
     while true do
         lineno = lineno + 1
-        line = _G["GameTooltipTextLeft"..lineno] 
+        line = _G[prefix..lineno] 
         if not line or not line:IsShown() then
             line = nil
             break
