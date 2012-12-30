@@ -26,7 +26,8 @@ local defaults = {
         enableBattleBorderIcon = true,
         preferNamesOverQuality = false,
         useOlderText = false,
-        useSubTip = false
+        useSubTip = false,
+        showBreedID = true
     }
 }
 
@@ -133,6 +134,14 @@ local options = {
                     width = "double",
                     order  = 3,
                 },
+                showBreedID = {
+                    type = "toggle",
+                    name = L["OPT_USE_BREEDID_ADDON"],
+                    width = "double",
+                    order = 4,
+                    disabled = function() return not GetBreedID_Journal end,
+                    get = function(info) return addon.db.profile[info[#info]] and GetBreedID_Journal end,
+                }
             }
         }
     }
@@ -159,6 +168,13 @@ function addon:GetPetName(petID)
     return customName or petName
 end
 
+function addon:_breedID(petID)
+    if self.db.profile.showBreedID and GetBreedID_Journal then
+        return ":"..tostring(GetBreedID_Journal(petID))
+    end
+    return ""
+end
+
 do
     local tmp = {}
     function addon:OwnedList(speciesID)
@@ -176,12 +192,11 @@ do
                     name = _G["ITEM_QUALITY"..(quality-1).."_DESC"] or UNKNOWN
                 end
 
-
-                tinsert(tmp, format("|cff%02x%02x%02x%s|r (L%d)",
+                tinsert(tmp, format("|cff%02x%02x%02x%s|r (L%d%s)",
                             ITEM_QUALITY_COLORS[quality-1].r*255,
                             ITEM_QUALITY_COLORS[quality-1].g*255,
                             ITEM_QUALITY_COLORS[quality-1].b*255,
-                            name, tostring(level)))
+                            name, tostring(level), self:_breedID(petID)))
             end
         end
         
