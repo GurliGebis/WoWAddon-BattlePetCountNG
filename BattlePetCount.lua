@@ -22,7 +22,6 @@ local defaults = {
         enableItemTip = true,
         itemTipIncludesAll = true,
         enableBattleIndicator = true,
-        enableBattleBorder = false,     -- for 5.0 only
         enableBattleBorderIcon = true,
         preferNamesOverQuality = false,
         useOlderText = false,
