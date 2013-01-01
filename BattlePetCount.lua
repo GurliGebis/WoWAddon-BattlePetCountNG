@@ -27,7 +27,8 @@ local defaults = {
         preferNamesOverQuality = false,
         useOlderText = false,
         useSubTip = false,
-        showBreedID = true
+        showBreedID = true,
+        showBreedIDShort = false
     }
 }
 
@@ -168,8 +169,13 @@ function addon:GetPetName(petID)
     return customName or petName
 end
 
-function addon:_breedID(petID)
-    if self.db.profile.showBreedID and GetBreedID_Journal then
+function addon:_breedID(petID, toggle)
+    if toggle == nil then
+        -- default
+        toggle = self.db.profile.showBreedID
+    end
+
+    if toggle and GetBreedID_Journal then
         return " "..tostring(GetBreedID_Journal(petID))
     end
     return ""
@@ -225,7 +231,7 @@ do
                         ITEM_QUALITY_COLORS[quality-1].r*255,
                         ITEM_QUALITY_COLORS[quality-1].g*255,
                         ITEM_QUALITY_COLORS[quality-1].b*255,
-                        level, self:_breedID(petID)))
+                        level, self:_breedID(petID, self.db.profile.showBreedIDShort)))
             end
         end
         
