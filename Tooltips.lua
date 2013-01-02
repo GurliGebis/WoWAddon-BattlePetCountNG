@@ -171,6 +171,7 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         if CollectedText and CollectedText:IsShown() then
             local height = tip:GetHeight()
             tip:SetHeight(height - CollectedText:GetHeight())
+            tip.HealthBorder:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", -1, -6)
             CollectedText:Hide()
         end
 
