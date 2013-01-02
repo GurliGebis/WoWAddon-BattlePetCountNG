@@ -188,15 +188,6 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         self:SubTip(tip, addon:CollectedText(speciesID))
     else
         self:HideSubTip(tip)
-    
-        if not CollectedText then
-            -- 5.0 support
-            CollectedText = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            CollectedText:SetJustifyH("LEFT")
-            CollectedText:SetPoint("TOPLEFT", tip.Icon, "BOTTOMLEFT", 0, -4)
-
-            tip.CollectedText = CollectedText
-        end
 
         local height = tip:GetHeight()
         if CollectedText:IsShown() then
