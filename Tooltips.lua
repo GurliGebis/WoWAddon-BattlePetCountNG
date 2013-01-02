@@ -136,17 +136,6 @@ function module:BattlePetToolTip_Show(speciesID, level, breedQuality, maxHealth,
     else
         self:HideSubTip(tip)
 
-        if not Owned then
-            -- 5.0 support
-            Owned = tip:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            Owned:SetWidth(238)
-            Owned:SetJustifyH("LEFT")
-            Owned:SetPoint("TOPLEFT", tip.SpeedTexture, "BOTTOMLEFT", 0, -2)
-            Owned:SetVertexColor(1.0, 0.82, 0.0, 1.0)
-
-            tip.Owned = Owned
-        end
-
         Owned:SetWordWrap(true)
         Owned:SetText(addon:CollectedText(speciesID))
         Owned:Show()
