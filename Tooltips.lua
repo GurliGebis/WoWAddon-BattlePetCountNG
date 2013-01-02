@@ -174,6 +174,7 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         self.PetBattleUnit_Hooked[tip] = true
     end
 
+    local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
     local CollectedText = tip.CollectedText
     if not addon.db.profile.enableBattleTip then
         -- pass
@@ -202,7 +203,6 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
             height = height - CollectedText:GetHeight()
         end
         
-        local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, petIndex)
         CollectedText:SetWidth(tip:GetWidth()-20)
         CollectedText:SetWordWrap(true)
         CollectedText:SetText(addon:CollectedText(speciesID))
