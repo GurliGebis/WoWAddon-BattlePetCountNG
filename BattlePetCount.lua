@@ -215,7 +215,7 @@ do
     local tmp = {}
     function addon:ShortOwnedList(speciesID)
         local sep = "/"
-        if self.db.profile.showBreedID and GetBreedID_Journal then
+        if self.db.profile.showBreedIDShort and GetBreedID_Journal then
             sep = ","
         end
 
