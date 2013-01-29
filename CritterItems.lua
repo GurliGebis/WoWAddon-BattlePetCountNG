@@ -265,6 +265,7 @@ Map[91040] = 1063
 Map[92707] = 1117
 Map[92798] = 1124
 Map[92799] = 1125
+Map[92800] = 1126
 Map[93025] = 1142
 Map[93029] = 1146
 Map[93030] = 1143
@@ -279,7 +280,8 @@ Map[93038] = 1152
 Map[93039] = 1154
 Map[93040] = 1155
 Map[93041] = 1156  
-Map[92800] = 1126
+Map[93669] = 1174
+Map[94025] = 1176
 Map[94124] = 1178
 Map[94125] = 1177
 Map[94126] = 1180
@@ -297,6 +299,7 @@ Map[94210] = 1198
 local EXCEPTIONS = {
     [629] = true,   -- Shore Crawler (Sold as Spell)
     [630] = true,   -- Gilnean Raven (Sold as Spell)
+    [1068] = true,  -- Crow (return value wrong, is caught in wild)
     [1168] = true,  -- Murki (Korean Promotional Event)
 }
 
