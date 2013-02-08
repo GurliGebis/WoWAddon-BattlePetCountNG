@@ -56,6 +56,13 @@ local options = {
                     width = "double",
                     order = 2,
                 },
+                resetBattleIndicator = {
+                    type = "execute",
+                    name = L["OPT_BATTLE_HINT_RESET"],
+                    disabled = function() return not addon.db.profile.enableBattleIndicator end,
+                    func = function() addon:GetModule("Indicators"):ResetIndicatorPosition() end,
+                    order = 3
+                },
                 enableBattleBorderIcon = {
                     type = "toggle",
                     name = L["OPT_BATTLE_BORDER_ICON"],
