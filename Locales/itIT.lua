@@ -13,9 +13,11 @@ if not L then return end
 
 --
 
+L["EXPLAIN_BATTLE_HINT_DRAG"] = "Alt-Clic per spostare il Riquadro Suggerimenti di Scontro"
 L["OPT_BATTLE_BORDER"] = "Modifica Bordo Colore Mascotte da Battaglia"
 L["OPT_BATTLE_BORDER_ICON"] = "Mostra Bordo Colore Mascotte da Battaglia"
 L["OPT_BATTLE_HINT_BOX"] = "Mostra finestra dei suggerimenti durante lo scontro"
+L["OPT_BATTLE_HINT_RESET"] = "Reimposta Riquadro Suggerimenti di Scontro"
 L["OPT_BATTLE_TIP"] = "Modifica tooltip durante lo Scontro"
 L["OPT_CAGE_TIP"] = "Modifica tooltip Mascotte in Gabbia"
 L["OPT_CREATURE_TIP"] = "Modifica Tooltip Mascotte "
