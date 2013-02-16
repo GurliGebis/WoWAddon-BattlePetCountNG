@@ -13,11 +13,11 @@ if not L then return end
 
 --
 
--- L["EXPERIMENTAL_TAG"] = ""
--- L["ITEM_PET_KNOWN_5_0"] = ""
+-- L["EXPLAIN_BATTLE_HINT_DRAG"] = ""
 -- L["OPT_BATTLE_BORDER"] = ""
 -- L["OPT_BATTLE_BORDER_ICON"] = ""
 -- L["OPT_BATTLE_HINT_BOX"] = ""
+-- L["OPT_BATTLE_HINT_RESET"] = ""
 -- L["OPT_BATTLE_TIP"] = ""
 -- L["OPT_CAGE_TIP"] = ""
 -- L["OPT_CREATURE_TIP"] = ""
@@ -29,14 +29,12 @@ if not L then return end
 -- L["OPT_ITEM_TIP"] = ""
 -- L["OPT_ITEM_TIP_ALL"] = ""
 -- L["OPT_MINIMAP_TIP"] = ""
--- L["OPT_PET_COMPARE"] = ""
--- L["OPT_PET_STATS"] = ""
 -- L["OPT_PREFER_NAMES_OVER_QUALITY"] = ""
+-- L["OPT_USE_BREEDID_ADDON"] = ""
 -- L["OPT_USE_OLDER_TEXT"] = ""
 -- L["OPT_USE_SUB_TIP"] = ""
 L["OWNED"] = "Lo tienes" -- Needs review
 L["UNOWNED"] = "Desconocido" -- Needs review
 -- L["UPGRADE"] = ""
 L["YOU_DONT_OWN"] = "No tienes esta mascota." -- Needs review
-L["YOU_OWN"] = "Tienes esta mascota." -- Needs review
 L["YOU_OWN_COLON"] = "Tienes esta mascota:" -- Needs review

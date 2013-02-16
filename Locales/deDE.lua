@@ -13,9 +13,11 @@ if not L then return end
 
 --
 
+L["EXPLAIN_BATTLE_HINT_DRAG"] = "Alt-Klick um das Kampf Hinweis Fenster zu verschieben"
 L["OPT_BATTLE_BORDER"] = "\195\132ndere die Rahmenfarbe der Kampfhaustiere"
 L["OPT_BATTLE_BORDER_ICON"] = "Zeige das Kampfhaustier Rahmen Symbol"
 L["OPT_BATTLE_HINT_BOX"] = "Hinweistext im Kampf anzeigen"
+L["OPT_BATTLE_HINT_RESET"] = "Kampf Hinweis Fenster auf Standard zur\195\188cksetzen"
 L["OPT_BATTLE_TIP"] = "\195\132ndere den Hinweistext im Kampf"
 L["OPT_CAGE_TIP"] = "\195\132ndere den eingefanges Haustier Hinweistext"
 L["OPT_CREATURE_TIP"] = "\195\132ndere den Kreatur Hinweistext"
@@ -36,3 +38,4 @@ L["UNOWNED"] = "Nicht im Besitz"
 L["UPGRADE"] = "Verbesserung"
 L["YOU_DONT_OWN"] = "Du besitzt dieses Haustier nicht."
 L["YOU_OWN_COLON"] = "Du besitzt dieses Haustier:"
+

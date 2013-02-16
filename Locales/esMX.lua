@@ -13,9 +13,11 @@ if not L then return end
 
 --
 
+-- L["EXPLAIN_BATTLE_HINT_DRAG"] = ""
 L["OPT_BATTLE_BORDER"] = "Alterar color de borde en duelo de mascotas" -- Needs review
 L["OPT_BATTLE_BORDER_ICON"] = "Mostrar \195\173cono de notificaci\195\179n en el borde del duelo de mascotas" -- Needs review
 L["OPT_BATTLE_HINT_BOX"] = "Mostrar caja de indicaciones en duelo" -- Needs review
+-- L["OPT_BATTLE_HINT_RESET"] = ""
 L["OPT_BATTLE_TIP"] = "Alterar tooltips en duelo" -- Needs review
 L["OPT_CAGE_TIP"] = "Alterar tooltip en mascotas atrapadas" -- Needs review
 L["OPT_CREATURE_TIP"] = "Alterar tooltips en criaturas" -- Needs review
