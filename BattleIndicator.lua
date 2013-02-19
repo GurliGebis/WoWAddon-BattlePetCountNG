@@ -22,8 +22,9 @@ end
 
 function module:CreateIndicator()
     self.InBattleIndicator = CreateFrame("FRAME", nil, PetBattleFrame.ActiveEnemy, "InsetFrameTemplate3")
-    self:UpdateIndicatorPosition()
     self.InBattleIndicator:SetHeight(30)
+    self.InBattleIndicator:SetWidth(143)
+    self:UpdateIndicatorPosition()
 
     self.InBattleIndicator:EnableMouse(true)
     self.InBattleIndicator:SetMovable(true)
@@ -34,10 +35,9 @@ function module:CreateIndicator()
     end)
     self.InBattleIndicator:SetScript("OnMouseUp", function(frame)
         frame:StopMovingOrSizing()
-        frame:SetUserPlaced(false)
-        -- anchor to topright, since it seems most likely place to drag the indicator too
-        addon.db.profile.battleIndicatorRight = GetScreenWidth() - frame:GetRight()
-        addon.db.profile.battleIndicatorTop = GetScreenHeight() - frame:GetTop()
+        frame:SetUserPlaced(false)  -- don't let location cache position us
+        addon.db.profile.battleIndicatorX = frame:GetLeft() - PetBattleFrame.TopVersusText:GetRight()
+        addon.db.profile.battleIndicatorY = frame:GetTop() - PetBattleFrame.TopVersusText:GetTop()
     end)
 
     local Text = self.InBattleIndicator:CreateFontString(nil, "OVERLAY")
@@ -57,20 +57,17 @@ end
 
 function module:UpdateIndicatorPosition()
     self.InBattleIndicator:ClearAllPoints()
-    if addon.db.profile.battleIndicatorRight then
-        self.InBattleIndicator:SetWidth(143)
-        self.InBattleIndicator:SetPoint("TOPRIGHT", UIParent,
-            -addon.db.profile.battleIndicatorRight,
-            -addon.db.profile.battleIndicatorTop)
+    if addon.db.profile.battleIndicatorX then
+        self.InBattleIndicator:SetPoint("TOPLEFT", PetBattleFrame.TopVersusText, "TOPRIGHT",
+            addon.db.profile.battleIndicatorX, addon.db.profile.battleIndicatorY)
     else
-        self.InBattleIndicator:SetPoint("RIGHT", PetBattleFrame.ActiveEnemy, "LEFT", -6, 0)
-        self.InBattleIndicator:SetPoint("LEFT", PetBattleFrame.TopVersusText, "RIGHT", 22, 0)
+        self.InBattleIndicator:SetPoint("TOPLEFT", PetBattleFrame.TopVersusText, "TOPRIGHT", 22, 0)
     end
 end
 
 function module:ResetIndicatorPosition()
-    addon.db.profile.battleIndicatorRight = nil
-    addon.db.profile.battleIndicatorTop = nil
+    addon.db.profile.battleIndicatorX = nil
+    addon.db.profile.battleIndicatorY = nil
     self:UpdateIndicatorPosition()
 end
 
@@ -166,13 +163,15 @@ function module:InBattleIndicator_OnEnter(indicator)
     local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
     local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
 
-    GameTooltip:SetOwner(indicator, "ANCHOR_BOTTOM")
-    
-    GameTooltip:AddLine(addon:CollectedText(speciesID))
-    GameTooltip:AddLine(" ")
-    GameTooltip:AddLine(L["EXPLAIN_BATTLE_HINT_DRAG"])
+    if speciesID then
+        GameTooltip:SetOwner(indicator, "ANCHOR_BOTTOM")
+        
+        GameTooltip:AddLine(addon:CollectedText(speciesID))
+        GameTooltip:AddLine(" ")
+        GameTooltip:AddLine(L["EXPLAIN_BATTLE_HINT_DRAG"])
 
-    GameTooltip:Show()
+        GameTooltip:Show()
+    end
 end
 
 function module:InBattleIndicator_OnLeave(indicator)
