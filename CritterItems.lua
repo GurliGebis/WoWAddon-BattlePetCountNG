@@ -313,6 +313,27 @@ SLASH_BPCMISSINGSCAN1 = '/bpcmissing'
 function SlashCmdList.BPCMISSINGSCAN(msg, editbox)
     local LPJ = LibStub("LibPetJournal-2.0")
 
+    if msg ~= "" then
+        -- locate a species by name (include non-obtainable)
+        local LPJ = LibStub("LibPetJournal-2.0")
+
+        local maxID = 0
+        for _,speciesID  in LPJ:IterateSpeciesIDs() do
+            if speciesID > maxID then
+                maxID = speciesID
+            end
+        end
+
+        for speciesID = 1,maxID*1.5 do
+            local name, _, _, creatureID = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+            if name and strfind(name, msg) then
+                print(format("%s species=%d creature=%d", name, speciesID, creatureID))
+            end
+        end
+        return
+    end
+
+    -- list unknown
     local speciesSet = {}
     for itemid, speciesid in pairs(Map) do
         speciesSet[speciesid] = true
