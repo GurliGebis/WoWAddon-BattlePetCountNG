@@ -320,9 +320,17 @@ local EXCEPTIONS = {
     [1168] = true,  -- Murki (Korean Promotional Event)
 }
 
+local scanByItem
+
 SLASH_BPCMISSINGSCAN1 = '/bpcmissing'
 function SlashCmdList.BPCMISSINGSCAN(msg, editbox)
     local LPJ = LibStub("LibPetJournal-2.0")
+
+    local itemid = tonumber(msg)
+    if itemid then
+        print("Scanning...")
+        return scanByItem(itemid)
+    end
 
     if msg ~= "" then
         -- locate a species by name (include non-obtainable)
@@ -362,4 +370,85 @@ function SlashCmdList.BPCMISSINGSCAN(msg, editbox)
     end
     
     print(format("%d pets missing from table.", count))
+end
+
+--
+-- item scanner
+--
+
+do
+    local AceTimer = LibStub("AceTimer-3.0")    
+    local tooltip = CreateFrame("GameTooltip", "BPCScanTooltip", UIParent, "GameTooltipTemplate")
+
+    local tooltipQueue = {}
+    local itemsInfoSize = 0
+    local itemsInfo = {}
+    local maxitem
+    local handle
+
+    local function runNextTooltip()
+        local item = tremove(tooltipQueue)
+        if item then
+            tooltip.item = item
+            tooltip:SetItemByID(item)
+        end
+    end
+
+    tooltip:SetScript("OnTooltipSetItem", function(self)
+        local name = tooltip:GetItem()
+        local itemid = tooltip.item
+        if addon:GetModule("Tooltips"):FindCollectedTooltipText(tooltip) then
+            print(format("%s (itemid=%d)", name, itemid))
+        end
+
+        AceTimer.ScheduleTimer(addon, runNextTooltip, 0)
+    end)
+
+    local function runQueue() 
+        local now = GetTime()
+
+        while itemsInfoSize < 1000 and maxitem > 1 do
+            maxitem = maxitem - 1
+            if not Map[maxitem] then
+                itemsInfo[maxitem] = now
+                itemsInfoSize = itemsInfoSize + 1
+            end
+        end
+      
+        if itemsInfoSize == 0 then
+            print("Finished")
+            return AceTimer.CancelTimer(addon, handle) 
+        end
+        
+        for itemid, start in pairs(itemsInfo) do
+            local remove
+            if now - start > 5 then
+                remove = true
+            else
+                local name = GetItemInfo(itemid)
+                if name then
+                    tinsert(tooltipQueue, itemid)
+                    if #tooltipQueue == 1 then
+                        runNextTooltip()
+                    end
+                    remove = true
+                end
+            end
+
+            if remove then
+                itemsInfo[itemid] = nil
+                itemsInfoSize = itemsInfoSize - 1
+            end
+        end
+    end
+
+    function scanByItem(itemid)
+        wipe(tooltipQueue)
+        itemsInfo = { n = 0 }
+        if handle then
+            AceTimer.CancelTimer(addon, handle)
+        end
+        maxitem = itemid
+        handle = AceTimer.ScheduleRepeatingTimer(addon, runQueue, 0.1)
+    end
 end
