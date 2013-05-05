@@ -377,78 +377,102 @@ end
 --
 
 do
-    local AceTimer = LibStub("AceTimer-3.0")    
-    local tooltip = CreateFrame("GameTooltip", "BPCScanTooltip", UIParent, "GameTooltipTemplate")
+    local updateFrame
+    local tooltip
 
     local tooltipQueue = {}
     local itemsInfoSize = 0
     local itemsInfo = {}
     local maxitem
-    local handle
 
     local function runNextTooltip()
-        local item = tremove(tooltipQueue)
-        if item then
-            tooltip.item = item
-            tooltip:SetItemByID(item)
+        if not tooltip.item then
+            local item = tremove(tooltipQueue)
+            if item then
+                tooltip.item = item
+                tooltip:SetItemByID(item)
+            end
         end
     end
 
-    tooltip:SetScript("OnTooltipSetItem", function(self)
+    local function tooltop_OnTooltipSetItem(self)
         local name = tooltip:GetItem()
         local itemid = tooltip.item
         if addon:GetModule("Tooltips"):FindCollectedTooltipText(tooltip) then
             print(format("%s (itemid=%d)", name, itemid))
         end
+        tooltip.item = nil
+    end
 
-        AceTimer.ScheduleTimer(addon, runNextTooltip, 0)
-    end)
-
+    local remove = {}
     local function runQueue() 
+        local hit
         local now = GetTime()
 
-        while itemsInfoSize < 1000 and maxitem > 1 do
+        while itemsInfoSize < 2000 and maxitem > 1 do
             maxitem = maxitem - 1
             if not Map[maxitem] then
                 itemsInfo[maxitem] = now
                 itemsInfoSize = itemsInfoSize + 1
             end
         end
-      
-        if itemsInfoSize == 0 then
-            print("Finished")
-            return AceTimer.CancelTimer(addon, handle) 
-        end
         
+        wipe(remove)
         for itemid, start in pairs(itemsInfo) do
-            local remove
-            if now - start > 5 then
-                remove = true
+            if now - start > 3 then
+                tinsert(remove, itemid)
             else
-                local name = GetItemInfo(itemid)
+                local name, _, _, _, _, _, subclass = GetItemInfo(itemid)
                 if name then
-                    tinsert(tooltipQueue, itemid)
-                    if #tooltipQueue == 1 then
-                        runNextTooltip()
+                    if subclass == "Companion Pets" then
+                        tinsert(tooltipQueue, itemid)
+                        if not hit then
+                            runNextTooltip()
+                            hit = true
+                        end
                     end
-                    remove = true
+                    tinsert(remove, itemid)
                 end
             end
+        end
 
-            if remove then
-                itemsInfo[itemid] = nil
-                itemsInfoSize = itemsInfoSize - 1
+        for _, itemid in ipairs(remove) do
+            itemsInfo[itemid] = nil
+            itemsInfoSize = itemsInfoSize - 1
+        end
+    end
+
+    local totalElapsed = 0
+    local function updateFrame_OnUpdate(self, elapsed)
+        runNextTooltip()
+
+        totalElapsed = totalElapsed + elapsed
+        if totalElapsed > 0.5 then
+            totalElapsed = 0
+
+            runQueue()
+            if itemsInfoSize == 0 and maxitem <= 1 and #tooltipQueue == 0 and self.item == nil then
+                print("Finished")
+                return self:Hide()
             end
         end
     end
 
     function scanByItem(itemid)
-        wipe(tooltipQueue)
-        itemsInfo = { n = 0 }
-        if handle then
-            AceTimer.CancelTimer(addon, handle)
+        if not updateFrame then
+            updateFrame = CreateFrame("Frame")
+            updateFrame:SetScript("OnUpdate", updateFrame_OnUpdate)
+
+            tooltip = CreateFrame("GameTooltip", "BPCScanTooltip", UIParent, "GameTooltipTemplate")
+            tooltip:SetScript("OnTooltipSetItem", tooltop_OnTooltipSetItem)
         end
-        maxitem = itemid
-        handle = AceTimer.ScheduleRepeatingTimer(addon, runQueue, 0.1)
+
+        wipe(tooltipQueue)
+        wipe(itemsInfo)
+        itemsInfoSize = 0
+        maxitem = itemid + 1
+
+        runQueue()
+        updateFrame:Show()
     end
 end
