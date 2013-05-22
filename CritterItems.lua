@@ -346,6 +346,10 @@ local EXCEPTIONS = {
     [1168] = true,  -- Murki (Korean Promotional Event)
 }
 
+local ITEM_EXCEPTIONS = {
+    
+}
+
 local scanByItem
 
 SLASH_BPCMISSINGSCAN1 = '/bpcmissing'
@@ -404,31 +408,10 @@ end
 
 do
     local updateFrame
-    local tooltip
 
-    local tooltipQueue = {}
     local itemsInfoSize = 0
     local itemsInfo = {}
     local maxitem
-
-    local function runNextTooltip()
-        if not tooltip.item then
-            local item = tremove(tooltipQueue)
-            if item then
-                tooltip.item = item
-                tooltip:SetItemByID(item)
-            end
-        end
-    end
-
-    local function tooltop_OnTooltipSetItem(self)
-        local name = tooltip:GetItem()
-        local itemid = tooltip.item
-        if addon:GetModule("Tooltips"):FindCollectedTooltipText(tooltip) then
-            print(format("%s (itemid=%d)", name, itemid))
-        end
-        tooltip.item = nil
-    end
 
     local remove = {}
     local function runQueue() 
@@ -437,7 +420,7 @@ do
 
         while itemsInfoSize < 500 and maxitem > 1 do
             maxitem = maxitem - 1
-            if not Map[maxitem] then
+            if not Map[maxitem] and not ITEM_EXCEPTIONS[maxitem] then
                 itemsInfo[maxitem] = now
                 itemsInfoSize = itemsInfoSize + 1
             end
@@ -451,11 +434,7 @@ do
                 local name, _, _, _, _, _, subclass = GetItemInfo(itemid)
                 if name then
                     if subclass == "Companion Pets" then
-                        tinsert(tooltipQueue, itemid)
-                        if not hit then
-                            runNextTooltip()
-                            hit = true
-                        end
+                        print(format("%s (itemid=%d)", name, itemid))
                     end
                     tinsert(remove, itemid)
                 end
@@ -470,8 +449,6 @@ do
 
     local totalElapsed = 0
     local function updateFrame_OnUpdate(self, elapsed)
-        runNextTooltip()
-
         totalElapsed = totalElapsed + elapsed
         if totalElapsed > 0.4 then
             totalElapsed = 0
@@ -488,12 +465,8 @@ do
         if not updateFrame then
             updateFrame = CreateFrame("Frame")
             updateFrame:SetScript("OnUpdate", updateFrame_OnUpdate)
-
-            tooltip = CreateFrame("GameTooltip", "BPCScanTooltip", UIParent, "GameTooltipTemplate")
-            tooltip:SetScript("OnTooltipSetItem", tooltop_OnTooltipSetItem)
         end
 
-        wipe(tooltipQueue)
         wipe(itemsInfo)
         itemsInfoSize = 0
         maxitem = itemid + 1
