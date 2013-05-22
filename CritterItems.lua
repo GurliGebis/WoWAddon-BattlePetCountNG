@@ -435,7 +435,7 @@ do
         local hit
         local now = GetTime()
 
-        while itemsInfoSize < 2000 and maxitem > 1 do
+        while itemsInfoSize < 500 and maxitem > 1 do
             maxitem = maxitem - 1
             if not Map[maxitem] then
                 itemsInfo[maxitem] = now
@@ -473,7 +473,7 @@ do
         runNextTooltip()
 
         totalElapsed = totalElapsed + elapsed
-        if totalElapsed > 0.5 then
+        if totalElapsed > 0.4 then
             totalElapsed = 0
 
             runQueue()
