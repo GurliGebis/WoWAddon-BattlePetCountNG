@@ -54,6 +54,7 @@ Map[19054] = 758
 Map[19055] = 757
 Map[19450] = 106
 Map[20371] = 107
+Map[20651] = 1168
 Map[20769] = 114
 Map[21277] = 116
 Map[21301] = 119
@@ -87,6 +88,7 @@ Map[29960] = 146
 Map[30360] = 111
 Map[31760] = 149
 Map[32233] = 153 
+Map[32465] = 155
 Map[32498] = 155
 Map[32588] = 156
 Map[32616] = 158
@@ -153,6 +155,7 @@ Map[46802] = 228
 Map[46820] = 229
 Map[46821] = 229
 Map[46892] = 217
+Map[46894] = 231
 Map[48112] = 232
 Map[48114] = 233
 Map[48116] = 234
@@ -176,6 +179,7 @@ Map[50446] = 251
 Map[54436] = 254
 Map[54810] = 255
 Map[54847] = 256
+Map[54857] = 217
 Map[56806] = 258
 Map[59597] = 261
 Map[60216] = 262
@@ -204,6 +208,7 @@ Map[67128] = 285
 Map[67274] = 267
 Map[67275] = 292
 Map[67282] = 293
+Map[67417] = 188
 Map[67418] = 294
 Map[68385] = 297
 Map[68618] = 296
@@ -313,6 +318,8 @@ Map[94208] = 1196
 Map[94209] = 1197
 Map[94210] = 1198
 Map[94573] = 1205
+Map[94574] = 1200
+Map[94595] = 1201
 Map[94835] = 1202
 Map[94903] = 1204
 Map[94932] = 1206
@@ -333,7 +340,13 @@ Map[97554] = 1232
 Map[97555] = 1233
 Map[97556] = 1234
 Map[97557] = 1235
+Map[97558] = 1236
+Map[97959] = 1243
+Map[97960] = 1244
+Map[97961] = 1245
+Map[97821] = 1237
 Map[98550] = 1248
+-- Map[100870] = Murkimus Tyrannicus
 
 --
 -- Helper 
@@ -347,7 +360,26 @@ local EXCEPTIONS = {
 }
 
 local ITEM_EXCEPTIONS = {
-    
+    [11903] = true, -- Cat Carrier (Corrupted Kitten)
+    [19462] = true, -- Unhatched Jubling Egg (pet container)
+    [21168] = true, -- Baby Shark (not implemented?)
+    [22200] = true, -- Silver Shafted Arrow (fake pet)
+    [23712] = true, -- White Tiger Cub (not implemented?)
+    [35227] = true, -- Goblin Weather Machine (not a pet)
+    [37460] = true, -- Rope Pet Leash (pet accessory)
+    [39148] = true, -- Baby Coralshell Turtle (not implemented?)
+    [44820] = true, -- Red Ribbon Pet Leash (pet accessory)
+    [44972] = true, -- Alarming Clockbot (NOT IN USE)
+    [46831] = true, -- Macabre Marionette (fake pet)
+    [50301] = true, -- Landro's Pet Box (pet container)
+    [62769] = true, -- Hardboiled Egg (not implemented?)
+    [66070] = true, -- Lizzy (not implemented?)
+    [66075] = true, -- Bubbles (not implemented?)
+    [68384] = true, -- Moonkin Egg (pet container)
+    [75040] = true, -- Flimsy Darkmoon Balloon (fake pet)
+    [75041] = true, -- Flimsy Green Balloon (fake pet)
+    [75042] = true, -- Flimsy Yellow Balloon (fake pet)
+    [89139] = true, -- Chain Pet Leash (pet accessory)
 }
 
 local scanByItem
@@ -454,7 +486,7 @@ do
             totalElapsed = 0
 
             runQueue()
-            if itemsInfoSize == 0 and maxitem <= 1 and #tooltipQueue == 0 and self.item == nil then
+            if itemsInfoSize == 0 and maxitem <= 1 and self.item == nil then
                 print("Finished")
                 return self:Hide()
             end
