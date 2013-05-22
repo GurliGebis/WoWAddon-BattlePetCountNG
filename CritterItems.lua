@@ -383,10 +383,10 @@ SLASH_BPCMISSINGSCAN1 = '/bpcmissing'
 function SlashCmdList.BPCMISSINGSCAN(msg, editbox)
     local LPJ = LibStub("LibPetJournal-2.0")
 
-    local itemid = tonumber(msg)
-    if itemid then
+    local _, _, minv, maxv = strfind(msg, "%s*(%d+)%s+(%d+)%s*")
+    if minv and maxv then
         print("Scanning...")
-        return scanByItem(itemid)
+        return scanByItem(tonumber(minv), tonumber(maxv))
     end
 
     if msg ~= "" then
@@ -439,13 +439,14 @@ do
     local itemsInfoSize = 0
     local itemsInfo = {}
     local maxitem
+    local minitem
 
     local remove = {}
     local function runQueue() 
         local hit
         local now = GetTime()
 
-        while itemsInfoSize < 500 and maxitem > 1 do
+        while itemsInfoSize < 500 and maxitem > minitem do
             maxitem = maxitem - 1
             if not addon.Item2Species[maxitem] and not ITEM_EXCEPTIONS[maxitem] then
                 itemsInfo[maxitem] = now
@@ -481,14 +482,14 @@ do
             totalElapsed = 0
 
             runQueue()
-            if itemsInfoSize == 0 and maxitem <= 1 and self.item == nil then
+            if itemsInfoSize == 0 and maxitem < minitem and self.item == nil then
                 print("Finished")
                 return self:Hide()
             end
         end
     end
 
-    function scanByItem(itemid)
+    function scanByItem(minitem_, maxitem_)
         if not updateFrame then
             updateFrame = CreateFrame("Frame")
             updateFrame:SetScript("OnUpdate", updateFrame_OnUpdate)
@@ -496,7 +497,8 @@ do
 
         wipe(itemsInfo)
         itemsInfoSize = 0
-        maxitem = itemid + 1
+        minitem = minitem_
+        maxitem = maxitem_ + 1
 
         runQueue()
         updateFrame:Show()
