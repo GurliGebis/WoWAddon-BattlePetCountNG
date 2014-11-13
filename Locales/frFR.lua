@@ -13,11 +13,11 @@ if not L then return end
 
 --
 
-L["EXPLAIN_BATTLE_HINT_DRAG"] = "Alt-clic pour d\195\169placer la zone d'infos" -- Needs review
+L["EXPLAIN_BATTLE_HINT_DRAG"] = "Alt-clic pour d\195\169placer la zone d'infos"
 L["OPT_BATTLE_BORDER"] = "Modifier la couleur de bordure des mascottes de combat"
 L["OPT_BATTLE_BORDER_ICON"] = "Montrer l'ic\195\180ne d'info sur la bordure du portrait"
 L["OPT_BATTLE_HINT_BOX"] = "Montrer la zone d'infos en combat"
-L["OPT_BATTLE_HINT_RESET"] = "R\195\169init. la zone d'infos" -- Needs review
+L["OPT_BATTLE_HINT_RESET"] = "R\195\169init. la zone d'infos"
 L["OPT_BATTLE_TIP"] = "Modifier l'infobulle en combat"
 L["OPT_CAGE_TIP"] = "Modifier l'infobulle des mascottes mises en cage"
 L["OPT_CREATURE_TIP"] = "Modifier l'infobulle des cr\195\169atures"
