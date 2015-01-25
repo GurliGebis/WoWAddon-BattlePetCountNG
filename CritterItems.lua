@@ -435,7 +435,21 @@ addon.Item2Species = {
     [119467] = 1568,
     [119468] = 1570,
     [120050] = 1596,
-    [120051] = 1597
+    [120051] = 1597,
+    [122106] = 1624,
+    [122114] = 1633,
+    [122107] = 1625,
+    [122109] = 1627,
+    [122108] = 1626,
+    [122105] = 1622,
+    [122112] = 1631,
+    [122104] = 1623,
+    [116258] = 1514,
+    [122110] = 1628,
+    [122111] = 1629,
+    [122113] = 1632,
+    [122115] = 1634,
+    [122533] = 1656,
 }
 
 --
@@ -447,6 +461,7 @@ local EXCEPTIONS = {
     [630] = true,   -- Gilnean Raven (Sold as Spell)
     [1068] = true,  -- Crow (return value wrong, is caught in wild)
     [1168] = true,  -- Murki (Korean Promotional Event)
+    [1532] = true,  -- Ikky's Egg (Quest)
 }
 
 local ITEM_EXCEPTIONS = {
