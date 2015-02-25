@@ -220,7 +220,7 @@ end
 
 do
     local tmp = {}
-    function addon:ShortOwnedList(speciesID)
+    function addon:ShortOwnedListOnly(speciesID, skipPetID)
         local sep = "/"
         if self.db.profile.showBreedIDShort and GetBreedID_Journal then
             sep = ","
@@ -229,7 +229,7 @@ do
         wipe(tmp)
 
         for _,petID in LPJ:IteratePetIDs() do
-            if C_PetJournal.GetPetInfoByPetID(petID) == speciesID then
+            if C_PetJournal.GetPetInfoByPetID(petID) == speciesID and skipPetID ~= petID then
                 local _, _, level = C_PetJournal.GetPetInfoByPetID(petID)
                 local _, _, _, _, quality = C_PetJournal.GetPetStats(petID)
                 
@@ -242,10 +242,17 @@ do
         end
         
         if #tmp > 0 then
-            return format("%s: %s", L["OWNED"], table.concat(tmp, sep))
-        else
-            return format("|cffee3333%s|r", L["UNOWNED"])
+            return table.concat(tmp, sep)
         end
+    end
+end
+
+function addon:ShortOwnedList(speciesID)
+    local text = self:ShortOwnedListOnly(speciesID)
+    if text then
+        return format("%s: %s", L["OWNED"], text)
+    else
+        return format("|cffee3333%s|r", L["UNOWNED"])
     end
 end
 
