@@ -33,14 +33,17 @@ end
 function module:UpdatePetCard()
     local QualityFrame = PetJournalPetCard.QualityFrame
 
-    if PetJournalPetCard.petID and PetJournalPetCard.speciesID  then       
+    if addon.db.profile.enablePetCard and PetJournalPetCard.petID and PetJournalPetCard.speciesID then
         local ownedElse = addon:ShortOwnedListOnly(PetJournalPetCard.speciesID, PetJournalPetCard.petID)
         if ownedElse then
             local _, _, _, _, rarity = C_PetJournal.GetPetStats(PetJournalPetCard.petID)
             local color = ITEM_QUALITY_COLORS[rarity-1]
 
             QualityFrame.quality:SetVertexColor(1, 1, 1)
-            QualityFrame.quality:SetText(format("%s%s|r (%s%s)", color.hex, _G["BATTLE_PET_BREED_QUALITY"..rarity], "Also Own: ", ownedElse))
+            QualityFrame.quality:SetText(format("%s%s|r (%s%s)",
+                                                color.hex,
+                                                _G["BATTLE_PET_BREED_QUALITY"..rarity],
+                                                L["ALSO_OWN_COLON"], ownedElse))
         end
     end
 end

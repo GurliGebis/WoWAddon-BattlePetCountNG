@@ -24,6 +24,7 @@ local defaults = {
         enableBattleIndicator = true,
         enableBattleBorderIcon = true,
         preferNamesOverQuality = false,
+        enablePetCard = true,
         useOlderText = false,
         useSubTip = false,
         showBreedID = true,
@@ -129,23 +130,29 @@ local options = {
                     width = "double",
                     order = 1
                 },
+                enablePetCard = {
+                    type = "toggle",
+                    name = L["OPT_PET_CARD"],
+                    width = "double",
+                    order = 2
+                },
                 useOlderText = {
                     type = "toggle",
                     name = L["OPT_USE_OLDER_TEXT"],
                     width = "double",
-                    order = 2,
+                    order = 3,
                 },
                 useSubTip = {
                     type = "toggle",
                     name = L["OPT_USE_SUB_TIP"],
                     width = "double",
-                    order  = 3,
+                    order  = 4,
                 },
                 showBreedID = {
                     type = "toggle",
                     name = L["OPT_USE_BREEDID_ADDON"],
                     width = "double",
-                    order = 4,
+                    order = 5,
                     disabled = function() return not GetBreedID_Journal end,
                     get = function(info) return addon.db.profile[info[#info]] and GetBreedID_Journal end,
                 }
