@@ -1,10 +1,7 @@
 
 local addon_name, addon = ...
 
-local module = addon:NewModule("PetCard", "AceEvent-3.0", "AceHook-3.0")
-
-local LPJ = LibStub("LibPetJournal-2.0")
-local LibQTip = LibStub("LibQTip-1.0")
+local module = addon:NewModule("PetCard", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
 --
@@ -13,7 +10,11 @@ local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 
 function module:OnInitialize()
     if not self:Setup() then
-        self:RegisterEvent("ADDON_LOADED")
+        self:RegisterEvent("ADDON_LOADED", function()
+            if self:Setup() then
+                self:UnregisterEvent("ADDON_LOADED")
+            end
+        end)
     end
 end
 
@@ -47,10 +48,3 @@ function module:UpdatePetCard()
         end
     end
 end
-
-function module:ADDON_LOADED()
-    if self:Setup() then
-        self:UnregisterEvent("ADDON_LOADED")
-    end
-end
-
