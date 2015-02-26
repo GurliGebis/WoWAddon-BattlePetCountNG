@@ -13,6 +13,7 @@ if not L then return end
 
 --
 
+L["ALSO_OWN_COLON"] = "Auch In Besitz:"
 L["EXPLAIN_BATTLE_HINT_DRAG"] = "Alt-Klick um das Kampf Hinweis Fenster zu verschieben"
 L["OPT_BATTLE_BORDER"] = "\195\132ndere die Rahmenfarbe der Kampfhaustiere"
 L["OPT_BATTLE_BORDER_ICON"] = "Zeige das Kampfhaustier Rahmen Symbol"
@@ -29,6 +30,7 @@ L["OPT_HEADER_WORLD"] = "Welt"
 L["OPT_ITEM_TIP"] = "\195\132ndere den Lernf\195\164higen Gegenstands Hinweistext"
 L["OPT_ITEM_TIP_ALL"] = "Gegenstands Hinweis beinhaltet Nicht-Kampff\195\164hige Haustiere"
 L["OPT_MINIMAP_TIP"] = "\195\132ndere den Minikarten Hinweistext"
+L["OPT_PET_CARD"] = "In Besitz befindliche Haustiere gleicher Spezies anzeigen"
 L["OPT_PREFER_NAMES_OVER_QUALITY"] = "Haustiernamen bevorzugt anzeigen"
 L["OPT_USE_BREEDID_ADDON"] = "Zeige BreedID (Ben\195\182tigt Battle Pet BreedID)"
 L["OPT_USE_OLDER_TEXT"] = "Verwende den original gesammelten Textstil."
@@ -38,4 +40,3 @@ L["UNOWNED"] = "Nicht im Besitz"
 L["UPGRADE"] = "Verbesserung"
 L["YOU_DONT_OWN"] = "Du besitzt dieses Haustier nicht."
 L["YOU_OWN_COLON"] = "Du besitzt dieses Haustier:"
-
