@@ -300,8 +300,8 @@ local function sub_PetName(line)
     end
     
     for _,speciesID in LPJ:IterateSpeciesIDs() do
-        local s_name = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
-        if s_name == name then
+        local s_name, _, _, _, _, _, _, _, _, _, s_obtain = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+        if s_name == name and s_obtain then
             return format("%s (%s)", line, addon:ShortOwnedList(speciesID))          
         end
     end

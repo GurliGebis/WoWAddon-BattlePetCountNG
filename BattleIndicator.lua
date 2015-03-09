@@ -155,6 +155,10 @@ function module:Update()
     
     local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
     local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
+    if not addon:CanObtainSpecies(speciesID) then
+        return self.InBattleIndicator:Hide()
+    end 
+
     self.InBattleIndicator.Text:SetText(addon:ShortOwnedList(speciesID))
     self.InBattleIndicator:Show()
 end
