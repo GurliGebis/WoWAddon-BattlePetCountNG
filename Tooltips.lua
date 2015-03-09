@@ -244,7 +244,7 @@ function module:AlterCollectedTooltipText(tt, speciesID)
     if line then
         line:SetText(newtext)
         line:SetVertexColor(1, 1, 1)
-    else
+    elseif addon:CanObtainSpecies(speciesID) then
         tt:AddLine(newtext)
     end
     tt:Show()

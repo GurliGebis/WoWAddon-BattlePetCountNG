@@ -177,6 +177,11 @@ end
 --
 --
 
+function addon:CanObtainSpecies(speciesID)
+    local _, _, _, _, _, _, _, _, _, _, obtainable = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+    return obtainable
+end
+
 function addon:GetPetName(petID)
     local _, customName, _, _, _, _, _, petName = C_PetJournal.GetPetInfoByPetID(petID)
     return customName or petName
