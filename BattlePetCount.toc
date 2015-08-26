@@ -1,4 +1,4 @@
-## Interface: 60100
+## Interface: 60200
 ## Title: BattlePetCount
 ## Version: @project-version@
 ## Notes: Indicate how many and what quality battle pets you have.
