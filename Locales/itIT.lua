@@ -13,6 +13,7 @@ if not L then return end
 
 --
 
+L["ALSO_OWN_COLON"] = "Possiedi anche:"
 L["EXPLAIN_BATTLE_HINT_DRAG"] = "Alt-Clic per spostare il Riquadro Suggerimenti di Scontro"
 L["OPT_BATTLE_BORDER"] = "Modifica Bordo Colore Mascotte da Battaglia"
 L["OPT_BATTLE_BORDER_ICON"] = "Mostra Bordo Colore Mascotte da Battaglia"
@@ -29,6 +30,7 @@ L["OPT_HEADER_WORLD"] = "Mondo"
 L["OPT_ITEM_TIP"] = "Modifica Tooltip Oggetto che puoi Imparare"
 L["OPT_ITEM_TIP_ALL"] = "Il Tooltip dell'oggetto include anche le Mascotte che non possono Combattere"
 L["OPT_MINIMAP_TIP"] = "Modifica Tooltip Minimappa"
+-- L["OPT_PET_CARD"] = ""
 L["OPT_PREFER_NAMES_OVER_QUALITY"] = "Preferenza nel mostrare i Nomi delle Mascotte"
 L["OPT_USE_BREEDID_ADDON"] = "Mostra BreedID (Richiede Battle Pet BreedID addon)"
 L["OPT_USE_OLDER_TEXT"] = "Usa lo stile di testo originale per le possessioni."
