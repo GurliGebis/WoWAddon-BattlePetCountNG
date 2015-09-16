@@ -511,6 +511,7 @@ local EXCEPTIONS = {
     [1068] = true,  -- Crow (return value wrong, is caught in wild)
     [1168] = true,  -- Murki (Korean Promotional Event)
     [1532] = true,  -- Ikky's Egg (Quest)
+    [1604] = true,  -- Nethaera's Light (caught by cheering, not an item)
 }
 
 local ITEM_EXCEPTIONS = {
