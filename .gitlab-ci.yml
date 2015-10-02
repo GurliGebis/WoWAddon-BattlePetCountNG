@@ -1,0 +1,23 @@
+stages:
+    - build
+    - upload
+
+build:
+    stage: build
+    script:
+        - /opt/wowui-builder/bin/wowui-builder build --vcs-tag=$CI_BUILD_REF_NAME --dist-dir=$CI_DIST_DIR
+
+upload-wowi:
+    only:
+        - tags
+    stage: upload
+    script:
+        - /opt/wowui-builder/bin/wowui-builder upload --dist-dir=$CI_DIST_DIR wowi
+
+upload-curse:
+    only:
+        - tags
+    stage: upload
+    script:
+        - /opt/wowui-builder/bin/wowui-builder upload --dist-dir=$CI_DIST_DIR curse
+
