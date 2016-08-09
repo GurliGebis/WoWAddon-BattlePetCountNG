@@ -142,6 +142,12 @@ local options = {
                     width = "double",
                     order = 3,
                 },
+                multilineTooltip = {
+                    type = "toggle",
+                    name = L["OPT_MULTILINE_TOOLTIP"],
+                    width = "double",
+                    order = 4,
+                },
                 useSubTip = {
                     type = "toggle",
                     name = L["OPT_USE_SUB_TIP"],
@@ -204,6 +210,11 @@ do
     function addon:OwnedList(speciesID)
         wipe(tmp)
 
+        local linePrefix = ""
+        if self.db.profile.multilineTooltip then
+            linePrefix = "\n - "
+        end
+
         for _,petID in LPJ:IteratePetIDs() do
             if C_PetJournal.GetPetInfoByPetID(petID) == speciesID then
                 local _, _, level = C_PetJournal.GetPetInfoByPetID(petID)
@@ -216,7 +227,8 @@ do
                     name = _G["ITEM_QUALITY"..(quality-1).."_DESC"] or UNKNOWN
                 end
 
-                tinsert(tmp, format("|cff%02x%02x%02x%s|r (L%d%s)",
+                tinsert(tmp, format("%s|cff%02x%02x%02x%s|r (L%d%s)",
+                            linePrefix,
                             ITEM_QUALITY_COLORS[quality-1].r*255,
                             ITEM_QUALITY_COLORS[quality-1].g*255,
                             ITEM_QUALITY_COLORS[quality-1].b*255,
