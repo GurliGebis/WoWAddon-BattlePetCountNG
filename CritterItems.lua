@@ -586,6 +586,7 @@ local ITEM_EXCEPTIONS = {
 }
 
 local scanByItem
+local print
 
 SLASH_BPCMISSINGSCAN1 = '/bpcmissing'
 function SlashCmdList.BPCMISSINGSCAN(msg, editbox)
@@ -635,6 +636,32 @@ function SlashCmdList.BPCMISSINGSCAN(msg, editbox)
     end
     
     print(format("%d pets missing from table.", count))
+end
+
+do
+    local displayFrame
+    local printBox
+
+    function print(s)
+        if not displayFrame then
+            local AceGUI = LibStub("AceGUI-3.0")
+
+            displayFrame = AceGUI:Create("Frame")
+            displayFrame:SetCallback("OnClose", function(widget)
+                AceGUI:Release(widget)
+                displayFrame = nil
+                editBox = nil
+            end)
+            displayFrame:SetLayout("Fill")
+
+            printBox = AceGUI:Create("MultiLineEditBox")
+            printBox:SetLabel("Output")
+            displayFrame:AddChild(printBox)
+        end
+
+        s = s.."\n"
+        printBox:SetText(printBox:GetText()..s)
+    end
 end
 
 --
