@@ -15,3 +15,7 @@ externals:
     Libs/LibQTip-1.0:
         url: svn://svn.wowace.com/wow/libqtip-1-0/mainline/trunk
         tag: latest
+
+manual-changelog:
+    filename: CHANGES.md
+    markup-type: markdown
