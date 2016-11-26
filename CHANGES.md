@@ -2,8 +2,8 @@
 Changelog
 =========
 
-Next
-----
+1.8.11 (2016-11-25)
+-------------------
 
 - Update pet items list.
 
