@@ -2,18 +2,18 @@
 package-as: BattlePetCount
 
 externals:
-    Libs/AceAddon-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
-    Libs/AceConfig-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
-    Libs/AceDB-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDB-3.0
-    Libs/AceEvent-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceEvent-3.0
-    Libs/AceGUI-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
-    Libs/AceHook-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceHook-3.0
-    Libs/AceLocale-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceLocale-3.0
-    Libs/LibPetJournal-2.0: 
-        url: http://hg.curseforge.net/wow/libpetjournal-2-0/mainline
+    Libs/AceAddon-3.0: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
+    Libs/AceConfig-3.0: https://repos.wowace.com/wow/ace3/trunk/AceConfig-3.0
+    Libs/AceDB-3.0: https://repos.wowace.com/wow/ace3/trunk/AceDB-3.0
+    Libs/AceEvent-3.0: https://repos.wowace.com/wow/ace3/trunk/AceEvent-3.0
+    Libs/AceGUI-3.0: https://repos.wowace.com/wow/ace3/trunk/AceGUI-3.0
+    Libs/AceHook-3.0: https://repos.wowace.com/wow/ace3/trunk/AceHook-3.0
+    Libs/AceLocale-3.0: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
+    Libs/LibPetJournal-2.0:
+        url: https://repos.curseforge.com/wow/libpetjournal-2-0
         tag: latest
     Libs/LibQTip-1.0:
-        url: svn://svn.wowace.com/wow/libqtip-1-0/mainline/trunk
+        url: https://repos.wowace.com/wow/libqtip-1-0/trunk
         tag: latest
 
 manual-changelog:
