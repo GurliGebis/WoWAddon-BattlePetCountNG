@@ -600,7 +600,6 @@ local ITEM_EXCEPTIONS = {
     [19462] = true, -- Unhatched Jubling Egg (pet container)
     [21168] = true, -- Baby Shark (not implemented?)
     [22200] = true, -- Silver Shafted Arrow (fake pet)
-    [23712] = true, -- White Tiger Cub (not implemented?)
     [35227] = true, -- Goblin Weather Machine (not a pet)
     [37460] = true, -- Rope Pet Leash (pet accessory)
     [39148] = true, -- Baby Coralshell Turtle (not implemented?)
