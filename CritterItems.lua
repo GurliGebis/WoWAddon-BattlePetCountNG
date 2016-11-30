@@ -589,6 +589,10 @@ local EXCEPTIONS = {
     [1168] = true,  -- Murki (Korean Promotional Event)
     [1532] = true,  -- Ikky's Egg (Quest)
     [1604] = true,  -- Nethaera's Light (caught by cheering, not an item)
+    [1974] = true,  -- Snowfeather Hatchling (world quest)
+    [1975] = true,  -- Direbeak Hatchling (world quest)
+    [1976] = true,  -- Sharptalon Hatchling (world quest)
+    [1977] = true,  -- Bloodgazer Hatchling (world quest)
 }
 
 local ITEM_EXCEPTIONS = {
