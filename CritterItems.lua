@@ -572,6 +572,10 @@ addon.Item2Species = {
     [142379] = 1978,
     [142380] = 1979,
     [142448] = 1984,
+    [143842] = 2004,
+    [143953] = 2017,
+    [143954] = 2018,
+    [144394] = 2022,
 }
 
 --
@@ -585,6 +589,10 @@ local EXCEPTIONS = {
     [1168] = true,  -- Murki (Korean Promotional Event)
     [1532] = true,  -- Ikky's Egg (Quest)
     [1604] = true,  -- Nethaera's Light (caught by cheering, not an item)
+    [1974] = true,  -- Snowfeather Hatchling (world quest)
+    [1975] = true,  -- Direbeak Hatchling (world quest)
+    [1976] = true,  -- Sharptalon Hatchling (world quest)
+    [1977] = true,  -- Bloodgazer Hatchling (world quest)
 }
 
 local ITEM_EXCEPTIONS = {
@@ -592,7 +600,6 @@ local ITEM_EXCEPTIONS = {
     [19462] = true, -- Unhatched Jubling Egg (pet container)
     [21168] = true, -- Baby Shark (not implemented?)
     [22200] = true, -- Silver Shafted Arrow (fake pet)
-    [23712] = true, -- White Tiger Cub (not implemented?)
     [35227] = true, -- Goblin Weather Machine (not a pet)
     [37460] = true, -- Rope Pet Leash (pet accessory)
     [39148] = true, -- Baby Coralshell Turtle (not implemented?)
