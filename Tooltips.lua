@@ -23,8 +23,6 @@ function module:OnInitialize()
     self:Initialize_PetBattleUnitTooltip()
     self:Initialize_GameTooltip()
 
-    self:RegisterEvent("PET_BATTLE_OPENING_START")
-
     self:RegisterEvent("ADDON_LOADED")
     self:ADDON_LOADED()
 end
