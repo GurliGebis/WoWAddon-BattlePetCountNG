@@ -2,7 +2,7 @@ stages:
     - build
     - upload
 
-image: docker.git.cornhooves.org/wowui/wowui-builder-ci:latest
+image: docker.git.cornhooves.org/wowui/wowui-builder:latest
 
 #
 # Build
