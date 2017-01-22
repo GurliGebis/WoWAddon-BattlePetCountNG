@@ -16,6 +16,7 @@ build:
     artifacts:
         paths:
             - dist/
+        expire_in: 2 years
 
 #
 # Upload
