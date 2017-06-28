@@ -2,8 +2,8 @@
 Changelog
 =========
 
-Next
-----
+1.8.14 (2017-06-27)
+-------------------
 
 - Update pet items list.
 - Update localizations (ruRU)
