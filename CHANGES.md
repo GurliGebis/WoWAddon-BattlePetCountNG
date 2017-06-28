@@ -6,6 +6,7 @@ Next
 ----
 
 - Update pet items list.
+- Update localizations (ruRU)
 
 1.8.13 (2017-03-26)
 -------------------
