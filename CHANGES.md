@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Next
+----
+
+- Update pet items list.
+
 1.8.15 (2017-09-04)
 -------------------
 
