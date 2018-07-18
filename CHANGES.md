@@ -2,8 +2,8 @@
 Changelog
 =========
 
-Next
-----
+1.8.16 (2018-07-18)
+-------------------
 
 - Update pet items list.
 
