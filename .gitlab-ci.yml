@@ -11,7 +11,7 @@ image: docker.git.cornhooves.org/wowui/wowui-builder:latest
 build:
     stage: build
     script:
-        - wowui-builder build --vcs-tag=$CI_BUILD_TAG --dist-dir=dist/
+        - wowui-builder build --vcs-tag=$CI_BUILD_TAG --dist-dir=dist/ --allow-missing-localization
 
     artifacts:
         paths:
