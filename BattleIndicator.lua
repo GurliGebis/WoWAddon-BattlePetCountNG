@@ -94,7 +94,7 @@ local function updateBorder(owner, slot, frame)
     if not frame:IsShown() then
         return
     end
-    
+
     local border = frame.Border or frame.BorderAlive
     local quality = C_PetBattles.GetBreedQuality(owner, slot)
         
@@ -120,22 +120,22 @@ local function updateBorder(owner, slot, frame)
 end
 
 local function updateBorders()
-    local activeEnemy = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
-    local activeAlly = C_PetBattles.GetActivePet(LE_BATTLE_PET_ALLY)
+    local activeEnemy = C_PetBattles.GetActivePet(Enum.BattlePetOwner.Enemy)
+    local activeAlly = C_PetBattles.GetActivePet(Enum.BattlePetOwner.Ally)
     local inactiveEnemy, inactiveAlly = 2, 2
     for i=1, NUM_BATTLE_PETS_IN_BATTLE do
         if i ~= activeEnemy then
-            updateBorder(LE_BATTLE_PET_ENEMY, i, PetBattleFrame["Enemy"..inactiveEnemy])
+            updateBorder(Enum.BattlePetOwner.Enemy, i, PetBattleFrame["Enemy"..inactiveEnemy])
             inactiveEnemy = inactiveEnemy + 1
         else
-            updateBorder(LE_BATTLE_PET_ENEMY, i, PetBattleFrame.ActiveEnemy)
+            updateBorder(Enum.BattlePetOwner.Enemy, i, PetBattleFrame.ActiveEnemy)
         end
-        
+
         if i ~= activeAlly then
-            updateBorder(LE_BATTLE_PET_ALLY, i, PetBattleFrame["Ally"..inactiveAlly])
+            updateBorder(Enum.BattlePetOwner.Ally, i, PetBattleFrame["Ally"..inactiveAlly])
             inactiveAlly = inactiveAlly + 1
         else
-            updateBorder(LE_BATTLE_PET_ALLY, i, PetBattleFrame.ActiveAlly)
+            updateBorder(Enum.BattlePetOwner.Ally, i, PetBattleFrame.ActiveAlly)
         end
     end
 end
@@ -153,8 +153,8 @@ function module:Update()
         return self.InBattleIndicator:Hide()
     end
     
-    local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
-    local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
+    local activePet = C_PetBattles.GetActivePet(Enum.BattlePetOwner.Enemy)
+    local speciesID = C_PetBattles.GetPetSpeciesID(Enum.BattlePetOwner.Enemy, activePet)
     if not addon:CanObtainSpecies(speciesID) then
         return self.InBattleIndicator:Hide()
     end 
@@ -164,8 +164,8 @@ function module:Update()
 end
 
 function module:InBattleIndicator_OnEnter(indicator)
-    local activePet = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
-    local speciesID = C_PetBattles.GetPetSpeciesID(LE_BATTLE_PET_ENEMY, activePet)
+    local activePet = C_PetBattles.GetActivePet(Enum.BattlePetOwner.Enemy)
+    local speciesID = C_PetBattles.GetPetSpeciesID(Enum.BattlePetOwner.Enemy, activePet)
 
     if speciesID then
         GameTooltip:SetOwner(indicator, "ANCHOR_BOTTOM")

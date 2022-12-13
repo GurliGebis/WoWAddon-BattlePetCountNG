@@ -9,12 +9,6 @@ externals:
     Libs/AceGUI-3.0: https://repos.wowace.com/wow/ace3/trunk/AceGUI-3.0
     Libs/AceHook-3.0: https://repos.wowace.com/wow/ace3/trunk/AceHook-3.0
     Libs/AceLocale-3.0: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
-    Libs/LibPetJournal-2.0:
-        url: https://repos.curseforge.com/wow/libpetjournal-2-0
-        tag: latest
-    Libs/LibQTip-1.0:
-        url: https://repos.wowace.com/wow/libqtip-1-0/trunk
-        tag: latest
 
 manual-changelog:
     filename: CHANGES.md

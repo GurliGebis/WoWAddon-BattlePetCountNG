@@ -86,7 +86,7 @@ end
 
 function module:HookScriptSilent(frame, script, func)
     if frame:HasScript(script) then
-        return self:HookScript(frame, script, func)
+        return self:SecureHookScript(frame, script, func)
     end
 end
 
@@ -96,7 +96,7 @@ end
 
 function module:Initialize_BattlePetTooltip()
     self:SecureHook("BattlePetToolTip_Show")
-    self:HookScript(BattlePetTooltip, "OnHide", "BattlePetToolTip_Hide")
+    self:SecureHookScript(BattlePetTooltip, "OnHide", "BattlePetToolTip_Hide")
 end
 
 function module:BattlePetToolTip_Show(speciesID, level, breedQuality, maxHealth, power, speed, customName)
@@ -196,7 +196,7 @@ function module:Initialize_GameTooltip()
         module:AlterGameTooltip(ItemRefTooltip)
     end)
 
-    self:HookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
+    self:SecureHookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
 end
 
 function module:FindCollectedTooltipText(tt)

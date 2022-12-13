@@ -1,9 +1,12 @@
-## Interface: 80000
-## Title: BattlePetCount
+## Interface: 100002
+## Title: BattlePetCountNG
 ## Version: @project-version@
 ## Notes: Indicate how many and what quality battle pets you have.
-## Author: End
-## X-Email: end@cornhooves.org
+## Author: End,GurliGebis
+## X-Compatible-With: 100002
+## X-Curse-Packaged-Version: @project-version@
+## X-Curse-Project-Name: BattlePetCount NG
+## X-Curse-Project-ID: 735675
 ## OptionalDeps: Ace3, LibPetJournal-2.0, LibQTip-1.0, BattlePetBreedID
 ## Dependencies: Blizzard_PetBattleUI
 ## SavedVariables: BattlePetCountDB
