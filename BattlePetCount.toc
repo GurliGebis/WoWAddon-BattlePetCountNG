@@ -1,5 +1,5 @@
-## Interface: 80000
-## Title: BattlePetCount
+## Interface: 100002
+## Title: BattlePetCountNG
 ## Version: @project-version@
 ## Notes: Indicate how many and what quality battle pets you have.
 ## Author: End
