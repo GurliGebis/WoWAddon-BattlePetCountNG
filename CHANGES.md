@@ -2,6 +2,11 @@
 Changelog
 =========
 
+10.0.2-20230108_1 (2023-01-08)
+-------------------
+
+- Fix problems with tooltip API to show minimap tooltips correctly
+
 10.0.2-20221213_1 (2022-12-13)
 -------------------
 
