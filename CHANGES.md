@@ -2,6 +2,12 @@
 Changelog
 =========
 
+10.1.0-20230503_1 (2023-05-03)
+-------------------
+
+- Updated TOC to 10.1.0
+- Fixed tooltip due to changed API from Blizzard
+
 10.0.7-20230322_1 (2023-03-22)
 -------------------
 

@@ -292,9 +292,13 @@ local lastMinimapTooltip
 function GameTooltip_OnUpdate_Hook(tt)
     if addon.db and not addon.db.profile.enableMinimapTip then
         return
-    elseif tt ~= GameTooltip then
+    elseif not tt then
         return
-    elseif not tt or not tt.info or not tt.info.getterName or tt.info.getterName ~= "GetMinimapMouseover" then
+    end
+
+    local tooltipInfo = tt:GetPrimaryTooltipInfo()
+
+    if not tooltipInfo or not tooltipInfo.getterName or tooltipInfo.getterName ~= "GetMinimapMouseover" then
         return
     end
 
