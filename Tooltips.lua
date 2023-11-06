@@ -250,7 +250,7 @@ function module:AlterGameTooltip(tt)
         if link then
             local _, _, itemid = strfind(link, "|Hitem:(%d+):")
             if itemid then
-                local speciesID = addon.Item2Species[tonumber(itemid)]
+                local speciesID = select(13, C_PetJournal.GetPetInfoByItemID(itemid))
                 if speciesID then
                     if not addon.db.profile.itemTipIncludesAll then
                         local _, _, _, _, _, _, _, canBattle = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
