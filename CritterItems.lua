@@ -1,4 +1,4 @@
-
+--[=[
 local addon_name, addon = ...
 
 --
@@ -884,3 +884,4 @@ do
         updateFrame:Show()
     end
 end
+]=]
