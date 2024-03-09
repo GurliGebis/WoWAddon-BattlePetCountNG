@@ -2,6 +2,12 @@
 Changelog
 =========
 
+10.2.5-20240309_1 (2024-03-09)
+-------------------
+
+- Correct tooltip dimensions (patch provided by tflo on Github)
+- Attach extra attached tooltip at top (patch provided by tflo on Github)
+
 10.2.5-20240117_1 (2024-01-17)
 -------------------
 
