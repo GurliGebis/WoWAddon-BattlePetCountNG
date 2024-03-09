@@ -62,8 +62,8 @@ function module:SubTip(tooltip, text)
     if not subtip then
         subtip = LibQTip:Acquire(tooltip:GetName().."_BPC_SubTip", 1, "LEFT")
 
-        subtip:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
-        subtip:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT") 
+        subtip:SetPoint("BOTTOMLEFT", tooltip, "TOPLEFT")
+        subtip:SetPoint("BOTTOMRIGHT", tooltip, "TOPRIGHT")
         subtip:Show()
 
         tooltip.X_BPC2 = subtip
