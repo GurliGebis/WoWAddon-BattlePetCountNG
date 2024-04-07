@@ -2,6 +2,11 @@
 Changelog
 =========
 
+10.2.6-20240407_1 (2024-04-07)
+-------------------
+
+- Fix nil arithmetic bug when pet is released mid-update (patch provided by davidmc24 on Github)
+
 10.2.6-20240320_1 (2024-03-20)
 -------------------
 
