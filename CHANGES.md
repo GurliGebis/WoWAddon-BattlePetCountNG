@@ -2,6 +2,11 @@
 Changelog
 =========
 
+10.2.6-20240412_1 (2024-04-12)
+-------------------
+
+- Display "Unobtainable" in tooltip for unobtainable pets, rather than Collected: 0/3 (patch provided by davidmc24 on Github)
+
 10.2.6-20240407_1 (2024-04-07)
 -------------------
 
