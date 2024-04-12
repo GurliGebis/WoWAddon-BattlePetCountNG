@@ -312,6 +312,10 @@ function addon:CollectedOlderText(speciesID)
 end
 
 function addon:CollectedText(speciesID)
+    if not addon:CanObtainSpecies(speciesID) then
+        return L["UNOBTAINABLE"]
+    end
+
     if self.db.profile.useOlderText then
         return self:CollectedOlderText(speciesID)
     end
