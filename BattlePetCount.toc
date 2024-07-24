@@ -1,9 +1,9 @@
-## Interface: 100207
+## Interface: 110000
 ## Title: BattlePetCountNG
 ## Version: @project-version@
 ## Notes: Indicate how many and what quality battle pets you have.
 ## Author: End,GurliGebis
-## X-Compatible-With: 100207
+## X-Compatible-With: 110000
 ## X-Curse-Packaged-Version: @project-version@
 ## X-Curse-Project-Name: BattlePetCount NG
 ## X-Curse-Project-ID: 735675
