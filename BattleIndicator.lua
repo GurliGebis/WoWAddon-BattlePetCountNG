@@ -97,7 +97,10 @@ local function updateBorder(owner, slot, frame)
 
     local border = frame.Border or frame.BorderAlive
     local quality = C_PetBattles.GetBreedQuality(owner, slot)
-        
+
+    -- Workaround for 11.0.0 breaking C_PetBattles.GetBreedQuality
+    quality = quality + 1
+
     local upgradeIcon = frame.X_BPC_UP
     if upgradeIcon then
         if addon.db.profile.enableBattleBorderIcon and C_PetBattles.IsWildBattle() then

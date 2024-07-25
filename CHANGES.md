@@ -2,6 +2,10 @@
 Changelog
 =========
 
+11.0.0-20240725-1 (2024-07-25)
+
+- Fixed indexing, since the WoW API now returns pet quality with 0 based indexing.
+
 11.0.0-20240724-1 (2024-07-24)
 
 - Updated TOC to 11.0.0
