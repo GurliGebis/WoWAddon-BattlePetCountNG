@@ -2,6 +2,10 @@
 Changelog
 =========
 
+11.0.2-20240813-1 (2024-08-13)
+
+- Updated TOC to 11.0.2
+
 11.0.0-20240725-2 (2024-07-25)
 
 - Update package build logic.
