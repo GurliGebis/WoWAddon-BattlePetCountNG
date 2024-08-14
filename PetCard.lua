@@ -19,7 +19,7 @@ function module:OnInitialize()
 end
 
 function module:Setup()
-    if not IsAddOnLoaded("Blizzard_Collections") then
+    if not C_AddOns.IsAddOnLoaded("Blizzard_Collections") then
         return false
     end
 

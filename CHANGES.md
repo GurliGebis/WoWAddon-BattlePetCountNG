@@ -2,6 +2,10 @@
 Changelog
 =========
 
+11.0.2-20240814-1 (2024-08-14)
+
+- Changes needed due to deprecated API calls.
+
 11.0.2-20240813-1 (2024-08-13)
 
 - Updated TOC to 11.0.2
