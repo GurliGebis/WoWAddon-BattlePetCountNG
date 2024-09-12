@@ -2,6 +2,10 @@
 Changelog
 =========
 
+11.0.2-20240912-1 (2024-09-12)
+
+- Github actions fixes.
+
 11.0.2-20240814-1 (2024-08-14)
 
 - Changes needed due to deprecated API calls.
