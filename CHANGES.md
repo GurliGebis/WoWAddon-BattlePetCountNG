@@ -2,6 +2,10 @@
 Changelog
 =========
 
+11.0.2-20241015-1 (2024-10-15)
+
+- Added installation of missing github runner packages.
+
 11.0.2-20240912-1 (2024-09-12)
 
 - Github actions fixes.
