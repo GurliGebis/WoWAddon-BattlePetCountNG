@@ -2,6 +2,11 @@
 Changelog
 =========
 
+11.0.5-20241022-1 (2024-10-22)
+
+- Fixed tooltip issue (patch provided by davidmc24 on Github)
+- Updated TOC to 11.0.5
+
 11.0.2-20241015-1 (2024-10-15)
 
 - Added installation of missing github runner packages.
