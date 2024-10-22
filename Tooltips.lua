@@ -123,7 +123,15 @@ function module:BattlePetToolTip_Show(speciesID, level, breedQuality, maxHealth,
         Owned:SetText(addon:CollectedText(speciesID))
         Owned:Show()
 
-        local height = tip:GetHeight() + Owned:GetHeight() - 12
+        local ownedCount = C_PetJournal.GetNumCollectedInfo(speciesID)
+        local heightModifier
+        if ownedCount > 0 then
+            heightModifier = 12
+        else
+            heightModifier = -2
+        end
+
+        local height = tip:GetHeight() + Owned:GetHeight() - heightModifier
         tip:SetHeight(height)
     end
 end
