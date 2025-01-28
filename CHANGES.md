@@ -1,6 +1,10 @@
 Changelog
 =========
 
+11.0.7-20250128-1 (2025-01-28)
+
+- Added category to TOC file
+
 11.0.7-20241218-1 (2024-12-18)
 
 - Updated TOC to match WoW 11.0.7
