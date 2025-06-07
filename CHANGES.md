@@ -1,6 +1,10 @@
 Changelog
 =========
 
+11.1.5-20250607-1 (2025-06-07)
+
+- Updated TOC to allow WoW MoP Classic (patch provided by Adal4 on Github)
+
 11.1.5-20250422-1 (2025-04-22)
 
 - Updated TOC to match WoW 11.1.5
