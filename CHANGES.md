@@ -1,6 +1,10 @@
 Changelog
 =========
 
+11.2.5-20251006-1 (2025-10-06)
+
+- Updated TOC to match WoW 11.2.5
+
 11.2.0-20250924-1 (2025-09-24)
 
 - Updated Classic TOC to match 5.5.1
