@@ -243,9 +243,13 @@ function module:AlterGameTooltip(tt)
         return
     end
     
+    -- Handle Classic, where issecretvalue is not defined.
+    local issecretvalue = issecretvalue or function(not_used) return false end
+
     if tt.GetUnit and addon.db.profile.enableCreatureTip then
         local _, unit = tt:GetUnit()
-        if unit then
+        -- If the unit is a secret value, we cannot do anything.
+        if unit and not issecretvalue(unit) then
             if UnitIsWildBattlePet(unit) then
                 local speciesID = UnitBattlePetSpeciesID(unit)
                 self:AlterCollectedTooltipText(tt, speciesID)
