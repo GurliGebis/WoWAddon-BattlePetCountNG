@@ -316,6 +316,11 @@ function GameTooltip_OnUpdate_Hook(tt)
     end
 
     local text = GameTooltipTextLeft1:GetText()
+    -- Handle Classic, where issecretvalue is not defined.
+    local _issecretvalue = issecretvalue or function() return false end
+    if _issecretvalue(text) then
+        return
+    end
     if text ~= lastMinimapTooltip then
         return module:UpdateMiniMapTooltip(tt, text)
     end

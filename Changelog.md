@@ -1,3 +1,6 @@
+# 12.0.1-20260325-1
+* Fixed Lua error caused by secret string taint on minimap tooltip.
+
 # 12.0.1-20260211-1
 * Updated TOC to Midnight Pre-Patch.
 
