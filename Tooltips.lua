@@ -207,6 +207,8 @@ end
 function module:FindCollectedTooltipText(tt)
     local prefix = tt:GetName().."TextLeft"
     local lineno, line = 0, nil
+    -- Handle Classic, where issecretvalue is not defined.
+    local _issecretvalue = issecretvalue or function() return false end
     while true do
         lineno = lineno + 1
         line = _G[prefix..lineno] 
@@ -216,7 +218,9 @@ function module:FindCollectedTooltipText(tt)
         end
 
         local text = line:GetText()
-        if text == UNIT_CAPTURABLE then
+        if _issecretvalue(text) then
+            -- skip tainted lines, continue searching
+        elseif text == UNIT_CAPTURABLE then
             break
         elseif strmatch(text, self.ITEM_PET_KNOWN_DEFORMAT) then
             break

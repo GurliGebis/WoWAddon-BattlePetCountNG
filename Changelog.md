@@ -1,3 +1,6 @@
+# 12.0.1-20260326-1
+* Fixed additional Lua error caused by secret string taint when scanning tooltip lines.
+
 # 12.0.1-20260325-1
 * Fixed Lua error caused by secret string taint on minimap tooltip.
 
