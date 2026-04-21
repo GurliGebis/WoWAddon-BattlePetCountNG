@@ -1,3 +1,6 @@
+# 12.0.5-20260421-1
+* Updated TOC to match WoW 12.0.5
+
 # 12.0.1-20260326-1
 * Fixed additional Lua error caused by secret string taint when scanning tooltip lines.
 
