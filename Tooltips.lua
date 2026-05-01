@@ -251,7 +251,9 @@ function module:AlterGameTooltip(tt)
     local issecretvalue = issecretvalue or function(not_used) return false end
 
     if tt.GetUnit and addon.db.profile.enableCreatureTip then
-        local _, unit = tt:GetUnit()
+        local ok, _, unit = pcall(tt.GetUnit, tt)
+        -- If GetUnit failed (e.g. due to secret values in instances), bail out.
+        if not ok then return end
         -- If the unit is a secret value, we cannot do anything.
         if unit and not issecretvalue(unit) then
             if UnitIsWildBattlePet(unit) then
