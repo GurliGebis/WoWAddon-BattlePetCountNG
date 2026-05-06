@@ -1,3 +1,6 @@
+# 12.0.5-20260506-1
+* Update CallbackHandler library in LibPetJournal-2.0 to a compatible version.
+
 # 12.0.5-20260501-1
 * Fixed Lua error caused by secret value taint when GetUnit is called in dungeons/delves.
 
