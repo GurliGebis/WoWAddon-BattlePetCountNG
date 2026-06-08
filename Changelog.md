@@ -1,3 +1,6 @@
+# 12.0.5-20260608-1
+* Updated Classic TOC to match 5.5.4
+
 # 12.0.5-20260506-1
 * Update CallbackHandler library in LibPetJournal-2.0 to a compatible version.
 
