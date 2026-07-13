@@ -201,7 +201,8 @@ end
 function module:Initialize_GameTooltip()
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, updateTooltip)
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, updateTooltip)
-    TooltipDataProcessor.AddTooltipPostCall(TooltipDataProcessor.AllTypes, GameTooltip_OnUpdate_Hook)
+    self:SecureHookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
+    self:SecureHookScript(GameTooltip, "OnHide", "GameTooltip_OnHide")
 end
 
 function module:FindCollectedTooltipText(tt)
@@ -308,14 +309,12 @@ local function sub_PetName(line)
 end
 
 local lastMinimapTooltip
-function GameTooltip_OnUpdate_Hook(tt)
-    if addon.db and not addon.db.profile.enableMinimapTip then
-        return
-    elseif not tt then
+function GameTooltip_OnUpdate_Hook(self, elapsed)
+    if not addon.db or not addon.db.profile.enableMinimapTip then
         return
     end
 
-    local tooltipInfo = tt:GetPrimaryTooltipInfo()
+    local tooltipInfo = self:GetPrimaryTooltipInfo()
 
     if not tooltipInfo or not tooltipInfo.getterName or tooltipInfo.getterName ~= "GetMinimapMouseover" then
         return
@@ -328,7 +327,7 @@ function GameTooltip_OnUpdate_Hook(tt)
         return
     end
     if text ~= lastMinimapTooltip then
-        return module:UpdateMiniMapTooltip(tt, text)
+        return module:UpdateMiniMapTooltip(self, text)
     end
 end
 
@@ -341,4 +340,8 @@ function module:UpdateMiniMapTooltip(tt, text)
     GameTooltipTextLeft1:SetText(text)
     lastMinimapTooltip = text
     tt:Show()
+end
+
+function module:GameTooltip_OnHide()
+    lastMinimapTooltip = nil
 end

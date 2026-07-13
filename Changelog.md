@@ -1,3 +1,6 @@
+# 12.0.7-20260713-1
+* Fixed taint error after exiting instances caused by AddTooltipPostCall(AllTypes) running inside Blizzard's secure tooltip pipeline.
+
 # 12.0.7-20260617-1
 * Updated TOC to match 12.0.7
 
