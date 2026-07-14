@@ -1,3 +1,6 @@
+# 12.0.7-20260714-1
+* Fixed MoP Classic errors caused by using Retail-only GetPrimaryTooltipInfo API in HookScript OnUpdate.
+
 # 12.0.7-20260713-1
 * Fixed taint error after exiting instances caused by AddTooltipPostCall(AllTypes) running inside Blizzard's secure tooltip pipeline.
 

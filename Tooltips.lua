@@ -201,8 +201,12 @@ end
 function module:Initialize_GameTooltip()
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, updateTooltip)
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, updateTooltip)
-    self:SecureHookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
-    self:SecureHookScript(GameTooltip, "OnHide", "GameTooltip_OnHide")
+    if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+        self:SecureHookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
+        self:SecureHookScript(GameTooltip, "OnHide", "GameTooltip_OnHide")
+    else
+        TooltipDataProcessor.AddTooltipPostCall(TooltipDataProcessor.AllTypes, GameTooltip_OnUpdate_Hook)
+    end
 end
 
 function module:FindCollectedTooltipText(tt)
@@ -314,7 +318,7 @@ function GameTooltip_OnUpdate_Hook(self, elapsed)
         return
     end
 
-    local tooltipInfo = self:GetPrimaryTooltipInfo()
+    local tooltipInfo = self.GetPrimaryTooltipInfo and self:GetPrimaryTooltipInfo()
 
     if not tooltipInfo or not tooltipInfo.getterName or tooltipInfo.getterName ~= "GetMinimapMouseover" then
         return
