@@ -11,7 +11,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("BattlePetCount")
 --
 --
 
-local GameTooltip_OnUpdate_Hook
+local Minimap_OnUpdate_Hook
 
 function module:OnInitialize()
     local str = ITEM_PET_KNOWN
@@ -202,11 +202,11 @@ function module:Initialize_GameTooltip()
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, updateTooltip)
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, updateTooltip)
     if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-        self:SecureHookScript(GameTooltip, "OnUpdate", GameTooltip_OnUpdate_Hook)
-        self:SecureHookScript(GameTooltip, "OnHide", "GameTooltip_OnHide")
+        self:SecureHook("Minimap_OnUpdate", Minimap_OnUpdate_Hook)
     else
-        TooltipDataProcessor.AddTooltipPostCall(TooltipDataProcessor.AllTypes, GameTooltip_OnUpdate_Hook)
+        self:SecureHookScript(GameTooltip, "OnUpdate", Minimap_OnUpdate_Hook)
     end
+    self:SecureHookScript(GameTooltip, "OnHide", "GameTooltip_OnHide")
 end
 
 function module:FindCollectedTooltipText(tt)
@@ -258,7 +258,9 @@ function module:AlterGameTooltip(tt)
     if tt.GetUnit and addon.db.profile.enableCreatureTip then
         local ok, _, unit = pcall(tt.GetUnit, tt)
         -- If GetUnit failed (e.g. due to secret values in instances), bail out.
-        if not ok then return end
+        if not ok then
+            return
+        end
         -- If the unit is a secret value, we cannot do anything.
         if unit and not issecretvalue(unit) then
             if UnitIsWildBattlePet(unit) then
@@ -301,11 +303,12 @@ local function sub_PetName(line)
     if subname then
         name = subname
     end
+    name = strtrim(name)
 
     for _,speciesID in LPJ:IterateSpeciesIDs() do
         local s_name, _, _, _, _, _, _, _, _, _, s_obtain = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
         if s_name == name and s_obtain then
-            return format("%s (%s)", line, addon:ShortOwnedList(speciesID))          
+            return format("%s (%s)", line, addon:ShortOwnedList(speciesID))
         end
     end
 
@@ -313,14 +316,20 @@ local function sub_PetName(line)
 end
 
 local lastMinimapTooltip
-function GameTooltip_OnUpdate_Hook(self, elapsed)
+function Minimap_OnUpdate_Hook(self)
     if not addon.db or not addon.db.profile.enableMinimapTip then
         return
     end
 
-    local tooltipInfo = self.GetPrimaryTooltipInfo and self:GetPrimaryTooltipInfo()
+    local tooltipInfo = GameTooltip.GetPrimaryTooltipInfo and GameTooltip:GetPrimaryTooltipInfo()
 
-    if not tooltipInfo or not tooltipInfo.getterName or tooltipInfo.getterName ~= "GetMinimapMouseover" then
+    if not tooltipInfo or not tooltipInfo.getterName then
+        -- Handle Classic, where GetPrimaryTooltipInfo is not defined.
+        local owner = GameTooltip:GetOwner()
+        if owner ~= Minimap then
+            return
+        end
+    elseif tooltipInfo.getterName ~= "GetMinimapMouseover" then
         return
     end
 
@@ -331,7 +340,7 @@ function GameTooltip_OnUpdate_Hook(self, elapsed)
         return
     end
     if text ~= lastMinimapTooltip then
-        return module:UpdateMiniMapTooltip(self, text)
+        return module:UpdateMiniMapTooltip(GameTooltip, text)
     end
 end
 

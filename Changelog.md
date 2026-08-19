@@ -1,3 +1,6 @@
+# 12.1.0-20260819-1
+* Fix minimap tooltip not working.
+
 # 12.1.0-20260812-1
 * Updated TOC to match 12.1.0
 
