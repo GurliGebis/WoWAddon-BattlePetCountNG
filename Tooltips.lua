@@ -36,7 +36,7 @@ function module:ADDON_LOADED()
                 callback = function(tip, extratip)
                     if tip.X_BPC2 then
                         tip.X_BPC2:SetPoint("TOPLEFT", extratip, "BOTTOMLEFT")
-                        tip.X_BPC2:SetPoint("TOPRIGHT", extratip, "BOTTOMRIGHT") 
+                        tip.X_BPC2:SetPoint("TOPRIGHT", extratip, "BOTTOMRIGHT")
                     end
                 end
             }
@@ -45,7 +45,7 @@ function module:ADDON_LOADED()
                 callback = function(tip, extratip)
                     if tip.X_BPC2 then
                         tip.X_BPC2:SetPoint("TOPLEFT", tip, "BOTTOMLEFT")
-                        tip.X_BPC2:SetPoint("TOPRIGHT", tip, "BOTTOMRIGHT") 
+                        tip.X_BPC2:SetPoint("TOPRIGHT", tip, "BOTTOMRIGHT")
                     end
                 end
             }
@@ -175,7 +175,7 @@ function module:PetBattleUnitTooltip_UpdateForUnit(tip, petOwner, petIndex)
         if CollectedText:IsShown() then
             height = height - CollectedText:GetHeight()
         end
-        
+
         CollectedText:SetWidth(tip:GetWidth()-20)
         CollectedText:SetWordWrap(true)
         CollectedText:SetText(addon:CollectedText(speciesID))
@@ -216,7 +216,7 @@ function module:FindCollectedTooltipText(tt)
     local _issecretvalue = issecretvalue or function() return false end
     while true do
         lineno = lineno + 1
-        line = _G[prefix..lineno] 
+        line = _G[prefix..lineno]
         if not line or not line:IsShown() then
             line = nil
             break
@@ -251,7 +251,7 @@ function module:AlterGameTooltip(tt)
     if not addon.db then
         return
     end
-    
+
     -- Handle Classic, where issecretvalue is not defined.
     local issecretvalue = issecretvalue or function(not_used) return false end
 
@@ -268,7 +268,7 @@ function module:AlterGameTooltip(tt)
             return
         end
     end
-    
+
     if tt.GetItem and addon.db.profile.enableItemTip then
         local _, link = tt:GetItem()
         if link then
@@ -301,7 +301,7 @@ local function sub_PetName(line)
     if subname then
         name = subname
     end
-    
+
     for _,speciesID in LPJ:IterateSpeciesIDs() do
         local s_name, _, _, _, _, _, _, _, _, _, s_obtain = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
         if s_name == name and s_obtain then
